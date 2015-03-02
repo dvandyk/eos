@@ -1,0 +1,619 @@
+%%% Shortcuts
+%\newcommand{\modified}[1]{{\textcolor{red}{{#1}}}}
+%\newcommand{\todo}[1]{{\textcolor{red}{\text{\textbf{ToDo:}\,{#1}}}}}
+%\newcommand{\christoph}[1]{{\textcolor{blue}{(\textbf{Christoph:}\,{#1})}}}
+%\newcommand{\danny}[1]{{\textcolor{magenta}{(\textbf{Danny:}\,{#1})}}}
+%\newcommand{\citeneeded}{\textsuperscript{\textcolor{red}{Citation needed}}}
+%\Renewcommand{\left(}{\left(}
+%\Renewcommand{\right)}{\right)}
+%%\Renewcommand{\lbrace}{\left\lbrace}
+%%\Renewcommand{\rbrace}{\right\rbrace}
+%\Renewcommand{\Re}[1]{\mathrm{Re}\left(#1\right)}
+%\Renewcommand{\Im}[1]{\mathrm{Im}\left(#1\right)}
+%\newcommand{\dd}[1][{}]{\mathrm{d}^{#1}\!\!\;}
+%\newcommand{\rmd}{\rm d}
+%\newcommand{\del}{\partial}
+%\newcommand{\nn}{\nonumber}
+%\newcommand{\refeq}[1]{Eq.~(\ref{eq:#1})}
+%\newcommand{\refeqs}[2]{Eqs.~(\ref{eq:#1})-(\ref{eq:#2})}
+%\newcommand{\reffig}[1]{Fig.~\ref{fig:#1}}
+%\newcommand{\refsec}[1]{Section \ref{sec:#1}}
+%\newcommand{\reftab}[1]{Table~\ref{tab:#1}}
+%\newcommand{\refapp}[1]{Appendix~\ref{sec:#1}}
+%\newcommand{\order}[1]{\mathcal{O}\left({#1}\right)}
+%\newcommand{\para}{\parallel}
+
+%\def \Re{\textrm{Re}}
+%\def \Im{\textrm{Im}}
+
+%% Physics
+%\newcommand{\alphas}{\alpha_\mathrm{s}}
+%\newcommand{\alphae}{\alpha_\mathrm{e}}
+%\newcommand{G_{F}ermi}{G_\mathrm{F}}
+%\newcommand{\GeV}{\,\mathrm{GeV}}
+%\newcommand{\MeV}{\,\mathrm{MeV}}
+%\newcommand{\amp}[1]{\mathcal{A}\left({#1}\right)}
+%\newcommand{\wilson}[2][{}]{\mathcal{C}_{#2}^{\mathrm{#1}}}
+%\newcommand{\bra}[1]{\left\langle{#1}\right\vert}
+%\newcommand{\ket}[1]{\left\vert{#1}\right\rangle}
+%\newcommand{\braket}[1]{\left\langle #1 \right\rangle}
+
+%------------------------
+% transversity amplitudes
+%------------------------
+
+\def \azeL{{A_0^L}}
+\def \azeR{{A_0^R}}
+\def \apaL{{A_\|^L}}
+\def \apaR{{A_\|^R}}
+\def \apeL{{A_\bot^L}}
+\def \apeR{{A_\bot^R}}
+
+%--------
+% angles
+%--------
+
+\def \thl {{\theta_\ell}}
+\def \thK {{\theta_{K}}}
+\def \barthl {{\bar{\theta}_l}}
+\def \barthK {{\bar{\theta}_{K^*}}}
+
+
+%
+%
+%--+----1----+----2----+----3----+----4----+----5----+----6----+----7---+----8
+\section{The Effective Hamiltonian \label{sec:eff:Ham}}
+
+Rare semileptonic $|\Delta B| = |\Delta S| = 1$ decays
+are described by an effective Hamiltonian
+\begin{align}
+  \label{eq:Heff}
+  {\cal{H}}_{\rm eff}= 
+   - \frac{4\, G_F}{\sqrt{2}}  V_{tb}^{} V_{ts}^\ast \,\frac{\alpha_e}{4 \pi}\,
+     \sum_i \wilson[]{i}(\mu)  \mathcal{O}_i(\mu).
+\end{align}
+Here, $G_F$ denotes Fermi's constant, $\alpha_e$ the fine structure constant and
+unitarity of the Cabibbo-Kobayashi-Maskawa (CKM) matrix $V$ has been used. The
+subleading contribution proportional to $V_{ub}^{} V_{us}^\ast$ has been
+neglected. \todo{Add up-part.}
+
+The renormalization scale $\mu$, which appears in the short-distance couplings
+$\wilson[]{i}$ and the matrix elements of the operators $\mathcal{O}_i$, is of the order
+of the $b$-quark mass. In the following we suppress the dependence of the Wilson
+coefficients $\wilson{i}$ on the scale $\mu$.
+
+In the SM $b \to s\,\ell^+\ell^-$ processes are mainly governed by the operators
+$\mathcal{O}_{7,9,10}$ which will be referred to as the SM operator basis. Beyond the SM
+chirality-flipped ones $\mathcal{O}_{7',9',10'}$, collectively denoted here by SM', may
+appear. The SM and SM' operators are written as \cite{Bobeth:2007dw,
+  Altmannshofer:2008dz, Kruger:2005ep}
+\begin{equation}
+\begin{aligned}
+  \mathcal{O}_{7(7')} & = \frac{m_b}{e}\!\left\lbrack\bar{s} \sigma^{\mu\nu} P_{R(L)} b\right\rbrack F_{\mu\nu} \,,
+\\
+  \mathcal{O}_{9(9')} & = \left\lbrack\bar{s} \gamma_\mu P_{L(R)} b\right\rbrack\!\left\lbrack\bar{\ell} \gamma^\mu \ell\right\rbrack \,,
+\\left\lbrack0.1cm]
+  \mathcal{O}_{10(10')} & = \left\lbrack\bar{s} \gamma_\mu P_{L(R)} b\right\rbrack\!\left\lbrack\bar{\ell} \gamma^\mu \gamma_5 \ell\right\rbrack \,.
+\end{aligned}
+\label{eq:SM:ops}
+\end{equation}
+Furthermore, we allow for scalar and pseudo-scalar operators, referred to as S
+and P,
+\begin{equation}
+\begin{aligned}
+    \mathcal{O}_{S(S')}   & = \left\lbrack\bar{s} P_{R(L)} b\right\rbrack\!\left\lbrack\bar{\ell} \ell\right\rbrack \,,
+\\left\lbrack0.1cm]
+    \mathcal{O}_{P(P')}   & = \left\lbrack\bar{s} P_{R(L)} b\right\rbrack\!\left\lbrack\bar{\ell} \gamma_5 \ell\right\rbrack \,,
+\end{aligned}
+\label{eq:psd-scalar:ops}
+\end{equation}
+which includes the chirality-flipped ones, as well as tensor operators, referred
+to as T and T5,
+\begin{equation}
+\begin{aligned}
+  \mathcal{O}_T   & = \left\lbrack\bar{s} \sigma_{\mu\nu} b\right\rbrack\!\left\lbrack\bar{\ell} \sigma^{\mu\nu} \ell\right\rbrack \,,
+\\
+  \mathcal{O}_{T5} & = \left\lbrack\bar{s} \sigma_{\mu\nu} b\right\rbrack \left\lbrack\bar{\ell} \sigma^{\mu\nu} \gamma_5 \ell\right\rbrack \,.
+\end{aligned}
+\label{eq:tensor:ops}
+\end{equation}
+Note that $\mathcal{O}_{T5} = - i/2\, \varepsilon^{\mu\nu\alpha\beta}
+    \left\lbrack\bar{s} \sigma_{\mu\nu} b\right\rbrack\!\left\lbrack\bar{\ell} \sigma_{\alpha\beta} \ell\right\rbrack
+  = - \mathcal{O}_{TE}/2$,
+see Eq.~(\ref{eq:gamma5rel}),
+as commonly used in the literature \cite{Bobeth:2007dw,Kim:2007fx, Alok:2010zd}.
+
+%
+%
+%--+----1----+----2----+----3----+----4----+----5----+----6----+----7---+----8
+\section{Angular distribution \label{sec:ang:dist}}
+
+The differential decay rate of $\bar{B}\to\bar{K}^* (\to \bar{K}\pi)\,
+\ell^+\ell^-$ can, after summing over the lepton spins, assuming an  on-shell $\bar{K}^*$
+of narrow width, and integrating
+over the $\bar{K}\pi$-invariant mass, be written as
+\begin{equation}
+\begin{split}
+  \frac{8 \pi}{3} & \frac{d^4 \Gamma}{d q^2\, d\!\cos\thl\, d\!\cos\thK\, d\phi} = 
+\\left\lbrack0.1cm]
+    & (J_{1s} + J_{2s} \cos\!2\thl + J_{6s} \cos\thl) \sin^2\!\thK
+\\left\lbrack0.1cm]
+  + & (J_{1c} + J_{2c} \cos\!2\thl + J_{6c} \cos\thl) \cos^2\!\thK  
+\\left\lbrack0.2cm]
+  + & (J_3 \cos 2\phi + J_9 \sin 2\phi) \sin^2\!\thK \sin^2\!\thl
+\\left\lbrack0.2cm] 
+  + & (J_4 \cos\phi + J_8  \sin\phi) \sin 2\thK \sin 2\thl 
+\\left\lbrack0.2cm]
+  + & (J_5 \cos\phi  + J_7 \sin\phi ) \sin 2\thK \sin\thl \, ,
+\end{split}
+\label{eq:anganal}
+\end{equation}
+with twelve angular coefficients $J_i=J_i(q^2)$ times the angular
+dependence. The angles are defined as $i)$ the angle $\thl$ between $\ell^-$ and
+$\bar{B}$ in the $(\ell^+\ell^-)$ center of mass system (cms), $ii)$ the angle
+$\thK$ between $K^-$ and the negative direction of flight of the $\bar{B}$ in the 
+$(K^-\pi^+)$ cms --- this corresponds to the angle between the $K^-$ and
+the $(K^-\pi^+)=K^*$ direction of flight in the $\bar{B}$ rest frame --- and 
+$iii)$ the angle $\phi$ between the two decay planes spanned by the 3-momenta
+of the $(K^-\pi^+)$- and $(\ell^+\ell^-)$-systems, respectively 
+\cite{Bobeth:2008ij, Altmannshofer:2008dz, Kruger:1999xa, Kruger:2005ep}.
+
+Within the (SM+SM') operator basis holds $J_{6c} = 0$. A nonvanishing $J_{6c}$
+arises only from interference between the operator sets (SM+SM') and S
+\cite{Altmannshofer:2008dz}, (SM+SM') and T, and P and T \cite{Alok:2010zd}.
+The explicit expressions of the $J_i$ are given in \ref{sec:ang:obs}.
+
+We denote by 
+\begin{align} \label{eq:aveX}
+  \braket{J_i} = \int_{q^2_{\rm min}}^{q^2_{\rm max}} dq^2\, J_i(q^2) 
+\end{align}
+$q^2$-integrated angular observables $J_i$ in bins between $q^2_{\rm min}$ and $q^2_{\rm
+  max}$.  For composite observables $X$ we use
+  $\braket{X}=X(\braket{J_i})$. We assume in the following that an S-wave background from $\bar K \pi$
+around the $K^*(892)$ mass has been removed.
+
+Starting from the $q^2$-integrated decay distribution $d^3\!\braket{\Gamma} /
+d\!\cos\thl\, d\!\cos\thK d\phi$ one obtains the integrated decay rate and the
+three single-angular differential distributions
+\begin{align}
+  \label{eq:Gint}
+  \braket{\Gamma} & =
+    2 \braket{J_{1s}} + \braket{J_{1c}} 
+  - \frac{1}{3} \left(2 \braket{J_{2s}} + \braket{J_{2c}} \right)\,, 
+\\left\lbrack0.2cm]
+  \label{eq:dG:dphi}
+  \frac{d\braket{\Gamma}}{d\phi} & =  
+      \frac{\braket{\Gamma}}{2\pi} 
+    + \frac{2}{3\pi} \braket{J_3} \cos 2\phi 
+    + \frac{2}{3\pi} \braket{J_9} \sin 2\phi\,,
+\\left\lbrack0.2cm]
+  \frac{d\braket{\Gamma}}{d\!\cos\thl} & =
+      \braket{J_{1s}} + \frac{\braket{J_{1c}}}{2}
+    + \left(\braket{J_{6s}} + \frac{\braket{J_{6c}}}{2} \right) \cos\thl 
+\nonumber \\
+    & \qquad+ \left(\braket{J_{2s}} + \frac{\braket{J_{2c}}}{2} \right) \cos 2\thl \,,
+  \label{eq:dG:dcosthL}
+\\left\lbrack0.2cm]
+  \frac{d\braket{\Gamma}}{d\!\cos\thK} & = 
+  \frac{3}{2} \left\lbrack
+       \left(\braket{J_{1s}} - \frac{1}{3} \braket{J_{2s}} \right) \sin^2\!\thK  \right.
+\nonumber \\
+   & \qquad \left. + \left(\braket{J_{1c}} - \frac{1}{3} \braket{J_{2c}} \right) \cos^2\!\thK
+    \right\rbrack
+    \label{eq:dG:dcosthK}
+\end{align}
+after integration over either all or the remaining two angles, respectively. 
+
+%
+The lepton forward-backward asymmetry $A_{\rm FB}$ can be written as 
+\begin{align} \label{eq:afb}
+  \braket{A_{\rm FB}} \braket{\Gamma} & 
+   = \braket{J_{6s}} + \frac{\braket{J_{6c}}}{2} \, ,
+\end{align}
+see Eq.~(\ref{eq:dG:dcosthL}). 
+%
+The extraction of $J_{4,5,7,8}$ has been discussed in \cite{Bobeth:2008ij}.  For
+alternative methods to obtain the $J_i$, see for example \cite{Kim:2007fx,
+  Altmannshofer:2008dz,Matias:2012qz}.
+
+The longitudinal
+$K^*$ polarization fraction $F_L$ can model-independently be defined  as
+\begin{align}
+  \label{eq:dGdcK}
+  \frac{1}{\braket{\Gamma}} \frac{d\!\braket{\Gamma}}{d\!\cos\thK} & =
+     \frac{3}{4} \braket{F_T} \sin^2\!\thK
+   + \frac{3}{2} \braket{F_L} \cos^2\!\thK \,.
+   \end{align}
+{}From comparison with Eq.~(\ref{eq:dG:dcosthK}) one can read off
+\begin{align}
+  \label{eq:defFL}
+  \braket{F_L} & = \frac{1}{\braket{\Gamma}} \left(
+     \braket{J_{1c}}  - \frac{1}{3}\, \braket{J_{2c}} \right)\,, \\left\lbrack0.4cm]
+  \label{eq:defFT}
+  \braket{F_T} & = \frac{2}{\braket{\Gamma}} \left(
+     \braket{J_{1s}} - \frac{1}{3} \braket{J_{2s}} \right)\,,
+\end{align}
+where $F_T + F_L = 1$.
+
+In the experimental analyses by the collaborations
+Belle \cite{:2009zv}, BaBar \cite{:2012vwa}, CDF \cite{BKll:CDF:ICHEP:2012}
+and LHCb \cite{ Aaij:2011aa} 
+the distribution
+\begin{align}
+  \label{eq:dGdcL}
+  \frac{1}{\braket{\Gamma}} \frac{d\!\braket{\Gamma}}{d\!\cos\thl} & = 
+      \frac{3}{4} \braket{F_L} (1 - \cos^2\!\thl)  
+\\ \nonumber
+&   + \frac{3}{8} \braket{F_T} (1 + \cos^2\!\thl) 
+   + \braket{A_{\rm FB}} \cos\thl \, &
+\end{align}
+is at least partially  employed.
+We stress that the latter is based on 
+[\cf Eqs.~(\ref{eq:J1s}) - (\ref{eq:J2c})]
+\begin{align}
+  \label{eq:J1:mlzero}
+  J_{1s} & = 3\, J_{2s} \, , & 
+  J_{1c} & = -J_{2c} \, ,
+\end{align}
+which is broken by $m_\ell \neq 0$ and/or in the presence of S, P, T or T5
+contributions. Therefore, results for $F_L$  based on Eq.~(\ref{eq:dGdcL})
+do not hold in full generality.
+
+Note that in cases where Eq.~(\ref{eq:J1:mlzero}) holds, such as the SM with
+lepton masses neglected, $F_L = (|A_0^L|^2 + |A_0^R|^2)/\Gamma= -
+J_{2c}/\Gamma$. Furthermore, $\braket{J_{2s}} = 3/16\, \braket{\Gamma} (1 -
+\braket{F_L})$ and $\braket{J_{2c}} = - 3/4\, \braket{\Gamma} \braket{F_L}$.
+
+%
+%
+%--+----1----+----2----+----3----+----4----+----5----+----6----+----7---+----8
+\section{Angular observables \label{sec:ang:obs}}
+
+The $J_i(q^2)$ of Eq.~(\ref{eq:anganal}) can be conveniently expressed within
+the (SM+SM') operator basis with the help of seven transversity amplitudes,
+$A_{0,\perp,\parallel}^{L,R}$ and $A_t$, \cite{Kruger:2005ep}. The operators S
+require an additional amplitude $A_S$, whereas the set P can be absorbed into
+the amplitude $A_t$ \cite{Altmannshofer:2008dz}. In the presence of tensor
+operators T and T5, six additional transversity amplitudes $A_{ij}$ need to be
+introduced, with $ij = \lbrace\parallel\perp,\, t0,\, t\!\perp,\, t\!\parallel,\,
+0\!\perp,\, 0\!\parallel \rbrace$, see \refsec{calculation}. In the
+complete basis (SM+SM') $+$ (S+P) $+$ (T+T5) we obtain
+\begin{align}
+  \label{eq:J1s}
+  \frac{4}{3} J_{1s} & = 
+    \frac{(2 + \beta_\ell^2)}{4} \left\lbrack|\apeL|^2 + |\apaL|^2 + (L\to R) \right\rbrack
+    + \frac{4 m_\ell^2}{q^2} \Re\left(\apeL^{}\apeR^* + \apaL^{}\apaR^*\right)
+\\ \nonumber & \hspace{0.5cm}
+  + 4\, \beta_\ell^2 \big(|A_{0\perp}|^2 + |A_{0\parallel}|^2\big)
+       + 4\, (4- 3 \beta_\ell^2)\, \big(|A_{t\perp}|^2 + |A_{t\parallel}|^2\big)
+\\ \nonumber & \hspace{0.5cm}
+  + 8\sqrt{2} \frac{m_\ell}{\sqrt{q^2}} \Re\left\lbrack
+      (\apaL + \apaR) A_{t\parallel}^* {+ (\apeL + \apeR) A_{t\perp}^*}
+    \right\rbrack , 
+\\left\lbrack0.2cm]
+  \frac{4}{3} J_{1c} & = 
+    |\azeL|^2 +|\azeR|^2
+  + \frac{4 m_\ell^2}{q^2} \Big[|A_t|^2 + 2\,\Re(\azeL^{}\azeR^*) \Big]
+  + \beta_\ell^2 |A_S|^2 
+\\ \nonumber & \hspace{0.5cm}
+  + 8\, (2 - \beta_\ell^2) |A_{t0}|^2 + 8\, \beta_\ell^2 |A_{\parallel\perp}|^2
+  + 16\, \frac{m_\ell}{\sqrt{q^2}} \Re\Big[ (\azeL + \azeR) A_{t0}^*\Big],
+\\left\lbrack0.2cm]
+  \frac{4}{3} J_{2s} & =
+    \frac{\beta_\ell^2}{4} \bigg[ |\apeL|^2+ |\apaL|^2 + (L\to R)
+       - 16 \, \big(|A_{t\perp}|^2 + |A_{t\parallel}|^2 + |A_{0\perp}|^2 + |A_{0\parallel}|^2 \big) \bigg],
+\\left\lbrack0.2cm]
+  \label{eq:J2c}
+  \frac{4}{3} J_{2c} & =
+    -\beta_\ell^2 \bigg[|\azeL|^2 + |\azeR|^2
+        - 8 \, \big(|A_{t0}|^2 + |A_{\parallel\perp}|^2 \big)\bigg],
+\\left\lbrack0.2cm]
+  \frac{4}{3} J_3 & =
+    \frac{\beta_\ell^2}{2} \bigg[ |\apeL|^2 - |\apaL|^2  + (L\to R)
+      + 16\, \big( |A_{t\parallel}^{}|^2 - |A_{t\perp}^{}|^2 +
+      |A_{0\parallel}^{}|^2 - |A_{0\perp}^{}|^2 \big) \bigg],
+\\left\lbrack0.2cm]
+  \frac{4}{3} J_4 & =
+    \frac{\beta_\ell^2}{\sqrt{2}} \Re \bigg[\azeL^{}\apaL^* + (L\to R) 
+    - 8 \, \sqrt{2}\, \Big(A_{t0}^{} A_{t\parallel}^*
+                         + A_{\parallel\perp}^{} A_{0\parallel}^* \Big) \bigg],
+\\left\lbrack0.2cm]
+  \frac{4}{3} J_5 & =
+    \sqrt{2}\beta_\ell\, \Re \bigg[\azeL^{}\apeL^* - (L\to R)
+      - 2\, \sqrt{2} A_{t\parallel}^{}  A_S^*
+      - \frac{m_\ell}{\sqrt{q^2}} \Big( [\apaL + \apaR] A_S^* 
+\\ \nonumber & \hspace{3.7cm}
+      + 4\, \sqrt{2}\, A_{0\parallel}^{} A_t^{*} 
+      {
+      - 4\, \sqrt{2}\, [\azeL - \azeR]^{} A_{t\perp}^*}
+      - 4\, [\apeL - \apeR] A_{t0}^* \Big) \bigg],
+\\left\lbrack0.2cm]
+  \frac{4}{3} J_{6s} & =
+    2\,\beta_\ell\, \Re \bigg[\apaL^{}\apeL^* - (L\to R)
+    {
+    + 4\, \sqrt{2}\, \frac{ m_\ell}{\sqrt{q^2}} \Big(
+[\apeL - \apeR] A_{t\parallel}^* + [\apaL - \apaR] A_{t\perp}^*}
+   \Big) \bigg],
+\\left\lbrack0.2cm]
+  \label{eq:j6c}
+  \frac{4}{3} J_{6c} & =
+    4\, \beta_\ell\, \Re \bigg[ 2\, A_{t0}^{} A_S^* +
+      \frac{m_\ell}{\sqrt{q^2}} \big[(\azeL + \azeR) A_S^* 
+           + 4\, A_{\parallel\perp}^{} A_t^* \big] \bigg],
+\\left\lbrack0.2cm]
+  \frac{4}{3} J_7 & = \label{eq:J7}
+    \sqrt{2} \beta_\ell\, \Im \bigg[ \azeL^{}\apaL^* - (L\to R)
+      {
+      + 2\, \sqrt{2} A_{t\perp}^{}  A_S^*}
+      + \frac{m_\ell}{\sqrt{q^2}} \Big( [\apeL + \apeR] A_S^* 
+\\ \nonumber & \hspace{3.7cm}
+      + 4\, \sqrt{2}\, A_{0\perp}^{} A_t^{*} 
+      + 4\, \sqrt{2}\, [\azeL - \azeR]^{} A_{t\parallel}^{*}
+      - 4\, [\apaL - \apaR] A_{t0}^* \Big)\bigg],
+\\left\lbrack0.2cm]
+  \frac{4}{3} J_8 & = 
+    \frac{\beta_\ell^2}{\sqrt{2}}\, \Im \bigg[
+     \azeL^{}\apeL^* + (L\to R) \big) \bigg],
+\\left\lbrack0.2cm]
+  \frac{4}{3} J_9 & =
+    \beta_\ell^2\, \Im \bigg[\apeL \apaL^{*} + (L\to R) \big) \bigg]\,,
+\end{align}
+where the lepton mass $m_\ell$ has been kept and 
+\begin{align}
+ \beta_\ell & = \sqrt{1 - \frac{4\, m_\ell^2}{q^2}}.
+\end{align}
+
+%
+%
+%--+----1----+----2----+----3----+----4----+----5----+----6----+----7---+----8
+\section{Optimised observables \label{sec:opt:obs}}
+  
+%
+%
+%--+----1----+----2----+----3----+----4----+----5----+----6----+----7---+----8
+\section{Transversity amplitudes \label{sec:trAmps}}
+
+The following transversity amplitudes receive only contributions from the operators
+in Eqs.~(\ref{eq:SM:ops}) -- (\ref{eq:tensor:ops}) which are factorizable (at
+lowest order in QED)
+\begin{align}
+  \label{eq:trAmp:At}
+  A_t & = N \frac{\sqrt{\lambda}}{\sqrt{q^2}}
+    \left\lbrack 2\, (\wilson[]{10} - \wilson[]{10'}) + 
+     \frac{q^2}{m_\ell} \frac{(\wilson[]{P} - \wilson[]{P'})}{(m_b + m_s)}\right\rbrack A_0,
+\\
+  \label{eq:trAmp:As}
+  A_S & = -2 N \sqrt{\lambda}\, \frac{(\wilson[]{S} - \wilson[]{S'})}{(m_b + m_s)} A_0, 
+\\
+  \label{eq:tensorAmpFirst}
+  A_{\parallel\!\perp\,(t0)} & = \pm N \frac{\wilson[]{T(5)}}{M_{K^*}}\, \Big[ 
+    (M_B^2 + 3\, M_{K^*}^2 - q^2)\, T_2\\
+    & \quad - \frac{\lambda}{M_B^2 - M_{K^*}^2}\, T_3
+     \Big], \nonumber
+\\left\lbrack0.2cm]
+  A_{t\perp\,(0\perp)} & 
+    = \pm 2 N \, \frac{\sqrt{\lambda}}{\sqrt{q^2}}\,\wilson[]{T(5)}\, T_1, &
+\\left\lbrack0.2cm]
+  \label{eq:tensorAmpLast}
+  A_{0\parallel\,(t\parallel)} &
+    = \pm 2 N \, \frac{(M_B^2 - M_{K^*}^2)}{\sqrt{q^2}}\, \wilson[]{T(5)}\, T_2. &
+\end{align}
+The upper and lower sign in \refeqs{tensorAmpFirst}{tensorAmpLast} refers 
+$C_T$ and $C_{T5}$, respectively. The normalization factor $N$ is given as
+\begin{align}
+  \label{eq:trAmp:norm:factor}
+  N & = G_F\, \alpha_e\, V_{tb}^{}V_{ts}^{*}\,
+    \sqrt{\frac{q^2 \, \beta_\ell \,\sqrt{\lambda}}{3 \cdot 2^{10}\, \pi^5\, M_B^3}}
+\end{align}
+and the $B \to K^*$ form factors $V$, $A_{0,1,2}$, $T_{1,2,3}$ are defined as in
+\cite{Beneke:2001at, Bobeth:2010wg, Ball:2004rg, Altmannshofer:2008dz,
+  Kruger:2005ep, Alok:2010zd}. Above we use the K{\"a}ll{\'e}n-function 
+$\lambda= \lambda(m_B^2, m_{K^*}^2, q^2)$
+\begin{align}
+  \label{eq:defLambda}
+  \lambda(a, b, c)
+    & = a^2 + b^2 + c^2 - 2(ab + ac + bc)\,.
+\end{align}
+
+In the remaining transversity amplitudes, the contributions from the hadronic part
+of the effective $|\Delta B|=1$ Hamiltonian $\propto \mathcal{O}_{i\leq 6,8}$ are taken
+into account in various degrees of sophistication, depending also on the $q^2$-region.
+In the following we have 
+\begin{enumerate}
+\item naive factorization,
+\item low-$q^2$: QCDF with/without form-factor relations,
+\item low-$q^2$: Khodjamirian et al.,
+\item high-$q^2$: local OPE,
+\item additional contributions parameterizing subleading contributions,
+\end{enumerate}
+which will be given in the sub-sequent sections.
+
+%
+%--+----1----+----2----+----3----+----4----+----5----+----6----+----7---+----8
+\subsection{Naive factorization \label{sec:trAmps:naive}}
+
+Here the transversity amplitudes contain the contributions from the operators
+in Eqs.~(\ref{eq:SM:ops}) -- (\ref{eq:tensor:ops}) which are factorizable.
+Within naive factorization the transversity  amplitudes read
+\begin{align}
+  A_\perp^{L,R} & = \sqrt{2} N \sqrt{\lambda}
+    \Big\lbrace\left\lbrack\left(\wilson{9} + \wilson[]{9'}\right) \mp \left(\wilson{10} + \wilson[]{10'}\right)\right\rbrack\frac{V}{M_B + M_{K^*}}
+      + \frac{2 m_b}{q^2}\left(\wilson{7} + \wilson[]{7'}\right)T_1\Big\rbrace,
+\\left\lbrack0.2cm]
+  A_\parallel^{L,R} & = -N \sqrt{2}(M_B^2 - M_{K^*}^2) \times \Big\lbrace
+\\ 
+\nonumber & \hskip 2.5cm  
+    \left\lbrack\left(\wilson{9} - \wilson[]{9'}\right) \mp \left(\wilson{10} - \wilson[]{10'}\right)\right\rbrack\frac{A_1}{M_B - M_{K^*}}
+      + \frac{2 m_b}{q^2}\left(\wilson{7} - \wilson[]{7'}\right)T_2 \Big\rbrace,
+\\left\lbrack0.2cm]
+  A_0^{L,R} & = -\frac{N}{2 M_{K^*}\sqrt{q^2}} \times \Big\lbrace
+\\
+\nonumber & \hskip 0.5cm
+    \Big[ \left(\wilson{9} - \wilson[]{9'}\right) \mp \left(\wilson{10} - \wilson[]{10'}\right) \Big]
+    \Big[(M_B^2 - M_{K^*}^2 - q^2)(M_B + M_{K^*}) A_1 - \frac{\lambda}{M_B + M_{K^*}} A_2 \Big]
+\\ \nonumber
+    & \hskip 0.8cm + 2 m_b \left(\wilson{7} - \wilson[]{7'} \right)
+        \Big[\left(M_B^2 + 3 M_{K^*}^2 - q^2\right)T_2 - \frac{\lambda}{M_B^2 - M_{K^*}^2}T_3\Big]
+      \Big\rbrace  ,
+\end{align}
+Non-factorizable contributions from $\mathcal{O}_{i\leq 6}$  are taken into account
+by using effective Wilson coefficients $\wilson[]{7,8,9} \to \wilson[eff]{7,8,9}$
+and similarly for the corresponding primed Wilson coefficients, when assuming
+also primed current-current and QCD-penguin operators $\mathcal{O}_{i\leq 6'}$ to have
+non-vanishing Wilson coefficients.
+The effective Wilson coefficients contain usually only the 1-loop matrix elements 
+of the 4-quark operators at the quark level, which cancel the leading $\mu_b$
+dependence in $\wilson[]{9}$, but not so for $\wilson[]{7,8}$.
+
+%
+%--+----1----+----2----+----3----+----4----+----5----+----6----+----7---+----8
+\subsection{\boldmath Low $q^2$ QCDF \label{sec:trAmps:QCDF}}
+
+%
+%--+----1----+----2----+----3----+----4----+----5----+----6----+----7---+----8
+\subsection{\boldmath Low $q^2$ Khodjamirian \label{sec:trAmps:QCDF}}
+
+%
+%--+----1----+----2----+----3----+----4----+----5----+----6----+----7---+----8
+\subsection{\boldmath High $q^2$ local OPE \label{sec:trAmps:QCDF}}
+
+%
+%--+----1----+----2----+----3----+----4----+----5----+----6----+----7---+----8
+\subsection{\boldmath Subleading parameterizations \label{sec:trAmps:QCDF}}
+
+%
+%
+%--------+---------+---------+---------+---------+---------+---------+---------+
+\section{$\bar{B}\to\bar{K}^*(\to \bar{K}\pi)\,\ell^+\ell^-$ Matrix Element 
+  \label{sec:calculation}}
+
+We present here the parametrization of the hadronic matrix element used to
+calculate the decay $\bar{B}\to\bar{K}^*(\to \bar{K}\pi)\,\ell^+\ell^-$,
+\begin{multline}
+  \label{eq:BKpill:ME:X}
+  {\cal M} =
+  {\cal F} \Big( X_S \left\lbrack\bar{\ell} \ell\right\rbrack
+    + X_P \left\lbrack\bar{\ell} \gamma_5 \ell\right\rbrack
+    + X^{\mu}_V \left\lbrack\bar{\ell} \gamma_{\mu} \ell\right\rbrack\\
+    + X^{\mu}_A \left\lbrack\bar{\ell} \gamma_{\mu} \gamma_5 \ell\right\rbrack
+    + X^{\mu\nu}_T \left\lbrack\bar{\ell} \sigma_{\mu\nu} \ell\right\rbrack
+    \Big)\,.
+\end{multline}
+We define
+\begin{align}
+  {\cal F} & = i \frac{G_{F} \alpha_e}{\sqrt{2} \pi}\, V_{tb}^{} V_{ts}^{\ast}\,\,
+               g_{K^*K\pi} D_V\, 2 |\vec{p}_K|\,,\\
+\intertext{and use $\vec{p}_K$, the three momentum of the $\bar{K}$ in the $\bar{K}\pi$ cms,
+}
+  |\vec{p}_K| & = \frac{\sqrt{\lambda\left(M^2_{K^*}, M^2_K, M^2_\pi\right)}}{2\, M_{K^*}}\,.
+\end{align}
+
+Using this parametrization, we obtain the hadronic tensors
+\begin{gather}
+    X_S = -\frac{i}{4 N} \cos\thK\, A_S\,,\\
+    X_P = +\frac{i}{2 N} \cos\thK\, \frac{m_\ell}{\sqrt{q^2}}\, A_{t}\,,
+\end{gather}
+\begin{align}
+\label{eq:XVA}
+  X^{\mu}_{V,A} & = \frac{i}{4 N} \cos\thK\, \varepsilon^\mu(0) \, (A_{0}^R \pm A_{0}^L)
+\\
+\nonumber
+  & + \frac{i}{8 N} \sin\thK\\
+\nonumber
+  & \times \Big(\varepsilon^\mu(+)\, e^{+i \phi}\!\left\lbrack(A_\parallel^R + A_\perp^R) \pm (A_\parallel^L + A_\perp^L) \right\rbrack\\
+\nonumber
+  & +
+  \varepsilon^\mu(-)\, e^{-i \phi}\!\left\lbrack(A_\parallel^R - A_\perp^R) \pm (A_\parallel^L - A_\perp^L) \right\rbrack\Big),
+\end{align}
+\begin{align}
+    \raisetag{4.4ex}
+  X^{\mu\nu}_{T} & = \frac{\cos\thK}{N}
+  \left(\varepsilon^\mu(t)\,\varepsilon^\nu(0) A_{t0} - \varepsilon^\mu(+)\,\varepsilon^\nu(-)A_{\parallel\perp}\right)
+\\
+\nonumber
+  & + \frac{\sin\thK}{\sqrt{2} N}\, \varepsilon^\mu(t)\\
+\nonumber
+  & \times \left(\varepsilon^\nu(+)\, e^{ i\phi}\, [A_{t\parallel}\, {+ A_{t\perp}}] + 
+    \varepsilon^\nu(-)\, e^{-i\phi}\, [A_{t\parallel} {- A_{t\perp}}]\right)\\
+\nonumber
+  & - \frac{\sin\thK}{\sqrt{2} N}\, \varepsilon^\mu(0)\\
+\nonumber
+  & \times \left(\varepsilon^\nu(+)\, e^{i\phi} [A_{0\perp} + A_{0\parallel}] + 
+    \varepsilon^\nu(-)\, e^{-i\phi}[A_{0\perp} - A_{0\parallel}]\right),
+\end{align}
+where the polarization vectors $\varepsilon^\mu(n)$ in the $\bar{B}$ meson rest
+frame read \cite{Altmannshofer:2008dz}
+\begin{equation}
+\label{eq:pol-vectors:eps}
+\begin{aligned}
+  \varepsilon^\mu(\pm) & = \frac{1}{\sqrt{2}}(0,1,\mp i,0)\,,\\
+  \varepsilon^\mu(0)   & = \frac{1}{\sqrt{q^2}}(-q_z, 0, 0, -q_0)\,,\\
+  \varepsilon^\mu(t)   & = \frac{1}{\sqrt{q^2}}(q_0, 0, 0, q_z) \, .
+\end{aligned}
+\end{equation}
+We choose the $z$-axis in this frame along the $\bar{K}^*$ direction of flight
+and $q_0$ ($q_z$) denotes the timelike (spacelike) component of the four
+momentum $q^\mu$. The polarization vectors fulfill the completeness relations
+\begin{equation}
+\begin{aligned}
+    g_{nn'} & = \varepsilon^\dagger_\mu(n)\, \varepsilon^\mu(n')\,,\\
+ g_{\mu\nu} & = \sum_{n,n'} \varepsilon^\dagger_\mu(n)\, \varepsilon_\nu(n')\, g_{nn'}
+\end{aligned}\label{eq:heldecomp}
+\end{equation}
+with $g_{nn'} = \mbox{diag}(+,-,-,-)$ for $n,n' = t, \pm, 0$. We use
+the relation \refeq{heldecomp}  to insert the full set of polarization vectors
+$\varepsilon^\mu(n)$ between the hadronic and leptonic currents, and introduce
+the helicity amplitudes $H_{a n_1 \dots n_l}$ for arbitrary Dirac
+structures $\Gamma^{\mu_1\dots\mu_l}$,
+\begin{gather}
+    \langle \bar{K}^*(k, \eta(a)) |\bar{s}\Gamma_{\mu_1\dots\mu_l} b|\bar{B}(p)\rangle\\
+    \nonumber
+    = \sum_{n_i,n'_i}
+          \!\langle \bar{K}^*(k,\eta(a))|\bar{s}\Gamma^{\nu_1\dots\nu_l}b|\bar{B}(p)\rangle
+      \prod_{i=1}^l \varepsilon^{\dagger}_{\nu_i}\!(n_i) g^{n_i n'_i} \varepsilon_{\mu_i}\!(n'_i)\\
+    \equiv \sum_{n_i}
+    H^\Gamma_{a n_1\dots n_l} \prod_{i=1}^l g^{n_i n_i} \varepsilon_{\mu_i}\!(n_i)\,.
+\end{gather}
+The tensorial transversity amplitudes $A_{ij}$ are related to the helicity
+amplitudes $H_{a n_1 n_2}$ by means of
+\begin{align}
+    A^\Gamma_{0\perp}     & = \frac{1}{2} \big(H^\Gamma_{+0+} + H^\Gamma_{-0-}\big) &
+    A^\Gamma_{0\para}     & = \frac{1}{2} \big(H^\Gamma_{+0+} - H^\Gamma_{-0-}\big)\nn\\
+    A^\Gamma_{t\perp}     & = \frac{1}{2} \big(H^\Gamma_{+t+} - H^\Gamma_{-t-}\big) &
+    A^\Gamma_{t\para}     & = \frac{1}{2} \big(H^\Gamma_{+t+} + H^\Gamma_{-t-}\big)\nn\\
+    A^\Gamma_{\para\perp} & = H^\Gamma_{0+-} &
+    A^\Gamma_{t0}         & = H^\Gamma_{0t0}
+\end{align}
+and
+\begin{equation}
+    A_{ij} = 2\, N \sum_{\Gamma=T,T5} C_\Gamma  A^\Gamma_{ij}\,.
+\end{equation}
+Note that the factor 2 above emerges from the relation $H_{a ij}^\Gamma =
+ - H_{a ji}^\Gamma$, which is due to the asymmetry of $\sigma^{\mu\nu}$ under
+ $\mu\leftrightarrow \nu$.
+The polarization vectors of the $\bar{K}^*$ for polarizations $a = \pm,0$ in the $\bar B$ cms read
+\begin{equation}
+\label{eq:pol-vectors:eta}
+\begin{aligned}
+  \eta^\mu(\pm) & = \frac{1}{\sqrt{2}}(0,1,\pm i,0)\,,\\
+  \eta^\mu(0)   & = \frac{1}{M_{K^*}}(-q_z, 0, 0, M_B-q_0) \, .
+\end{aligned}
+\end{equation}
+This approach generalizes the concept of the transversity amplitudes,
+cf. e.g. Refs.  \cite{Faessler:2002ut,Kruger:2005ep,Altmannshofer:2008dz}, to
+which we also refer for the definition of the remaining transversity amplitudes
+$A_{i}$, $i=0,\perp,\parallel,t,S$.
+
+We employ $\gamma_5 = i/(4\,!)\, \varepsilon_{\alpha\beta\mu\nu} \gamma^\alpha
+\gamma^\beta \gamma^\mu \gamma^\nu$, such that
+\begin{equation}
+\label{eq:gamma5rel}
+\begin{aligned}
+  \mbox{Tr}[\gamma^\alpha \gamma^\beta \gamma^\mu \gamma^\nu \gamma_5] & =
+     4\, i\, \varepsilon^{\alpha\beta\mu\nu}\, ,\\
+  \sigma^{\alpha\beta} \gamma_5 & = 
+     -\frac{i}{2}\,\varepsilon^{\alpha\beta\mu\nu} \sigma_{\mu\nu}
+\end{aligned}
+\end{equation}
+with $\sigma_{\mu\nu} = i/2\, [\gamma_\mu,\,
+\gamma_\nu]$, and $\varepsilon_{0123} = -\varepsilon^{0123} = 1$.

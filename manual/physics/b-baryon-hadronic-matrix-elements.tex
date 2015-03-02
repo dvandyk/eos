@@ -1,0 +1,49 @@
+\section{Hadronic Matrix Elements}
+\label{physics:b-mesons:hme}
+
+\subsection{$1/2^+\to 1/2^+$ Form Factors}
+\label{physics:b-mesons:hme:1/2+to1/2+}
+
+For the transition of $J^P = 1/2^+$ to $J'^P = 1/2^+$ state, we use the same parametrization
+of the matrix elements as in \cite{Boer:2014kda}. For the vector current, we have
+\begin{equation}
+\label{eq:physics:b-baryons:1/2+to1/2+:hel-ff-V}
+\begin{aligned}
+    % V, time-like
+    \eps_\mu^*(t) \, \bra{\Lambda(k, s_\Lambda)} \bar{s} \gamma^\mu  b \ket{\Lambda_b(p, s_{\Lambda_b})}
+    & \equiv f_t^V(q^2) \, \frac{m_{\Lambda_b} - m_\Lambda}{\sqrt{q^2}}
+             \left[ \bar u(k, s_\Lambda) \, u(p,s_{\Lambda_b}) \right]\,,\\
+    % V, longitudinal
+    \eps_\mu^*(0) \, \bra{\Lambda(k, s_\Lambda)} \bar{s} \gamma^\mu b \ket{\Lambda_b(p, s_{\Lambda_b})}
+    & \equiv 2 \, f^{V}_0(q^2) \, \frac{m_{\Lambda_b} + m_\Lambda}{s_+}
+             \, (k \cdot\eps^*(0)) \left[ \bar u(k,s_\Lambda) \, u(p,s_{\Lambda_b}) \right]\,,\\
+    % V, perpendicular
+    \eps_\mu^*(\pm) \, \bra{\Lambda(k, s_\Lambda)} \bar{s} \gamma^\mu b \ket{\Lambda_b(p, s_{\Lambda_b})}
+    & \equiv f^{V}_\perp(q^2) \left[ \bar u(k,s_\Lambda) \, \slashed{\eps}^*(\pm) \, u(p,s_{\Lambda_b}) \right]\,,
+\end{aligned}
+\end{equation}
+In the above, $u(p, s)$ represent a Dirac spinor with four-momentum $p$ and spin projection $s$;
+$q \equiv p - k$ is the momentum transfer; and $\eps$ is a virtual polarization vector that fulfills
+\begin{equation*}
+\begin{aligned}
+    \eps(t) \cdot q       & = \sqrt{q^2}\,, &
+    \eps(\lambda) \cdot q & = 0 \quad\text{for }\lambda=\pm, 0\,.
+\end{aligned}
+\end{equation*}
+For the axialvector current, we use
+\begin{equation}
+\label{eq:physics:b-baryons:1/2+to1/2+:hel-ff-A}
+\begin{aligned}
+    % A, time-like
+    \eps_\mu^*(t) \, \bra{\Lambda(k, s_\Lambda)} \bar{s} \gamma^\mu \gamma_5 b \ket{\Lambda_b(p, s_{\Lambda_b})}
+    & \equiv -f_t^A(q^2) \, \frac{m_{\Lambda_b} + m_\Lambda}{\sqrt{q^2}}
+             \left[ \bar u(k, s_\Lambda) \gamma_5 u(p,s_{\Lambda_b}) \right]\,,\\
+    % V, longitudinal
+    \eps_\mu^*(0) \, \bra{\Lambda(k, s_\Lambda)} \bar{s} \gamma^\mu b \ket{\Lambda_b(p, s_{\Lambda_b})}
+    & \equiv 2 \, f^{V}_0(q^2) \, \frac{m_{\Lambda_b} + m_\Lambda}{s_+}
+             \, (k \cdot\eps^*(0)) \left[ \bar u(k,s_\Lambda) \, u(p,s_{\Lambda_b}) \right]\,,\\
+    % V, perpendicular
+    \eps_\mu^*(\pm) \, \bra{\Lambda(k, s_\Lambda)} \bar{s} \gamma^\mu b \ket{\Lambda_b(p, s_{\Lambda_b})}
+    & \equiv f^{V}_\perp(q^2) \left[ \bar u(k,s_\Lambda) \, \slashed{\eps}^*(\pm) \, u(p,s_{\Lambda_b}) \right]\,,
+\end{aligned}
+\end{equation}
