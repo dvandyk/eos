@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -125,11 +125,11 @@ class WilsonCoefficientsTest :
                 initial_top_qcd_2[13] = (1.0 - 4.0 * sw2) / sw2 * TopLoops::C1(x_t, log_top) - TopLoops::B1(x_t, log_top) / sw2 - TopLoops::D1(x_t, log_top);
                 initial_top_qcd_2[14] = (TopLoops::B1(x_t, log_top) - TopLoops::C1(x_t, log_top)) / sw2;
 
-                WilsonCoefficients<BToS> downscaled_charm = evolve(initial_charm_qcd_0,
+                WilsonCoefficients<BToS> downscaled_charm = evolve_b_to_s(initial_charm_qcd_0,
                         initial_charm_qcd_1,
                         initial_charm_qcd_2,
                         alpha_s_0, alpha_s, nf, beta);
-                WilsonCoefficients<BToS> downscaled_top = evolve(initial_top_qcd_0,
+                WilsonCoefficients<BToS> downscaled_top = evolve_b_to_s(initial_top_qcd_0,
                         initial_top_qcd_1,
                         initial_top_qcd_2,
                         alpha_s_0, alpha_s, nf, beta);

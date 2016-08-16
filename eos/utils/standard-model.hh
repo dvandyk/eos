@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -121,6 +121,19 @@ namespace eos
             virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const std::string & lepton_flavour, const bool & cp_conjugate) const;
     };
 
+    template <> class SMComponent<components::DeltaBD1> :
+        public virtual ModelComponent<components::DeltaBD1>
+    {
+        private:
+            SMComponent<components::DeltaBS1> _b_to_s_component__deltabd1;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            /* b->d Wilson coefficients */
+            virtual WilsonCoefficients<BToD> wilson_coefficients_b_to_d(const std::string & lepton_flavour, const bool & cp_conjugate) const;
+    };
+
     template <> class SMComponent<components::DeltaBU1> :
         public virtual ModelComponent<components::DeltaBU1>
     {
@@ -135,6 +148,7 @@ namespace eos
         public Model,
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
+        public SMComponent<components::DeltaBD1>,
         public SMComponent<components::DeltaBS1>,
         public SMComponent<components::DeltaBU1>
     {

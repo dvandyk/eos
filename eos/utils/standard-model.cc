@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -418,6 +418,27 @@ namespace implementation
         }
     }
 
+    SMComponent<components::DeltaBD1>::SMComponent(const Parameters & p, ParameterUser & u) :
+        _b_to_s_component__deltabd1(p, u)
+    {
+    }
+
+    WilsonCoefficients<BToD>
+    SMComponent<components::DeltaBD1>::wilson_coefficients_b_to_d(const std::string & /*lepton_flavour*/, const bool & /*cp_conjugate*/) const
+    {
+        /*
+         * In the SM all Wilson coefficients are real-valued -> all weak phases are zero.
+         * Therefore, CP conjugation leaves the Wilson coefficients invariant.
+         *
+         * In the SM there is lepton flavour universality.
+         */
+        static const std::string empty("");
+
+        auto retval = _b_to_s_component__deltabd1.wilson_coefficients_b_to_s(empty, false);
+
+        return WilsonCoefficients<BToD>(retval);
+    }
+
     SMComponent<components::DeltaBS1>::SMComponent(const Parameters & p, ParameterUser & u) :
         _alpha_s_Z__deltabs1(p["QCD::alpha_s(MZ)"], u),
         _mu_t__deltabs1(p["QCD::mu_t"], u),
@@ -597,11 +618,11 @@ namespace implementation
         const double log_c = 2.0 * std::log(_mu_0c__deltabs1 / _m_W__deltabs1), log_t = std::log(_mu_0t__deltabs1 / m_t_mu_0t);
         const double x_c = power_of<2>(m_t_mu_0c / _m_W__deltabs1), x_t = power_of<2>(m_t_mu_0t / _m_W__deltabs1);
 
-        WilsonCoefficients<BToS> downscaled_charm = evolve(implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd0(),
+        WilsonCoefficients<BToS> downscaled_charm = evolve_b_to_s(implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd0(),
                 implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd1(log_c, _sw2__deltabs1),
                 implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd2(x_c, log_c, _sw2__deltabs1),
                 alpha_s_mu_0c, alpha_s, nf, QCD::beta_function_nf_5);
-        WilsonCoefficients<BToS> downscaled_top = evolve(implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd0(),
+        WilsonCoefficients<BToS> downscaled_top = evolve_b_to_s(implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd0(),
                 implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd1(x_t, _sw2__deltabs1),
                 implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd2(x_t, log_t, _sw2__deltabs1),
                 alpha_s_mu_0t, alpha_s, nf, QCD::beta_function_nf_5);
@@ -629,6 +650,7 @@ namespace implementation
     StandardModel::StandardModel(const Parameters & p) :
         SMComponent<components::CKM>(p, *this),
         SMComponent<components::QCD>(p, *this),
+        SMComponent<components::DeltaBD1>(p, *this),
         SMComponent<components::DeltaBS1>(p, *this),
         SMComponent<components::DeltaBU1>(p, *this)
     {

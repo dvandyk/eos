@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2016 Danny van Dyk
  * Copyright (c) 2010 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
@@ -38,7 +38,23 @@ namespace eos
         _scalar_tensor_coefficients.fill(0.0);
     }
 
-    WilsonCoefficients<BToS> evolve(const std::array<complex<double>, 15> & wc_qcd_0,
+    WilsonCoefficients<BToD>::WilsonCoefficients() :
+        _alpha_s(0.0)
+    {
+        _sm_like_coefficients.fill(0.0);
+        _primed_coefficients.fill(0.0);
+        _scalar_tensor_coefficients.fill(0.0);
+    }
+
+    WilsonCoefficients<BToD>::WilsonCoefficients(const WilsonCoefficients<BToS> & other) :
+        _sm_like_coefficients(other._sm_like_coefficients),
+        _primed_coefficients(other._primed_coefficients),
+        _scalar_tensor_coefficients(other._scalar_tensor_coefficients),
+        _alpha_s(other._alpha_s)
+    {
+    }
+
+    WilsonCoefficients<BToS> evolve_b_to_s(const std::array<complex<double>, 15> & wc_qcd_0,
             const std::array<complex<double>, 15> & wc_qcd_1,
             const std::array<complex<double>, 15> & wc_qcd_2,
             const double & alpha_s_0, const double & alpha_s, const double & nf, const QCD::BetaFunction & beta)
@@ -246,5 +262,15 @@ namespace eos
         result._sm_like_coefficients = result_qcd_0 + a_s * result_qcd_1 + power_of<2>(a_s) * result_qcd_2;
 
         return result;
+    }
+
+    WilsonCoefficients<BToD> evolve_b_to_d(const std::array<complex<double>, 15> & wc_qcd_0,
+            const std::array<complex<double>, 15> & wc_qcd_1,
+            const std::array<complex<double>, 15> & wc_qcd_2,
+            const double & alpha_s_0, const double & alpha_s, const double & nf, const QCD::BetaFunction & beta)
+    {
+        auto retval = evolve_b_to_s(wc_qcd_0, wc_qcd_1, wc_qcd_2, alpha_s_0, alpha_s, nf, beta);
+
+        return WilsonCoefficients<BToD>(retval);
     }
 }

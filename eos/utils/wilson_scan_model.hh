@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2015 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2015, 2016 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
  *
@@ -28,6 +28,90 @@
 namespace eos
 {
     template <typename Tag_> class WilsonScanComponent;
+
+    template <>
+    class WilsonScanComponent<components::DeltaBD1> :
+        public virtual ModelComponent<components::DeltaBD1>
+    {
+        protected:
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__deltabd1;
+            UsedParameter _mu_b__deltabd1;
+
+            /* Masses */
+            UsedParameter _m_Z__deltabd1;
+
+            /* Renormalization scale */
+            UsedParameter _mu__deltabd1;
+
+            /* b->s Wilson coefficients */
+            UsedParameter _bd_c1;
+            UsedParameter _bd_c2;
+            UsedParameter _bd_c3;
+            UsedParameter _bd_c4;
+            UsedParameter _bd_c5;
+            UsedParameter _bd_c6;
+            UsedParameter _bd_re_c7,           _bd_im_c7;
+            UsedParameter _bd_re_c7prime,      _bd_im_c7prime;
+            UsedParameter _bd_c8;
+            UsedParameter _bd_c8prime;
+            /* b->see Wilson coefficients */
+            UsedParameter _bdee_re_c9,         _bdee_im_c9;
+            UsedParameter _bdee_re_c10,        _bdee_im_c10;
+            UsedParameter _bdee_re_c9prime,    _bdee_im_c9prime;
+            UsedParameter _bdee_re_c10prime,   _bdee_im_c10prime;
+            UsedParameter _bdee_re_cS,         _bdee_im_cS;
+            UsedParameter _bdee_re_cSprime,    _bdee_im_cSprime;
+            UsedParameter _bdee_re_cP,         _bdee_im_cP;
+            UsedParameter _bdee_re_cPprime,    _bdee_im_cPprime;
+            UsedParameter _bdee_re_cT,         _bdee_im_cT;
+            UsedParameter _bdee_re_cT5,        _bdee_im_cT5;
+            /* b->smumu Wilson coefficients */
+            UsedParameter _bdmumu_re_c9,       _bdmumu_im_c9;
+            UsedParameter _bdmumu_re_c10,      _bdmumu_im_c10;
+            UsedParameter _bdmumu_re_c9prime,  _bdmumu_im_c9prime;
+            UsedParameter _bdmumu_re_c10prime, _bdmumu_im_c10prime;
+            UsedParameter _bdmumu_re_cS,       _bdmumu_im_cS;
+            UsedParameter _bdmumu_re_cSprime,  _bdmumu_im_cSprime;
+            UsedParameter _bdmumu_re_cP,       _bdmumu_im_cP;
+            UsedParameter _bdmumu_re_cPprime,  _bdmumu_im_cPprime;
+            UsedParameter _bdmumu_re_cT,       _bdmumu_im_cT;
+            UsedParameter _bdmumu_re_cT5,      _bdmumu_im_cT5;
+
+            /* b->sgamma */
+            std::function<complex<double> ()> _bd_c7;
+            std::function<complex<double> ()> _bd_c7prime;
+
+            /* b->see */
+            std::function<complex<double> ()> _bdee_c9;
+            std::function<complex<double> ()> _bdee_c10;
+            std::function<complex<double> ()> _bdee_c9prime;
+            std::function<complex<double> ()> _bdee_c10prime;
+            std::function<complex<double> ()> _bdee_cS;
+            std::function<complex<double> ()> _bdee_cSprime;
+            std::function<complex<double> ()> _bdee_cP;
+            std::function<complex<double> ()> _bdee_cPprime;
+            std::function<complex<double> ()> _bdee_cT;
+            std::function<complex<double> ()> _bdee_cT5;
+
+            /* b->smumu */
+            std::function<complex<double> ()> _bdmumu_c9;
+            std::function<complex<double> ()> _bdmumu_c10;
+            std::function<complex<double> ()> _bdmumu_c9prime;
+            std::function<complex<double> ()> _bdmumu_c10prime;
+            std::function<complex<double> ()> _bdmumu_cS;
+            std::function<complex<double> ()> _bdmumu_cSprime;
+            std::function<complex<double> ()> _bdmumu_cP;
+            std::function<complex<double> ()> _bdmumu_cPprime;
+            std::function<complex<double> ()> _bdmumu_cT;
+            std::function<complex<double> ()> _bdmumu_cT5;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            /*! b->s Wilson coefficients */
+            virtual WilsonCoefficients<BToD> wilson_coefficients_b_to_d(const std::string & lepton_flavour, const bool & cp_conjugate) const;
+    };
 
     template <>
     class WilsonScanComponent<components::DeltaBS1> :
@@ -150,6 +234,7 @@ namespace eos
         public Model,
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
+        public WilsonScanComponent<components::DeltaBD1>,
         public WilsonScanComponent<components::DeltaBS1>,
         public WilsonScanComponent<components::DeltaBU1>
     {
@@ -161,6 +246,7 @@ namespace eos
     };
 
     class ConstrainedWilsonScanComponent :
+        public WilsonScanComponent<components::DeltaBD1>,
         public WilsonScanComponent<components::DeltaBS1>
     {
         public:
