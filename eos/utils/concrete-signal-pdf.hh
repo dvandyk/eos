@@ -192,14 +192,18 @@ namespace eos
 
             std::function<double (const Decay_ *, const Args_ & ...)> _function;
 
+            Options _default_options;
+
             std::tuple<typename impl::ConvertTo<Args_, KinematicRange>::Type ...> _kinematic_ranges;
 
         public:
             ConcreteSignalPDFEntry(const std::string & name,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & function,
+                    const Options & default_options,
                     const std::tuple<typename impl::ConvertTo<Args_, KinematicRange>::Type ...> & kinematic_ranges) :
                 _name(name),
                 _function(function),
+                _default_options(default_options),
                 _kinematic_ranges(kinematic_ranges)
             {
             }
@@ -211,7 +215,7 @@ namespace eos
             virtual SignalPDFPtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
 
-                return SignalPDFPtr(new ConcreteSignalPDF<Decay_, Args_ ...>(_name, parameters, kinematics, options, _function, _kinematic_ranges));
+                return SignalPDFPtr(new ConcreteSignalPDF<Decay_, Args_ ...>(_name, parameters, kinematics, _default_options + options, _function, _kinematic_ranges));
             }
 
             virtual std::ostream & insert(std::ostream & os) const
@@ -226,11 +230,12 @@ namespace eos
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
     SignalPDFEntry * make_concrete_signal_pdf_entry(const std::string & name, double (Decay_::* function)(const Args_ & ...) const,
-            const Tuple_ & kinematic_ranges)
+            const Options & default_options, const Tuple_ & kinematic_ranges)
     {
         static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
         return new ConcreteSignalPDFEntry<Decay_, Args_ ...>(name,
                 std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(function)),
+                default_options,
                 kinematic_ranges);
     }
 }
