@@ -26,7 +26,7 @@
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/hard-scattering.hh>
 #include <eos/rare-b-decays/long-distance.hh>
-#include <eos/rare-b-decays/qcdf_integrals.hh>
+#include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
@@ -47,6 +47,7 @@
 
 namespace eos
 {
+    using namespace std::placeholders;
     using namespace eos::btovll;
     using std::norm;
 
@@ -120,6 +121,16 @@ namespace eos
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
+        std::function<QCDFIntegrals<BToKstarDileptonNew> (const double &, const double &,
+                const double &, const double &, const double &, const double &,
+                const double &, const double &)> qcdf_dilepton_massless_case;
+        std::function<QCDFIntegrals<BToKstarDileptonNew> (const double &, const double &,
+                const double &, const double &, const double &, const double &,
+                const double &, const double &, const double &)> qcdf_dilepton_charm_case;
+        std::function<QCDFIntegrals<BToKstarDileptonNew> (const double &, const double &,
+                const double &, const double &, const double &, const double &,
+                const double &, const double &, const double &)> qcdf_dilepton_bottom_case;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "WilsonScan"), p, o)),
             parameters(p),
@@ -184,6 +195,39 @@ namespace eos
 
             ff_relation = o.get("large-recoil-ff", "BFS2004");
 
+            // Select the appropriate calculator for the QCDF integrals
+            std::string qcdf_integrals(o.get("qcdf-integrals", "mixed"));
+            if ("mixed" == qcdf_integrals)
+            {
+                qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::dilepton_massless_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8);
+                qcdf_dilepton_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::dilepton_charm_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+                qcdf_dilepton_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::dilepton_bottom_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            }
+            else if ("numerical" == qcdf_integrals)
+            {
+                qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Numerical>::dilepton_massless_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8);
+                qcdf_dilepton_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Numerical>::dilepton_charm_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+                qcdf_dilepton_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Numerical>::dilepton_bottom_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            }
+            else if ("analytical" == qcdf_integrals)
+            {
+                qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_massless_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8);
+                qcdf_dilepton_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_charm_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+                qcdf_dilepton_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_bottom_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            }
+            else
+            {
+                throw InvalidOptionValueError("qcdf-integrals", qcdf_integrals, "mixed, numerical, analytical");
+            }
 #if 0
             p["Abs{c7}"]  =  0.33670; // c7eff = 0.30726
             p["Abs{c9}"]  =  4.27305;
@@ -268,9 +312,9 @@ namespace eos
             // Compute the QCDF Integrals
             double invm1_par = 3.0 * (1.0 + a_1_par + a_2_par); // <ubar^-1>_par
             double invm1_perp = 3.0 * (1.0 + a_1_perp + a_2_perp); // <ubar^-1>_perp
-            QCDFIntegrals::Results qcdf_0 = QCDFIntegrals::dilepton_massless_case(s, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
-            QCDFIntegrals::Results qcdf_c = QCDFIntegrals::dilepton_charm_case(s, m_c_pole, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
-            QCDFIntegrals::Results qcdf_b = QCDFIntegrals::dilepton_bottom_case(s, m_b_PS, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+            QCDFIntegrals<BToKstarDileptonNew> qcdf_0 = this->qcdf_dilepton_massless_case(s, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+            QCDFIntegrals<BToKstarDileptonNew> qcdf_c = this->qcdf_dilepton_charm_case(s, m_c_pole, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+            QCDFIntegrals<BToKstarDileptonNew> qcdf_b = this->qcdf_dilepton_bottom_case(s, m_b_PS, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
 
             // inverse of the "negative" moment of the B meson LCDA
             // cf. [BFS2001], Eq. (54), p. 15
@@ -491,10 +535,10 @@ namespace eos
             if (cp_conjugate)
                 lambda_hat_u = std::conj(lambda_hat_u);
 
-            QCDFIntegrals::Results
-                qcdf_0 = QCDFIntegrals::dilepton_massless_case(s, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par),
-                qcdf_c = QCDFIntegrals::dilepton_charm_case(s, m_c_pole, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par),
-                qcdf_b = QCDFIntegrals::dilepton_bottom_case(s, m_b_PS, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+            QCDFIntegrals<BToKstarDileptonNew>
+                qcdf_0 = this->qcdf_dilepton_massless_case(s, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par),
+                qcdf_c = this->qcdf_dilepton_charm_case(s, m_c_pole, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par),
+                qcdf_b = this->qcdf_dilepton_bottom_case(s, m_b_PS, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
 
             // inverse of the "negative" moment of the B meson LCDA
             // cf. [BFS2001], Eq. (54), p. 15
@@ -2227,6 +2271,16 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
 
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
+        std::function<QCDFIntegrals<BToKstarDileptonNew> (const double &, const double &,
+                const double &, const double &, const double &, const double &,
+                const double &, const double &)> qcdf_dilepton_massless_case;
+        std::function<QCDFIntegrals<BToKstarDileptonNew> (const double &, const double &,
+                const double &, const double &, const double &, const double &,
+                const double &, const double &, const double &)> qcdf_dilepton_charm_case;
+        std::function<QCDFIntegrals<BToKstarDileptonNew> (const double &, const double &,
+                const double &, const double &, const double &, const double &,
+                const double &, const double &, const double &)> qcdf_dilepton_bottom_case;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             parameters(p),
             model(Model::make(o.get("model", "SM"), p, o)),
@@ -2274,7 +2328,43 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
                 e_q = 2.0 / 3.0;
             }
             else
+            {
                 throw InternalError("Unsupported spectator quark");
+            }
+
+            // Select the appropriate calculator for the QCDF integrals
+            std::string qcdf_integrals(o.get("qcdf-integrals", "mixed"));
+            if ("mixed" == qcdf_integrals)
+            {
+                qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::dilepton_massless_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8);
+                qcdf_dilepton_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::dilepton_charm_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+                qcdf_dilepton_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::dilepton_bottom_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            }
+            else if ("numerical" == qcdf_integrals)
+            {
+                qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Numerical>::dilepton_massless_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8);
+                qcdf_dilepton_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Numerical>::dilepton_charm_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+                qcdf_dilepton_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Numerical>::dilepton_bottom_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            }
+            else if ("analytical" == qcdf_integrals)
+            {
+                qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_massless_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8);
+                qcdf_dilepton_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_charm_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+                qcdf_dilepton_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_bottom_case,
+                            _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            }
+            else
+            {
+                throw InvalidOptionValueError("qcdf-integrals", qcdf_integrals, "mixed, numerical, analytical");
+            }
         }
 
         WilsonCoefficients<BToS> wilson_coefficients() const
@@ -2309,9 +2399,9 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
 
             // Compute the QCDF Integrals
             double invm1_psd = 3.0 * (1.0 + a_1 + a_2); // <ubar^-1>
-            QCDFIntegrals::Results qcdf_0 = QCDFIntegrals::dilepton_massless_case(s, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
-            QCDFIntegrals::Results qcdf_c = QCDFIntegrals::dilepton_charm_case(s, m_c_pole, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
-            QCDFIntegrals::Results qcdf_b = QCDFIntegrals::dilepton_bottom_case(s, m_b_PS, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
+            QCDFIntegrals<BToKstarDileptonNew> qcdf_0 = this->qcdf_dilepton_massless_case(s, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
+            QCDFIntegrals<BToKstarDileptonNew> qcdf_c = this->qcdf_dilepton_charm_case(s, m_c_pole, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
+            QCDFIntegrals<BToKstarDileptonNew> qcdf_b = this->qcdf_dilepton_bottom_case(s, m_b_PS, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
 
             // inverse of the "negative" moment of the B meson LCDA
             // cf. [BFS2001], Eq. (54), p. 15

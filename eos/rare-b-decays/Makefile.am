@@ -18,7 +18,10 @@ libeosrarebdecays_la_SOURCES = \
 	hard-scattering.cc hard-scattering.hh \
 	long-distance.cc long-distance.hh \
 	lambda-b-to-lambda-dilepton.cc lambda-b-to-lambda-dilepton.hh \
-	qcdf_integrals.cc qcdf_integrals.hh
+	qcdf-integrals.cc qcdf-integrals.hh qcdf-integrals-impl.hh \
+	qcdf-integrals-analytical.cc \
+	qcdf-integrals-mixed.cc \
+	qcdf-integrals-numerical.cc
 libeosrarebdecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
@@ -38,7 +41,7 @@ include_eos_rarebdecays_HEADERS = \
 	inclusive-b-to-s-gamma.hh \
 	hard-scattering.hh \
 	long-distance.hh \
-	qcdf_integrals.hh
+	qcdf-integrals.hh
 
 EXTRA_DIST = \
 	exclusive-b-to-s-dilepton-low-recoil_TEST-btokll.data \
@@ -57,7 +60,7 @@ TESTS = \
 	inclusive-b-to-s-gamma_TEST \
 	hard-scattering_TEST \
 	long-distance_TEST \
-	qcdf_integrals_TEST
+	qcdf-integrals_TEST
 XFAIL_TESTS = \
 	exclusive-b-to-s-dilepton-large-recoil_TEST # One of the QCDF integrals has a bug in the imaginary part
 LDADD = \
@@ -89,4 +92,4 @@ hard_scattering_TEST_SOURCES = hard-scattering_TEST.cc
 
 long_distance_TEST_SOURCES = long-distance_TEST.cc
 
-qcdf_integrals_TEST_SOURCES = qcdf_integrals_TEST.cc
+qcdf_integrals_TEST_SOURCES = qcdf-integrals_TEST.cc
