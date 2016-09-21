@@ -31,7 +31,7 @@ class QCDFIntegralsPhotonTest :
     public TestCase
 {
     public:
-        using Calculator = QCDFIntegralCalculator<BToKstarDileptonNew, Tag_>;
+        using Calculator = QCDFIntegralCalculator<BToKstarDilepton, Tag_>;
 
         QCDFIntegralsPhotonTest() :
             TestCase("qcdf_integrals_photon_test" + Tag_::name + ">")
@@ -46,7 +46,7 @@ class QCDFIntegralsPhotonTest :
 
             // Asymptotic LCDA, shat = 0, bottom
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::photon_bottom_case(m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_bottom_case(m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.0,                    real(results.j0_perp),     eps);
@@ -88,7 +88,7 @@ class QCDFIntegralsPhotonTest :
 
             // Asymptotic LCDA, shat = 0, charm
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::photon_charm_case(m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_charm_case(m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.0,                    real(results.j0_perp),     eps);
@@ -130,7 +130,7 @@ class QCDFIntegralsPhotonTest :
 
             // Asymptotic LCDA, shat = 0, massless
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::photon_massless_case(m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_massless_case(m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.0,                    real(results.j0_perp),     eps);
@@ -173,7 +173,7 @@ class QCDFIntegralsPhotonTest :
 
             // Full LCDA, shat = 0, bottom
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::photon_bottom_case(m_b, m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_bottom_case(m_b, m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+12.0,                   real(results.j0_perp),     eps);
@@ -215,7 +215,7 @@ class QCDFIntegralsPhotonTest :
 
             // Full LCDA, shat = 0, charm
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::photon_charm_case(m_c, m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_charm_case(m_c, m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+12.0,                   real(results.j0_perp),     eps);
@@ -257,7 +257,7 @@ class QCDFIntegralsPhotonTest :
 
             // Full LCDA, shat = 0, massless
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::photon_massless_case(m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_massless_case(m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+12.0,                   real(results.j0_perp),     eps);
@@ -306,7 +306,7 @@ class QCDFIntegralsDileptonBottomTest :
     public TestCase
 {
     public:
-        using Calculator = QCDFIntegralCalculator<BToKstarDileptonNew, Tag_>;
+        using Calculator = QCDFIntegralCalculator<BToKstarDilepton, Tag_>;
 
         QCDFIntegralsDileptonBottomTest() :
             TestCase("qcdf_dilepton_bottom_test<" + Tag_::name + ">")
@@ -320,7 +320,7 @@ class QCDFIntegralsDileptonBottomTest :
 
             // Asymptotic LCDA, s = 1 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_bottom_case(1.0, m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_bottom_case(1.0, m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+2.5438661014683875729,   real(results.j0_perp),     eps);
@@ -362,7 +362,7 @@ class QCDFIntegralsDileptonBottomTest :
 
             // Full LCDA, s = 1 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_bottom_case(1.0, m_b, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_bottom_case(1.0, m_b, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+7.5060595661946593437,  real(results.j0_perp),      eps);
@@ -404,7 +404,7 @@ class QCDFIntegralsDileptonBottomTest :
 
             // Asymptotic LCDA, s = 6 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_bottom_case(6.0, m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_bottom_case(6.0, m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+1.8152337379049806314,  real(results.j0_perp),     eps);
@@ -446,7 +446,7 @@ class QCDFIntegralsDileptonBottomTest :
 
             // Full LCDA, s = 6 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_bottom_case(6.0, m_b, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_bottom_case(6.0, m_b, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.2577075222152920859,  real(results.j0_perp),     eps);
@@ -496,7 +496,7 @@ class QCDFIntegralsDileptonCharmTest :
     public TestCase
 {
     public:
-        using Calculator = QCDFIntegralCalculator<BToKstarDileptonNew, Tag_>;
+        using Calculator = QCDFIntegralCalculator<BToKstarDilepton, Tag_>;
 
         QCDFIntegralsDileptonCharmTest() :
             TestCase("qcdf_dilepton_charm_test<" + Tag_::name + ">")
@@ -510,7 +510,7 @@ class QCDFIntegralsDileptonCharmTest :
 
             // Asymptotic LCDA, s = 1 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_charm_case(1.0, m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_charm_case(1.0, m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+2.5438661014683875729,  real(results.j0_perp),     eps);
@@ -566,7 +566,7 @@ class QCDFIntegralsDileptonCharmTest :
 
             // Full LCDA, s = 1 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_charm_case(1.0, m_c, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_charm_case(1.0, m_c, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+7.5060595661946593437,  real(results.j0_perp),     eps);
@@ -622,7 +622,7 @@ class QCDFIntegralsDileptonCharmTest :
 
             // Asymptotic LCDA, s = 6 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_charm_case(6.0, m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_charm_case(6.0, m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+1.8152337379049806314,  real(results.j0_perp),     eps);
@@ -678,7 +678,7 @@ class QCDFIntegralsDileptonCharmTest :
 
             // Full LCDA, s = 6 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_charm_case(6.0, m_c, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_charm_case(6.0, m_c, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.2577075222152920859,  real(results.j0_perp),     eps);
@@ -742,7 +742,7 @@ class QCDFIntegralsDileptonMasslessTest :
     public TestCase
 {
     public:
-        using Calculator = QCDFIntegralCalculator<BToKstarDileptonNew, Tag_>;
+        using Calculator = QCDFIntegralCalculator<BToKstarDilepton, Tag_>;
 
         QCDFIntegralsDileptonMasslessTest() :
             TestCase("qcdf_dilepton_massless_test<" + Tag_::name + ">")
@@ -756,7 +756,7 @@ class QCDFIntegralsDileptonMasslessTest :
 
             // Asymptotic LCDA, s = 1 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_massless_case(1.0, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_massless_case(1.0, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+2.5438661014683875729, real(results.j0_perp),     eps);
@@ -798,7 +798,7 @@ class QCDFIntegralsDileptonMasslessTest :
 
             // Full LCDA, s = 1 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_massless_case(1.0, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_massless_case(1.0, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+7.5060595661946593437, real(results.j0_perp),     eps);
@@ -840,7 +840,7 @@ class QCDFIntegralsDileptonMasslessTest :
 
             // Asymptotic LCDA, s = 6 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_massless_case(6.0, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_massless_case(6.0, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+1.8152337379049806314, real(results.j0_perp),     eps);
@@ -882,7 +882,7 @@ class QCDFIntegralsDileptonMasslessTest :
 
             // Full LCDA, s = 6 GeV
             {
-                QCDFIntegrals<BToKstarDileptonNew> results = Calculator::dilepton_massless_case(6.0, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_massless_case(6.0, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.2577075222152920859, real(results.j0_perp),     eps);

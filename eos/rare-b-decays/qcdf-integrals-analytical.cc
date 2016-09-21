@@ -1865,12 +1865,12 @@ namespace eos
 
     // bottom case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::photon_bottom_case(const double & m_b, const double & m_B, const double & m_V, const double & mu,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_bottom_case(const double & m_b, const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals<BToKstarDileptonNew> results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double mh = m_b / m_B;
         double eh = (1.0 + power_of<2>(m_V / m_B)) / 2.0;
 
@@ -1906,12 +1906,12 @@ namespace eos
 
     // charm case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::photon_charm_case(const double & m_c, const double & m_B, const double & m_V, const double & mu,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_charm_case(const double & m_c, const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals<BToKstarDileptonNew> results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double mh = m_c / m_B;
         double eh = (1.0 + power_of<2>(m_V / m_B)) / 2.0;
 
@@ -1947,12 +1947,12 @@ namespace eos
 
     // massless case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::photon_massless_case(const double & m_B, const double & m_V, const double & mu,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_massless_case(const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals<BToKstarDileptonNew> results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double eh = (1.0 + power_of<2>(m_V / m_B)) / 2.0;
 
         /*
@@ -1989,12 +1989,12 @@ namespace eos
 
     // bottom case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_bottom_case(const double & s, const double & m_b, const double & m_B, const double & m_V, const double & mu,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_bottom_case(const double & s, const double & m_b, const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals<BToKstarDileptonNew> results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double sh = s / m_B / m_B, mh = m_b / m_B;
         double eh = (1.0 + power_of<2>(m_V / m_B) - sh) / 2.0;
 
@@ -2026,17 +2026,17 @@ namespace eos
 
     // charm case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_charm_case(const double & s, const double & m_c, const double & m_B, const double & m_V, const double & mu,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_charm_case(const double & s, const double & m_c, const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals<BToKstarDileptonNew> results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double sh = s / m_B / m_B, rho = 4.0 * m_c * m_c / s, mh = m_c / m_B;
         double eh = (1.0 + power_of<2>(m_V / m_B) - sh) / 2.0;
 
         if (rho < 1.0)
-            throw InternalError("QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_charm_case: charm mass too small, rho = " + stringify(rho) + ", m_c = " + stringify(m_c) + ", s = " + stringify(s));
+            throw InternalError("QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_charm_case: charm mass too small, rho = " + stringify(rho) + ", m_c = " + stringify(m_c) + ", s = " + stringify(s));
 
         impl::DileptonIntegralsCharm integrals(sh, mh, m_B, mu);
 
@@ -2066,12 +2066,12 @@ namespace eos
 
     // massless case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_massless_case(const double & s, const double & m_B, const double & m_V, const double & mu,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_massless_case(const double & s, const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals<BToKstarDileptonNew> results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double sh = s / m_B / m_B;
         double eh = (1.0 + power_of<2>(m_V / m_B) - sh) / 2.0;
 

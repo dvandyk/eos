@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2014 Christoph Bobeth
+ * Copyright (c) 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,12 +22,276 @@
 #ifndef EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_HH
 #define EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_HH 1
 
+#include <eos/utils/complex.hh>
+#include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 #include <eos/utils/power_of.hh>
+#include <eos/utils/private_implementation_pattern.hh>
 
 #include <array>
 
 namespace eos
 {
+    /*
+     * Decay: B -> K^* l lbar.
+     */
+    class BToKstarDilepton :
+        public ParameterUser,
+        public PrivateImplementationPattern<BToKstarDilepton>
+    {
+        public:
+            BToKstarDilepton(const Parameters & parameters, const Options & options);
+            ~BToKstarDilepton();
+
+            struct AngularCoefficients;
+            struct Amplitudes;
+            class AmplitudeGenerator;
+            struct DipoleFormFactors;
+
+            /*!
+             * @name Signal PDFs
+             */
+            // @{
+            double decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const;
+            // @}
+
+            /*!
+             * @name Inverse observables
+             *
+             * These observables have to be computed as inverse problems,
+             * e.g. zero crossings.
+             */
+            // @{
+            double a_fb_zero_crossing() const;
+            // @}
+
+            /*!
+             * @name Simple observables (@f$q^2@f$-differential)
+             *
+             * These observables are differential in q^2, the dilepton
+             * invariant mass. They arise form one decay mode,
+             * e.g. from @f$\bar{B}^0 \to @f$\bar{K}^{*0} \ell^+ \ell^-@f$, only.
+             */
+            // @{
+            double differential_decay_width(const double & q2) const;
+            double differential_branching_ratio(const double & q2) const;
+            double differential_forward_backward_asymmetry(const double & q2) const;
+            double differential_longitudinal_polarisation(const double & q2) const;
+            double differential_transversal_polarisation(const double & q2) const;
+            // @}
+
+            /*!
+             * @name Transverse asymmetries (@f$q^2@f$-differential)
+             *
+             * These transverse asymmetries partially cancel hadronic
+             * matrix elements at small @f$q^2@f$.
+             */
+            // @{
+            double differential_transverse_asymmetry_2(const double & q2) const;
+            double differential_transverse_asymmetry_3(const double & q2) const;
+            double differential_transverse_asymmetry_4(const double & q2) const;
+            double differential_transverse_asymmetry_5(const double & q2) const;
+            double differential_transverse_asymmetry_re(const double & q2) const;
+            double differential_transverse_asymmetry_im(const double & q2) const;
+            // @}
+
+            /*!
+             * @name Optimized observables for large recoil (@f$q^2@f$-differential)
+             *
+             * These transverse asymmetries partially cancel hadronic
+             * matrix elements at small @f$q^2@f$.
+             */
+            // @{
+            double differential_p_prime_4(const double & q2) const;
+            double differential_p_prime_5(const double & q2) const;
+            double differential_p_prime_6(const double & q2) const;
+            // @}
+
+            /*!
+             * @name Optimized observables for low recoil (@f$q^2@f$-differential)
+             *
+             * These transverse asymmetries partially cancel hadronic
+             * matrix elements at large @f$q^2@f$.
+             */
+            // @{
+            double differential_h_1(const double & q2) const;
+            double differential_h_2(const double & q2) const;
+            double differential_h_3(const double & q2) const;
+            double differential_h_4(const double & q2) const;
+            double differential_h_5(const double & q2) const;
+            // @}
+
+            /*!
+             * @name Angular observables (@f$q^2@f$-differential)
+             */
+            // @{
+            double differential_j_1s(const double & s) const;
+            double differential_j_1c(const double & s) const;
+            double differential_j_2s(const double & s) const;
+            double differential_j_2c(const double & s) const;
+            double differential_j_3(const double & s) const;
+            double differential_j_4(const double & s) const;
+            double differential_j_5(const double & s) const;
+            double differential_j_6s(const double & s) const;
+            double differential_j_6c(const double & s) const;
+            double differential_j_7(const double & s) const;
+            double differential_j_8(const double & s) const;
+            double differential_j_9(const double & s) const;
+            // @}
+
+            /*!
+             * @name Simple observables (@f$q^2@f$-integrated)
+             *
+             * These observables are integrated over q^2, the dilepton
+             * invariant mass. They arise from one decay mode,
+             * e.g. from @f$\bar{B}^0 \to \bar{K}^{*0} \ell^+ \ell^-@f$, only.
+             */
+            // @{
+            double integrated_decay_width(const double & q2_min, const double & q2_max) const;
+            double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
+            double integrated_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const;
+            double integrated_longitudinal_polarisation(const double & q2_min, const double & q2_max) const;
+            double integrated_transversal_polarisation(const double & q2_min, const double & q2_max) const;
+            // @}
+
+            /*!
+             * @name Direct CP-asymmetry (@f$q^2@f$-integrated)
+             *
+             * These observables are integrated over q^2, the dilepton
+             * invariant mass. They arise from the CP-antisymmetrization
+             * of the decay modes @f$\bar{B}^0 \to \bar{K}^{*0} \ell^+ \ell^-@f$
+             * and @f$B^0 \to K^{*0} \ell^+ \ell^-@f$.
+             */
+            // @{
+            double integrated_cp_asymmetry(const double & q2_min, const double & q2_max) const;
+            // @}
+
+            /*!
+             * @name Transverse asymmetries (@f$q^2@f$-integrated)
+             *
+             * These transverse asymmetries partially cancel hadronic
+             * matrix elements at small @f$q^2@f$.
+             */
+            // @{
+            double integrated_transverse_asymmetry_2(const double & q2_min, const double & q2_max) const;
+            double integrated_transverse_asymmetry_3(const double & q2_min, const double & q2_max) const;
+            double integrated_transverse_asymmetry_4(const double & q2_min, const double & q2_max) const;
+            double integrated_transverse_asymmetry_5(const double & q2_min, const double & q2_max) const;
+            double integrated_transverse_asymmetry_re(const double & q2_min, const double & q2_max) const;
+            double integrated_transverse_asymmetry_im(const double & q2_min, const double & q2_max) const;
+            // @}
+
+            /*!
+             * @name Optimized observables for large recoil (@f$q^2@f$-integrated)
+             *
+             * These transverse asymmetries partially cancel hadronic
+             * matrix elements at small @f$q^2@f$.
+             */
+            // @{
+            double integrated_p_prime_4(const double & q2_min, const double & q2_max) const;
+            double integrated_p_prime_5(const double & q2_min, const double & q2_max) const;
+            double integrated_p_prime_6(const double & q2_min, const double & q2_max) const;
+            // @}
+
+            /*!
+             * @name Optimized observables for low recoil (@f$q^2@f$-integrated)
+             *
+             * These transverse asymmetries partially cancel hadronic
+             * matrix elements at large @f$q^2@f$.
+             */
+            // @{
+            double integrated_h_1(const double & q2_min, const double & q2_max) const;
+            double integrated_h_2(const double & q2_min, const double & q2_max) const;
+            double integrated_h_3(const double & q2_min, const double & q2_max) const;
+            double integrated_h_4(const double & q2_min, const double & q2_max) const;
+            double integrated_h_5(const double & q2_min, const double & q2_max) const;
+            // @}
+
+            /*!
+             * @name Angular observables (@f$q^2@f$-integrated)
+             */
+            // @{
+            double integrated_j_1s(const double & q2_min, const double & q2_max) const;
+            double integrated_j_1c(const double & q2_min, const double & q2_max) const;
+            double integrated_j_2s(const double & q2_min, const double & q2_max) const;
+            double integrated_j_2c(const double & q2_min, const double & q2_max) const;
+            double integrated_j_3(const double & q2_min, const double & q2_max) const;
+            double integrated_j_4(const double & q2_min, const double & q2_max) const;
+            double integrated_j_5(const double & q2_min, const double & q2_max) const;
+            double integrated_j_6s(const double & q2_min, const double & q2_max) const;
+            double integrated_j_6c(const double & q2_min, const double & q2_max) const;
+            double integrated_j_7(const double & q2_min, const double & q2_max) const;
+            double integrated_j_8(const double & q2_min, const double & q2_max) const;
+            double integrated_j_9(const double & q2_min, const double & q2_max) const;
+            // @}
+
+            /*!
+             * @name CP-symmetrized angular observables (@f$q^2@f$-integrated)
+             */
+            // @{
+            double integrated_s_1s(const double & q2_min, const double & q2_max) const;
+            double integrated_s_1c(const double & q2_min, const double & q2_max) const;
+            double integrated_s_2s(const double & q2_min, const double & q2_max) const;
+            double integrated_s_2c(const double & q2_min, const double & q2_max) const;
+            double integrated_s_3(const double & q2_min, const double & q2_max) const;
+            double integrated_s_4(const double & q2_min, const double & q2_max) const;
+            double integrated_s_5(const double & q2_min, const double & q2_max) const;
+            double integrated_s_6s(const double & q2_min, const double & q2_max) const;
+            double integrated_s_6c(const double & q2_min, const double & q2_max) const;
+            double integrated_s_7(const double & q2_min, const double & q2_max) const;
+            double integrated_s_8(const double & q2_min, const double & q2_max) const;
+            double integrated_s_9(const double & q2_min, const double & q2_max) const;
+            // @}
+
+            /*!
+             * @name CP-antisymmetrized angular observables (@f$q^2@f$-integrated)
+             */
+            // @{
+            double integrated_a_1s(const double & q2_min, const double & q2_max) const;
+            double integrated_a_1c(const double & q2_min, const double & q2_max) const;
+            double integrated_a_2s(const double & q2_min, const double & q2_max) const;
+            double integrated_a_2c(const double & q2_min, const double & q2_max) const;
+            double integrated_a_3(const double & q2_min, const double & q2_max) const;
+            double integrated_a_4(const double & q2_min, const double & q2_max) const;
+            double integrated_a_5(const double & q2_min, const double & q2_max) const;
+            double integrated_a_6s(const double & q2_min, const double & q2_max) const;
+            double integrated_a_6c(const double & q2_min, const double & q2_max) const;
+            double integrated_a_7(const double & q2_min, const double & q2_max) const;
+            double integrated_a_8(const double & q2_min, const double & q2_max) const;
+            double integrated_a_9(const double & q2_min, const double & q2_max) const;
+            // @}
+
+            /*!
+             * Descriptions of the process and its kinematics.
+             */
+            // @{
+            static const std::string description;
+            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_c_theta_l;
+            static const std::string kinematics_description_c_theta_k;
+            static const std::string kinematics_description_phi;
+            // @}
+
+            /*!
+             * Auxilliary methods for unit tests and diagnostic purposes.
+             */
+            Amplitudes amplitudes(const double & q2) const;
+    };
+
+    /*!
+     * Amplitudes for the decay B -> K^* l lbar.
+     */
+    struct BToKstarDilepton::Amplitudes
+    {
+        complex<double> a_long_right, a_long_left;
+        complex<double> a_perp_right, a_perp_left;
+        complex<double> a_para_right, a_para_left;
+        complex<double> a_time, a_scal;
+        complex<double> a_para_perp, a_time_long;
+        complex<double> a_time_perp, a_long_perp;
+        complex<double> a_time_para, a_long_para;
+    };
+
     namespace btovll
     {
         struct Amplitudes

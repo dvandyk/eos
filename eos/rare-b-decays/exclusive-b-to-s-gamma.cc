@@ -87,13 +87,13 @@ namespace eos
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
-        std::function<QCDFIntegrals<BToKstarDileptonNew> (const double &, const double &,
+        std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
                 const double &, const double &, const double &, const double &,
                 const double &)> qcdf_photon_massless_case;
-        std::function<QCDFIntegrals<BToKstarDileptonNew> (const double &, const double &,
+        std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
                 const double &, const double &, const double &, const double &,
                 const double &, const double &)> qcdf_photon_charm_case;
-        std::function<QCDFIntegrals<BToKstarDileptonNew> (const double &, const double &,
+        std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
                 const double &, const double &, const double &, const double &,
                 const double &, const double &)> qcdf_photon_bottom_case;
 
@@ -144,20 +144,20 @@ namespace eos
             std::string qcdf_integrals(o.get("qcdf-integrals", "mixed"));
             if ("mixed" == qcdf_integrals)
             {
-                qcdf_photon_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::photon_massless_case,
+                qcdf_photon_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_massless_case,
                             _1, _2, _3, _4, _5, _6, _7);
-                qcdf_photon_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::photon_charm_case,
+                qcdf_photon_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_charm_case,
                             _1, _2, _3, _4, _5, _6, _7, _8);
-                qcdf_photon_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::photon_bottom_case,
+                qcdf_photon_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_bottom_case,
                             _1, _2, _3, _4, _5, _6, _7, _8);
             }
             else if ("analytical" == qcdf_integrals)
             {
-                qcdf_photon_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::photon_massless_case,
+                qcdf_photon_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_massless_case,
                             _1, _2, _3, _4, _5, _6, _7);
-                qcdf_photon_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::photon_charm_case,
+                qcdf_photon_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_charm_case,
                             _1, _2, _3, _4, _5, _6, _7, _8);
-                qcdf_photon_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::photon_bottom_case,
+                qcdf_photon_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_bottom_case,
                             _1, _2, _3, _4, _5, _6, _7, _8);
             }
             else
@@ -221,9 +221,9 @@ namespace eos
 
             // Compute the QCDF Integrals
             double invm1_perp = 3.0 * (1.0 + a_1_perp + a_2_perp); // <ubar^-1>_perp
-            QCDFIntegrals<BToKstarDileptonNew> qcdf_0 = this->qcdf_photon_massless_case(m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
-            QCDFIntegrals<BToKstarDileptonNew> qcdf_c = this->qcdf_photon_charm_case(m_c_pole, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
-            QCDFIntegrals<BToKstarDileptonNew> qcdf_b = this->qcdf_photon_bottom_case(m_b_PS, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+            QCDFIntegrals<BToKstarDilepton> qcdf_0 = this->qcdf_photon_massless_case(m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+            QCDFIntegrals<BToKstarDilepton> qcdf_c = this->qcdf_photon_charm_case(m_c_pole, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+            QCDFIntegrals<BToKstarDilepton> qcdf_b = this->qcdf_photon_bottom_case(m_b_PS, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
 
             // inverse of the "negative" moment of the B meson LCDA
             // cf. [BFS2001], Eq. (54), p. 15

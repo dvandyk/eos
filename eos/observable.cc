@@ -32,6 +32,7 @@
 #include <eos/b-decays/inclusive-b-to-u.hh>
 #include <eos/b-decays/properties.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
+#include <eos/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-gamma.hh>
@@ -60,6 +61,7 @@ namespace eos
     {
     }
 
+    /* regular observables */
     template <typename Decay_, typename ... Args_>
     std::pair<std::string, ObservableFactory *> make_observable(const char * name,
             double (Decay_::* function)(const Args_ & ...) const)
@@ -79,6 +81,7 @@ namespace eos
         return std::make_pair(sname, make_concrete_observable_factory(sname, function, kinematics_names));
     }
 
+    /* form factors as observables */
     template <typename Transition_>
     std::pair<std::string, ObservableFactory *> make_observable(const char * name,
             const char * process,
@@ -710,811 +713,388 @@ namespace eos
                     &BToKDilepton<LowRecoil>::imag_c7eff,
                     std::make_tuple("s")),
 
-            // B -> K^* ll, Large Recoil
-            make_observable("B->K^*ll::xi_perp(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::xi_perp,
-                    std::make_tuple("s")),
+            // B -> K^* ll
+            make_observable("B->K^*ll::s_0(A_FB)",
+                    &BToKstarDilepton::a_fb_zero_crossing),
 
-            make_observable("B->K^*ll::xi_para(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::xi_para,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::d^4Gamma@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::four_differential_decay_width,
+            make_observable("B->K^*ll::d^4Gamma",
+                    &BToKstarDilepton::decay_width,
                     std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi")),
 
-            make_observable("B->K^*ll::dBR/ds@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_branching_ratio,
+            make_observable("B->K^*ll::dBR/ds",
+                    &BToKstarDilepton::differential_branching_ratio,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::A_I(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_isospin_asymmetry,
+            make_observable("B->K^*ll::A_FB(s)",
+                    &BToKstarDilepton::differential_forward_backward_asymmetry,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::A_FB(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_forward_backward_asymmetry,
+            make_observable("B->K^*ll::F_L(s)",
+                    &BToKstarDilepton::differential_longitudinal_polarisation,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::A_T^2(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_2,
+            make_observable("B->K^*ll::F_T(s)",
+                    &BToKstarDilepton::differential_transversal_polarisation,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::A_T^3(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_3,
+            make_observable("B->K^*ll::A_T^2(s)",
+                    &BToKstarDilepton::differential_transverse_asymmetry_2,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::A_T^4(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_4,
+            make_observable("B->K^*ll::A_T^3(s)",
+                    &BToKstarDilepton::differential_transverse_asymmetry_3,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::A_T^5(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_5,
+            make_observable("B->K^*ll::A_T^4(s)",
+                    &BToKstarDilepton::differential_transverse_asymmetry_4,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::A_T^re(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_re,
+            make_observable("B->K^*ll::A_T^5(s)",
+                    &BToKstarDilepton::differential_transverse_asymmetry_5,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::A_T^im(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_im,
+            make_observable("B->K^*ll::A_T^re(s)",
+                    &BToKstarDilepton::differential_transverse_asymmetry_re,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::P'_4(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_p_prime_4,
+            make_observable("B->K^*ll::A_T^im(s)",
+                    &BToKstarDilepton::differential_transverse_asymmetry_im,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::P'_5(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_p_prime_5,
+            make_observable("B->K^*ll::P'_4(s)",
+                    &BToKstarDilepton::differential_p_prime_4,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::P'_6(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_p_prime_6,
+            make_observable("B->K^*ll::P'_5(s)",
+                    &BToKstarDilepton::differential_p_prime_5,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::F_L(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation,
+            make_observable("B->K^*ll::P'_6(s)",
+                    &BToKstarDilepton::differential_p_prime_6,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::F_T(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_transversal_polarisation,
+            make_observable("B->K^*ll::J_1s(s)",
+                    &BToKstarDilepton::differential_j_1s,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_1s(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_1s,
+            make_observable("B->K^*ll::J_1c(s)",
+                    &BToKstarDilepton::differential_j_1c,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_1c(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_1c,
+            make_observable("B->K^*ll::J_2s(s)",
+                    &BToKstarDilepton::differential_j_2s,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_2s(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_2s,
+            make_observable("B->K^*ll::J_2c(s)",
+                    &BToKstarDilepton::differential_j_2c,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_2c(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_2c,
+            make_observable("B->K^*ll::J_3(s)",
+                    &BToKstarDilepton::differential_j_3,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_3(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_3,
+            make_observable("B->K^*ll::J_4(s)",
+                    &BToKstarDilepton::differential_j_4,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_3norm(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_3_normalized,
+            make_observable("B->K^*ll::J_5(s)",
+                    &BToKstarDilepton::differential_j_5,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_3normavg(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_3_normalized_cp_averaged,
+            make_observable("B->K^*ll::J_6s(s)",
+                    &BToKstarDilepton::differential_j_6s,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_4(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_4,
+            make_observable("B->K^*ll::J_6c(s)",
+                    &BToKstarDilepton::differential_j_6c,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_5(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_5,
+            make_observable("B->K^*ll::J_7(s)",
+                    &BToKstarDilepton::differential_j_7,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_6s(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_6s,
+            make_observable("B->K^*ll::J_8(s)",
+                    &BToKstarDilepton::differential_j_8,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_6c(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_6c,
+            make_observable("B->K^*ll::J_9(s)",
+                    &BToKstarDilepton::differential_j_9,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_7(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_7,
+#if 0
+            make_observable("B->K^*ll::D_4(s)",
+                    &BToKstarDilepton::differential_d_4,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_8(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_8,
+            make_observable("B->K^*ll::D_5(s)",
+                    &BToKstarDilepton::differential_d_5,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_9(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_9,
+            make_observable("B->K^*ll::D_6s(s)",
+                    &BToKstarDilepton::differential_d_6s,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_9norm(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_9_normalized,
+            make_observable("B->K^*ll::R_K^*(s)",
+                    &BToKstarDilepton::differential_ratio_muons_electrons,
                     std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_9normavg(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_j_9_normalized_cp_averaged,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::D_4(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_d_4,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::D_5(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_d_5,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::D_6s(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_d_6s,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::R_K^*(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_ratio_muons_electrons,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::A_FB@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_FBavg@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry_cp_averaged,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::BR@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_branching_ratio,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::BRavg@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_branching_ratio_cp_averaged,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_CP@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_cp_asymmetry,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::F_L@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::F_Lavg@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation_cp_averaged,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::F_T@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_transversal_polarisation,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::F_Tavg@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_transversal_polarisation_cp_averaged,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_T^2@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_2,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_T^2avg@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_2_cp_averaged,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_T^3@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_3,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_T^4@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_4,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_T^5@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_5,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_T^re@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_re,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_T^im@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_im,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::P'_4@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_p_prime_4,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::P'_5@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_p_prime_5,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::P'_6@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_p_prime_6,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::H_T^1(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_h_1,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::H_T^2(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_h_2,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::H_T^3(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_h_3,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::H_T^4(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_h_4,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::H_T^5(s)@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::differential_h_5,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::H_T^1@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_h_1,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::H_T^2@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_h_2,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::H_T^3@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_h_3,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::H_T^4@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_h_4,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::H_T^5@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_h_5,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::s_0^A_FB@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::a_fb_zero_crossing),
-
-            make_observable("B->K^*ll::Gamma@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_decay_width,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::J_1s@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_1s,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::J_1c@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_1c,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::J_2s@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_2s,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::J_2c@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_2c,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::J_3@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_3,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::J_3norm@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_3_normalized,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::J_3normavg@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_3_normalized_cp_averaged,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::J_4@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_4,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::J_5@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_5,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::J_6s@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_6s,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::J_6c@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_6c,
+#endif
+            make_observable("B->K^*ll::Gamma",
+                    &BToKstarDilepton::integrated_decay_width,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_7@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_7,
+            make_observable("B->K^*ll::BR",
+                    &BToKstarDilepton::integrated_branching_ratio,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_8@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_8,
+            make_observable("B->K^*ll::A_FB",
+                    &BToKstarDilepton::integrated_forward_backward_asymmetry,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_9@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_9,
+            make_observable("B->K^*ll::F_L",
+                    &BToKstarDilepton::integrated_longitudinal_polarisation,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_9norm@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_9_normalized,
+            make_observable("B->K^*ll::F_T",
+                    &BToKstarDilepton::integrated_transversal_polarisation,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_9normavg@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_9_normalized_cp_averaged,
+            make_observable("B->K^*ll::A_T^2",
+                    &BToKstarDilepton::integrated_transverse_asymmetry_2,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_3@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_3_normalized_cp_averaged,
+            make_observable("B->K^*ll::A_T^3",
+                    &BToKstarDilepton::integrated_transverse_asymmetry_3,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_4@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_4_normalized_cp_averaged,
+            make_observable("B->K^*ll::A_T^4",
+                    &BToKstarDilepton::integrated_transverse_asymmetry_4,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_5@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_5_normalized_cp_averaged,
+            make_observable("B->K^*ll::A_T^5",
+                    &BToKstarDilepton::integrated_transverse_asymmetry_5,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_7@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_7_normalized_cp_averaged,
+            make_observable("B->K^*ll::A_T^re",
+                    &BToKstarDilepton::integrated_transverse_asymmetry_re,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_8@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_8_normalized_cp_averaged,
+            make_observable("B->K^*ll::A_T^im",
+                    &BToKstarDilepton::integrated_transverse_asymmetry_im,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_9@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_j_9_normalized_cp_averaged,
+            make_observable("B->K^*ll::P'_4",
+                    &BToKstarDilepton::integrated_p_prime_4,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::A_9@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_a_9,
+            make_observable("B->K^*ll::P'_5",
+                    &BToKstarDilepton::integrated_p_prime_5,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::D_4@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_d_4,
+            make_observable("B->K^*ll::P'_6",
+                    &BToKstarDilepton::integrated_p_prime_6,
                     std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::D_5@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_d_5,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::D_6s@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_d_6s,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::R_K^*@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::integrated_ratio_muons_electrons,
-                    std::make_tuple("s_min", "s_max")),
-
-            // B -> K^* ll, Low Recoil
-            make_observable("B->K^*ll::d^4Gamma@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::four_differential_decay_width,
-                    std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi")),
-
-            make_observable("B->K^*ll::dBR/ds@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_branching_ratio,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::A_FB(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::A_T^2(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_2,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::A_T^3(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_3,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::A_T^4(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_4,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::A_T^5(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_5,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::A_T^re(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_re,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::A_T^im(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_im,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::P'_4(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_p_prime_4,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::P'_5(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_p_prime_5,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::P'_6(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_p_prime_6,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::F_L(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::F_T(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_transversal_polarisation,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::H_T^1(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_h_1,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::H_T^2(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_h_2,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::H_T^3(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_h_3,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::H_T^4(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_h_4,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::H_T^5(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_h_5,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_1s(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_1s,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_1c(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_1c,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_2s(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_2s,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_2c(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_2c,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_3(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_3,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_3norm(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_3_normalized,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_3normavg(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_3_normalized_cp_averaged,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_4(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_4,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_5(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_5,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_6s(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_6s,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_6c(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_6c,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::J_7(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_7,
-                    std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_8(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_8,
+            make_observable("B->K^*ll::H_T^1(s)",
+                    &BToKstarDilepton::differential_h_1,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_9(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_9,
+            make_observable("B->K^*ll::H_T^2(s)",
+                    &BToKstarDilepton::differential_h_2,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_9norm(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_9_normalized,
+            make_observable("B->K^*ll::H_T^3(s)",
+                    &BToKstarDilepton::differential_h_3,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::J_9normavg(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_j_9_normalized_cp_averaged,
+            make_observable("B->K^*ll::H_T^4(s)",
+                    &BToKstarDilepton::differential_h_4,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::rho_1(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::rho_1,
+            make_observable("B->K^*ll::H_T^5(s)",
+                    &BToKstarDilepton::differential_h_5,
                     std::make_tuple("s")),
 
-            make_observable("B->K^*ll::rho_2(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::rho_2,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::A_FB@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_FBavg@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry_cp_averaged,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::Abar_FB@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_unnormalized_forward_backward_asymmetry,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::nA_FB@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry_naive,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::BR@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_branching_ratio,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::BRavg@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_branching_ratio_cp_averaged,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_CP@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::F_L@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::F_Lavg@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation_cp_averaged,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::F_T@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transversal_polarisation,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::F_Tavg@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transversal_polarisation_cp_averaged,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::nF_L@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation_naive,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::A_T^2@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2,
+            make_observable("B->K^*ll::H_T^1",
+                    &BToKstarDilepton::integrated_h_1,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::A_T^2avg@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2_cp_averaged,
+            make_observable("B->K^*ll::H_T^2",
+                    &BToKstarDilepton::integrated_h_2,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::nA_T^2@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2_naive,
+            make_observable("B->K^*ll::H_T^3",
+                    &BToKstarDilepton::integrated_h_3,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::A_T^3@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_3,
+            make_observable("B->K^*ll::H_T^4",
+                    &BToKstarDilepton::integrated_h_4,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::nA_T^3@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_3_naive,
+            make_observable("B->K^*ll::H_T^5",
+                    &BToKstarDilepton::integrated_h_5,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::A_T^4@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_4,
+            make_observable("B->K^*ll::J_1s",
+                    &BToKstarDilepton::integrated_j_1s,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::nA_T^4@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_4_naive,
+            make_observable("B->K^*ll::J_1c",
+                    &BToKstarDilepton::integrated_j_1c,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::A_T^5@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_5,
+            make_observable("B->K^*ll::J_2s",
+                    &BToKstarDilepton::integrated_j_2s,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::A_T^re@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_re,
+            make_observable("B->K^*ll::J_2c",
+                    &BToKstarDilepton::integrated_j_2c,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::A_T^im@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_im,
+            make_observable("B->K^*ll::J_3",
+                    &BToKstarDilepton::integrated_j_3,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::P'_4@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_p_prime_4,
+            make_observable("B->K^*ll::J_4",
+                    &BToKstarDilepton::integrated_j_4,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::P'_5@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_p_prime_5,
+            make_observable("B->K^*ll::J_5",
+                    &BToKstarDilepton::integrated_j_5,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::P'_6@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_p_prime_6,
+            make_observable("B->K^*ll::J_6s",
+                    &BToKstarDilepton::integrated_j_6s,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::H_T^1@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_h_1,
+            make_observable("B->K^*ll::J_6c",
+                    &BToKstarDilepton::integrated_j_6c,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::nH_T^1@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_h_1_naive,
+            make_observable("B->K^*ll::J_7",
+                    &BToKstarDilepton::integrated_j_7,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::H_T^2@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_h_2,
+            make_observable("B->K^*ll::J_8",
+                    &BToKstarDilepton::integrated_j_8,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::nH_T^2@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_h_2_naive,
+            make_observable("B->K^*ll::J_9",
+                    &BToKstarDilepton::integrated_j_9,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::H_T^3@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_h_3,
+            make_observable("B->K^*ll::A_CP",
+                    &BToKstarDilepton::integrated_cp_asymmetry,
                     std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::nH_T^3@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_h_3_naive,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::H_T^4@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_h_4,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::H_T^5@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_h_5,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::Re{Y}(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::real_y,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::Im{Y}(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::imag_y,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::Re{C_9^eff}(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::real_c9eff,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::Im{C_9^eff}(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::imag_c9eff,
+#if 0
+            make_observable("B->K^*ll::A_I(s)",
+                    &BToKstarDilepton::differential_isospin_asymmetry,
                     std::make_tuple("s")),
-
-            make_observable("B->K^*ll::a_CP^1(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_1,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::a_CP^2(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_2,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::a_CP^3(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_3,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::a_CP^mix(s)@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_mix,
-                    std::make_tuple("s")),
-
-            make_observable("B->K^*ll::a_CP^1@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_1,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::a_CP^2@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_2,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->K^*ll::a_CP^3@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_3,
+#endif
+            make_observable("B->K^*ll::S_1s",
+                    &BToKstarDilepton::integrated_s_1s,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::Gamma+Gammabar@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_cp_summed_decay_width,
+            make_observable("B->K^*ll::S_1c",
+                    &BToKstarDilepton::integrated_s_1c,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::Gamma-Gammabar@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_unnormalized_cp_asymmetry_1,
+            make_observable("B->K^*ll::S_2s",
+                    &BToKstarDilepton::integrated_s_2s,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_1s@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_1s,
+            make_observable("B->K^*ll::S_2c",
+                    &BToKstarDilepton::integrated_s_2c,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_1c@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_1c,
+            make_observable("B->K^*ll::S_3",
+                    &BToKstarDilepton::integrated_s_3,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_2s@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_2s,
+            make_observable("B->K^*ll::S_4",
+                    &BToKstarDilepton::integrated_s_4,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_2c@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_2c,
+            make_observable("B->K^*ll::S_5",
+                    &BToKstarDilepton::integrated_s_5,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_3@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_3,
+            make_observable("B->K^*ll::S_6s",
+                    &BToKstarDilepton::integrated_s_6s,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_3norm@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_3_normalized,
+            make_observable("B->K^*ll::S_7",
+                    &BToKstarDilepton::integrated_s_7,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_3normavg@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_3_normalized_cp_averaged,
+            make_observable("B->K^*ll::S_8",
+                    &BToKstarDilepton::integrated_s_8,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_4@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_4,
+            make_observable("B->K^*ll::S_9",
+                    &BToKstarDilepton::integrated_s_9,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_5@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_5,
+            make_observable("B->K^*ll::A_1s",
+                    &BToKstarDilepton::integrated_a_1s,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_6s@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_6s,
+            make_observable("B->K^*ll::A_1c",
+                    &BToKstarDilepton::integrated_a_1c,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_6c@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_6c,
+            make_observable("B->K^*ll::A_2s",
+                    &BToKstarDilepton::integrated_a_2s,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_7@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_7,
+            make_observable("B->K^*ll::A_2c",
+                    &BToKstarDilepton::integrated_a_2c,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_8@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_8,
+            make_observable("B->K^*ll::A_3",
+                    &BToKstarDilepton::integrated_a_3,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_9@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_9,
+            make_observable("B->K^*ll::A_4",
+                    &BToKstarDilepton::integrated_a_4,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_9norm@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_9_normalized,
+            make_observable("B->K^*ll::A_5",
+                    &BToKstarDilepton::integrated_a_5,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::J_9normavg@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_9_normalized_cp_averaged,
+            make_observable("B->K^*ll::A_6s",
+                    &BToKstarDilepton::integrated_a_6s,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_3@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_3_normalized_cp_averaged,
+            make_observable("B->K^*ll::A_7",
+                    &BToKstarDilepton::integrated_a_7,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_4@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_4_normalized_cp_averaged,
+            make_observable("B->K^*ll::A_8",
+                    &BToKstarDilepton::integrated_a_8,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_5@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_5_normalized_cp_averaged,
+            make_observable("B->K^*ll::A_9",
+                    &BToKstarDilepton::integrated_a_9,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_7@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_7_normalized_cp_averaged,
+#if 0
+            make_observable("B->K^*ll::D_4",
+                    &BToKstarDilepton::integrated_d_4,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_8@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_8_normalized_cp_averaged,
+            make_observable("B->K^*ll::D_5",
+                    &BToKstarDilepton::integrated_d_5,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::S_9@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_j_9_normalized_cp_averaged,
+            make_observable("B->K^*ll::D_6s",
+                    &BToKstarDilepton::integrated_d_6s,
                     std::make_tuple("s_min", "s_max")),
 
-            make_observable("B->K^*ll::A_9@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::integrated_a_9,
+            make_observable("B->K^*ll::R_K^*",
+                    &BToKstarDilepton::integrated_ratio_muons_electrons,
                     std::make_tuple("s_min", "s_max")),
-
+#endif
             // Lambda_b -> Lambda l^+ l^-, Large Recoil
             make_observable("Lambda_b->Lambdall::dBR/ds@LargeRecoil",
                     &LambdaBToLambdaDilepton<LargeRecoil>::differential_branching_ratio,

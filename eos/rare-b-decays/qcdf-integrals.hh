@@ -34,7 +34,7 @@ namespace eos
     struct QCDFIntegrals;
 
     template <>
-    struct QCDFIntegrals<BToKstarDileptonNew>
+    struct QCDFIntegrals<BToKstarDilepton>
     {
         // for the perpendicular amplitudes
         complex<double> j0_perp;
@@ -175,9 +175,9 @@ namespace eos
     };
 
     // explicit instantiation
-    template class QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>;
-    template class QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>;
-    template class QCDFIntegralCalculator<BToKstarDileptonNew, tag::Numerical>;
+    template class QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>;
+    template class QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>;
+    template class QCDFIntegralCalculator<BToKstarDilepton, tag::Numerical>;
 }
 
 #endif

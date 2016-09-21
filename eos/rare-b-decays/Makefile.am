@@ -5,13 +5,18 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 
 lib_LTLIBRARIES = libeosrarebdecays.la
 libeosrarebdecays_la_SOURCES = \
+	b-to-kstar-ll-base.cc b-to-kstar-ll-base.hh \
+	b-to-kstar-ll-abbbsw2008.cc b-to-kstar-ll-abbbsw2008.hh \
+	b-to-kstar-ll-cffmpsv2015.cc b-to-kstar-ll-cffmpsv2015.hh \
+	b-to-kstar-ll-bfs2004.cc b-to-kstar-ll-bfs2004.hh \
+	b-to-kstar-ll-gp2004.cc b-to-kstar-ll-gp2004.hh \
 	bremsstrahlung.cc bremsstrahlung.hh \
 	charm-loops.cc charm-loops.hh \
 	em-contributions.hh em-contributions.cc \
 	exclusive-b-to-dilepton.cc exclusive-b-to-dilepton.hh \
-	exclusive-b-to-s-dilepton.hh \
-	exclusive-b-to-s-dilepton-low-recoil.cc exclusive-b-to-s-dilepton-large-recoil.cc \
-	exclusive-b-to-s-dilepton-low-recoil.hh exclusive-b-to-s-dilepton-large-recoil.hh \
+	exclusive-b-to-s-dilepton.cc exclusive-b-to-s-dilepton.hh \
+	exclusive-b-to-s-dilepton-large-recoil.cc exclusive-b-to-s-dilepton-large-recoil.hh \
+	exclusive-b-to-s-dilepton-low-recoil.cc exclusive-b-to-s-dilepton-low-recoil.hh \
 	exclusive-b-to-s-gamma.cc exclusive-b-to-s-gamma.hh \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
 	inclusive-b-to-s-gamma.cc inclusive-b-to-s-gamma.hh \
@@ -49,12 +54,16 @@ EXTRA_DIST = \
 	exclusive-b-to-s-gamma_TEST-btokstargamma.data
 
 TESTS = \
+	b-to-kstar-ll-abbbsw2008_TEST \
+	b-to-kstar-ll-bfs2004_TEST \
+	b-to-kstar-ll-cffmpsv2015_TEST \
+	b-to-kstar-ll-gp2004_TEST \
 	bremsstrahlung_TEST \
 	charm-loops_TEST \
 	em-contributions_TEST \
 	exclusive-b-to-dilepton_TEST \
-	exclusive-b-to-s-dilepton-low-recoil_TEST \
 	exclusive-b-to-s-dilepton-large-recoil_TEST \
+	exclusive-b-to-s-dilepton-low-recoil_TEST \
 	exclusive-b-to-s-gamma_TEST \
 	inclusive-b-to-s-dilepton_TEST \
 	inclusive-b-to-s-gamma_TEST \
@@ -70,6 +79,14 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
+b_to_kstar_ll_abbbsw2008_TEST_SOURCES = b-to-kstar-ll-abbbsw2008_TEST.cc
+
+b_to_kstar_ll_bfs2004_TEST_SOURCES = b-to-kstar-ll-bfs2004_TEST.cc
+
+b_to_kstar_ll_cffmpsv2015_TEST_SOURCES = b-to-kstar-ll-cffmpsv2015_TEST.cc
+
+b_to_kstar_ll_gp2004_TEST_SOURCES = b-to-kstar-ll-gp2004_TEST.cc
+
 bremsstrahlung_TEST_SOURCES = bremsstrahlung_TEST.cc
 
 charm_loops_TEST_SOURCES = charm-loops_TEST.cc
@@ -78,9 +95,9 @@ em_contributions_TEST_SOURCES = em-contributions_TEST.cc
 
 exclusive_b_to_dilepton_TEST_SOURCES = exclusive-b-to-dilepton_TEST.cc
 
-exclusive_b_to_s_dilepton_low_recoil_TEST_SOURCES = exclusive-b-to-s-dilepton-low-recoil_TEST.cc
-
 exclusive_b_to_s_dilepton_large_recoil_TEST_SOURCES = exclusive-b-to-s-dilepton-large-recoil_TEST.cc
+
+exclusive_b_to_s_dilepton_low_recoil_TEST_SOURCES = exclusive-b-to-s-dilepton-low-recoil_TEST.cc
 
 exclusive_b_to_s_gamma_TEST_SOURCES = exclusive-b-to-s-gamma_TEST.cc
 

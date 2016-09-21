@@ -572,6 +572,54 @@ namespace eos
             Parameter::Template{"B->K^*ll::A_long_uncertainty@LargeRecoil",      +0.95,           +1.0,            +1.05          },
             Parameter::Template{"B->K^*ll::A_para_uncertainty@LargeRecoil",      +0.95,           +1.0,            +1.05          },
             Parameter::Template{"B->K^*ll::A_perp_uncertainty@LargeRecoil",      +0.95,           +1.0,            +1.05          },
+
+            // B->K^*ll power correction in non-factorizing terms, following
+            // [CFFMPSV2015] parametrization in cartesian coordinates
+            // modification to longitudinal helicity amplitudes
+            Parameter::Template{"B->K^*ll::Re{h_0^0}@CFFMPSV2015",              -20.0e-4,         -5.18e-4,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Im{h_0^0}@CFFMPSV2015",              -20.0e-4,         -2.37e-4,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Re{h_0^1}@CFFMPSV2015",              -20.0e-4,         +2.29e-4,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Im{h_0^1}@CFFMPSV2015",              -20.0e-4,         +0.22e-4,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Re{h_0^2}@CFFMPSV2015",              -20.0e-4,         +2.74e-5,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Im{h_0^2}@CFFMPSV2015",              -20.0e-4,         -0.55e-5,       +20.0e-4        },
+             // modification to positive-helicity amp@litudes
+            Parameter::Template{"B->K^*ll::Re{h_p^0}@CFFMPSV2015",              -20.0e-4,         +7.86e-6,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Im{h_p^0}@CFFMPSV2015",              -20.0e-4,         +0.79e-6,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Re{h_p^1}@CFFMPSV2015",              -20.0e-4,         +2.90e-5,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Im{h_p^1}@CFFMPSV2015",              -20.0e-4,         -2.45e-5,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Re{h_p^2}@CFFMPSV2015",              -20.0e-4,         -1.31e-5,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Im{h_p^2}@CFFMPSV2015",              -20.0e-4,         -0.49e-5,       +20.0e-4        },
+             // modification to negative-helicity amp@litudes
+            Parameter::Template{"B->K^*ll::Re{h_m^0}@CFFMPSV2015",              -20.0e-4,         -5.39e-5,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Im{h_m^0}@CFFMPSV2015",              -20.0e-4,         -0.31e-5,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Re{h_m^1}@CFFMPSV2015",              -20.0e-4,         +5.20e-5,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Im{h_m^1}@CFFMPSV2015",              -20.0e-4,         +0.00e-5,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Re{h_m^2}@CFFMPSV2015",              -20.0e-4,         +2.49e-5,       +20.0e-4        },
+            Parameter::Template{"B->K^*ll::Im{h_m^2}@CFFMPSV2015",              -20.0e-4,         +0.22e-5,       +20.0e-4        },
+
+            // B->K^*ll power correction in non-factorizing terms, following
+            // [CFFMPSV2015] parametrization in polar coordinates
+            // modification to longitudinal helicity amplitudes
+            Parameter::Template{"B->K^*ll::Abs{h_0^0}@CFFMPSV2015",               0.0,            +5.7e-4,         +20.0e-4       },
+            Parameter::Template{"B->K^*ll::Arg{h_0^0}@CFFMPSV2015",               0.0,            +3.57  ,         +2.0*M_PI      },
+            Parameter::Template{"B->K^*ll::Abs{h_0^1}@CFFMPSV2015",               0.0,            +2.3e-4,         +20.e-4        },
+            Parameter::Template{"B->K^*ll::Arg{h_0^1}@CFFMPSV2015",               0.0,            +0.10  ,         +2.0*M_PI      },
+            Parameter::Template{"B->K^*ll::Abs{h_0^2}@CFFMPSV2015",               0.0,            +2.8e-4,         +20.e-4        },
+            Parameter::Template{"B->K^*ll::Arg{h_0^2}@CFFMPSV2015",               0.0,            2.*M_PI-0.2 ,    +2.0*M_PI      },
+            // modification to positive-helicity amp@litudes
+            Parameter::Template{"B->K^*ll::Abs{h_p^0}@CFFMPSV2015",               0.0,            +7.9e-6,         +20.0e-4       },
+            Parameter::Template{"B->K^*ll::Arg{h_p^0}@CFFMPSV2015",               0.0,            +0.10  ,         +2.0*M_PI      },
+            Parameter::Template{"B->K^*ll::Abs{h_p^1}@CFFMPSV2015",               0.0,            +3.8e-5,         +20.0e-4       },
+            Parameter::Template{"B->K^*ll::Arg{h_p^1}@CFFMPSV2015",               0.0,            2.*M_PI-0.7 ,    +2.0*M_PI      },
+            Parameter::Template{"B->K^*ll::Abs{h_p^2}@CFFMPSV2015",               0.0,            +1.4e-5,         +20.0e-4       },
+            Parameter::Template{"B->K^*ll::Arg{h_p^2}@CFFMPSV2015",               0.0,            +3.50  ,         +2.0*M_PI      },
+            // modification to negative-helicity amp@litudes
+            Parameter::Template{"B->K^*ll::Abs{h_m^0}@CFFMPSV2015",               0.0,            +5.4e-5,         +20.0e-4       },
+            Parameter::Template{"B->K^*ll::Arg{h_m^0}@CFFMPSV2015",               0.0,            +3.20  ,         +2.0*M_PI      },
+            Parameter::Template{"B->K^*ll::Abs{h_m^1}@CFFMPSV2015",               0.0,            +5.2e-5,         +20.0e-4       },
+            Parameter::Template{"B->K^*ll::Arg{h_m^1}@CFFMPSV2015",               0.0,            +0.00  ,         +2.0*M_PI      },
+            Parameter::Template{"B->K^*ll::Abs{h_m^2}@CFFMPSV2015",               0.0,            +2.5e-5,         +20.0e-4       },
+            Parameter::Template{"B->K^*ll::Arg{h_m^2}@CFFMPSV2015",               0.0,            +0.09  ,         +2.0*M_PI      },
             // B->Pll uncertainties at subleading order at Large Recoil
             Parameter::Template{"B->Pll::Lambda_pseudo@LargeRecoil",             -0.5,            +0.0,            +0.5           },
             Parameter::Template{"B->Pll::sl_phase_pseudo@LargeRecoil",           -M_PI/2.0,       +0.0,            +M_PI/2.0      },

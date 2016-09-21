@@ -36,9 +36,7 @@ namespace eos
     /*
      * Rare B Decays
      */
-    class BToKstarDileptonNew;
-
-    template <typename T_> class BToKstarDilepton;
+    class BToKstarDilepton;
 
     template <typename T_> class BToKDilepton;
 

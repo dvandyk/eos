@@ -39,35 +39,35 @@ namespace eos
 
     // massless case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::photon_massless_case(const double & m_B,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_massless_case(const double & m_B,
             const double & m_V, const double & mu,
             const double & a_1_perp, const double & a_2_perp,
             const double & a_1_para, const double & a_2_para)
     {
-        return QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::photon_massless_case(m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
+        return QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_massless_case(m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
     }
 
     // charm case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::photon_charm_case(const double & m_c,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_charm_case(const double & m_c,
             const double & m_B, const double & m_V, const double & mu,
             const double & a_1_perp, const double & a_2_perp,
             const double & a_1_para, const double & a_2_para)
     {
-        return QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::photon_charm_case(m_c, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
+        return QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_charm_case(m_c, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
     }
 
     // bottom case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::photon_bottom_case(const double & m_b,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_bottom_case(const double & m_b,
             const double & m_B, const double & m_V, const double & mu,
             const double & a_1_perp, const double & a_2_perp,
             const double & a_1_para, const double & a_2_para)
     {
-        return QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::photon_bottom_case(m_b, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
+        return QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_bottom_case(m_b, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
     }
 
 
@@ -75,25 +75,25 @@ namespace eos
 
     // massless case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::dilepton_massless_case(const double & s,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_massless_case(const double & s,
             const double & m_B, const double & m_V, const double & mu,
             const double & a_1_perp, const double & a_2_perp,
             const double & a_1_para, const double & a_2_para)
     {
-        return QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_massless_case(s, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
+        return QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_massless_case(s, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
     }
 
     // charm case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::dilepton_charm_case(const double & s,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_charm_case(const double & s,
             const double & m_c, const double & m_B, const double & m_V, const double & mu,
             const double & a_1_perp, const double & a_2_perp,
             const double & a_1_para, const double & a_2_para)
     {
-        QCDFIntegrals<BToKstarDileptonNew> results;
-        results = QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_charm_case(s, m_c, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
+        QCDFIntegrals<BToKstarDilepton> results;
+        results = QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_charm_case(s, m_c, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
 
         // avoid NaN at u=1
         static const double u_min = 0.0 + 1e-5;
@@ -116,12 +116,12 @@ namespace eos
 
     // bottom case
     template <>
-    QCDFIntegrals<BToKstarDileptonNew>
-    QCDFIntegralCalculator<BToKstarDileptonNew, tag::Mixed>::dilepton_bottom_case(const double & s,
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_bottom_case(const double & s,
             const double & m_b, const double & m_B, const double & m_V, const double & mu,
             const double & a_1_perp, const double & a_2_perp,
             const double & a_1_para, const double & a_2_para)
     {
-        return QCDFIntegralCalculator<BToKstarDileptonNew, tag::Analytical>::dilepton_bottom_case(s, m_b, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
+        return QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_bottom_case(s, m_b, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
     }
 }

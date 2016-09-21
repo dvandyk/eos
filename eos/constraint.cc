@@ -593,73 +593,73 @@ namespace eos
         // BR in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_Belle_2009
         {
-            "B->K^*ll::BRavg@LargeRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             1.49e-7, +0.45e-7, -0.40e-7, +0.12e-7, -0.12e-7
         };
         // BR in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_Belle_2009
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             1.05e-7, +0.29e-7, -0.26e-7, +0.08e-7, -0.08e-7
         };
         // BR in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_Belle_2009
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             2.04e-7, +0.27e-7, -0.24e-7, +0.16e-7, -0.16e-7
         };
         // A_FB in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_Belle_2009
         {
-            "B->K^*ll::A_FBavg@LargeRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             -0.26, +0.30, -0.27, +0.07, -0.07
         };
         // A_FB in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_Belle_2009
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.70, +0.22, -0.16, +0.10, -0.10
         };
         // A_FB in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_Belle_2009
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.66, +0.16, -0.11, +0.04, -0.04
         };
         // F_L in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_Belle_2009
         {
-            "B->K^*ll::F_Lavg@LargeRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.67, +0.23, -0.23, +0.05, -0.05
         };
         // F_L in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_Belle_2009
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.15, +0.27, -0.23, +0.07, -0.07
         };
         // F_L in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_Belle_2009
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.12, +0.15, -0.13, +0.02, -0.02
         };
 
@@ -880,25 +880,25 @@ namespace eos
         // BR in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_CDF_2011
         {
-            "B->K^*ll::BRavg@LargeRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             1.42e-7, +0.41e-7, -0.4100e-7, +0.08e-7, -0.08e-7
         };
         // BR in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CDF_2011
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             1.34e-7, +0.26e-7, -0.26e-7, +0.08e-7, -0.08e-7
         };
         // BR in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_CDF_2011
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             0.97e-7, +0.26e-7, -0.26e-7, +0.06e-7, -0.06e-7
         };
 
@@ -906,25 +906,25 @@ namespace eos
         // BR in [1.0, 6.0]
         static const GaussianConstraintTemplate Bplus_to_Kstarplus_dimuon_BR_1_to_6_CDF_2011
         {
-            "B->K^*ll::BRavg@LargeRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "u"  }, { "l", "mu" } },
+            Options{ { "q", "u"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             2.57e-7, +1.61e-7, -1.61e-7, +0.22e-7, -0.22e-7
         };
         // BR in [14.18, 16.00]
         static const GaussianConstraintTemplate Bplus_to_Kstarplus_dimuon_BR_14dot18_to_16_CDF_2011
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "u"  }, { "l", "mu" } },
+            Options{ { "q", "u"  }, { "l", "mu" }, { "tag", "GP2004" } },
             0.52e-7, +0.61e-7, -0.61e-7, +0.04e-7, -0.04e-7
         };
         // BR in [16.00, 19.21]
         static const GaussianConstraintTemplate Bplus_to_Kstarplus_dimuon_BR_16_to_19dot21_CDF_2011
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "u"  }, { "l", "mu" } },
+            Options{ { "q", "u"  }, { "l", "mu" }, { "tag", "GP2004" } },
             1.57e-7, +0.96e-7, -0.96e-7, +0.13e-7, -0.13e-7
         };
 
@@ -937,97 +937,97 @@ namespace eos
         // A_FB in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_CDF_2011
         {
-            "B->K^*ll::A_FBavg@LargeRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             -0.36, +0.28, -0.46, +0.11, -0.11
         };
         // A_FB in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_CDF_2011
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.40, +0.21, -0.18, +0.07, -0.07
         };
         // A_FB in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_CDF_2011
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.66, +0.26, -0.18, +0.19, -0.19
         };
         // F_L in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CDF_2011
         {
-            "B->K^*ll::F_Lavg@LargeRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.60, +0.21, -0.23, +0.09, -0.09
         };
         // F_L in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CDF_2011
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.32, +0.14, -0.14, +0.03, -0.03
         };
         // F_L in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_CDF_2011
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.16, +0.22, -0.18, +0.06, -0.06
         };
         // A_T^{2} in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T_2_1_to_6_CDF_2011
         {
-            "B->K^*ll::A_T^2avg@LargeRecoil",
+            "B->K^*ll::A_T^2",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             +1.6, +1.8, -1.9, +2.2, -2.2
         };
         // A_T^{2} in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T_2_14dot18_to_16_CDF_2011
         {
-            "B->K^*ll::A_T^2avg@LowRecoil",
+            "B->K^*ll::A_T^2",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.4, +0.8, -0.8, +0.2, -0.2
         };
         // A_T^{2} in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T_2_16_to_19dot21_CDF_2011
         {
-            "B->K^*ll::A_T^2avg@LowRecoil",
+            "B->K^*ll::A_T^2",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.9, +0.8, -0.8, +0.4, -0.4
         };
         // A_{im} in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_im_1_to_6_CDF_2011
         {
-            "B->K^*ll::J_9normavg@LargeRecoil",
+            "B->K^*ll::S_9",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             -0.02, +0.40, -0.40, +0.03, -0.03
         };
         // A_{im} in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_im_14dot18_to_16_CDF_2011
         {
-            "B->K^*ll::J_9normavg@LowRecoil",
+            "B->K^*ll::S_9",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             0.15, +0.25, -0.26, +0.01, -0.01
         };
         // A_{im} in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_im_16_to_19dot21_CDF_2011
         {
-            "B->K^*ll::J_9normavg@LowRecoil",
+            "B->K^*ll::S_9",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.30, +0.36, -0.35, +0.14, -0.14
         };
 
@@ -1080,73 +1080,73 @@ namespace eos
         // BR in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2011
         {
-            "B->K^*ll::BRavg@LargeRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             2.1000e-7, +0.3000e-7, -0.3000e-7, +0.1500e-7, -0.1500e-7
         };
         // BR in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2011
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             1.1466e-7, +0.2002e-7, -0.2002e-7, +0.0910e-7, -0.0910e-7
         };
         // BR in [16.00, 19.00] (in the preliminary results, LHCb only integrated up to exactly 19.00 GeV^2!)
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_LHCb_2011
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             1.5000e-7, +0.2400e-7, -0.2400e-7, +0.1500e-7, -0.1500e-7
         };
         // A_FB in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_LHCb_2011
         {
-            "B->K^*ll::A_FBavg@LargeRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.06, +0.14, -0.13, +0.04, -0.04
         };
         // A_FB in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_LHCb_2011
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.47, +0.08, -0.06, +0.03, -0.03
         };
         // A_FB in [16.00, 19.00] (in the preliminary results, LHCb only integrated up to exactly 19.00 GeV^2!)
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_LHCb_2011
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.16, +0.13, -0.11, +0.06, -0.06
         };
         // F_L in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_LHCb_2011
         {
-            "B->K^*ll::F_Lavg@LargeRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.55, +0.10, -0.10, +0.03, -0.03
         };
         // F_L in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_LHCb_2011
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.37, +0.09, -0.09, +0.05, -0.05
         };
         // F_L in [16.00, 19.00] (in the preliminary results, LHCb only integrated up to exactly 19.00 GeV^2!)
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_LHCb_2011
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.26, +0.10, -0.08, +0.03, -0.03
         };
 
@@ -1217,25 +1217,25 @@ namespace eos
         // BR in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_BaBar_2012
         {
-            "B->K^*ll::BRavg@LargeRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             2.05e-7, +0.53e-7, -0.48e-7, +0.07e-7, -0.07e-7
         };
         // BR in [14.21, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot21_to_16_BaBar_2012
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 14.21 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             1.46e-7, +0.41e-7, -0.36e-7, +0.06e-7, -0.06e-7
         };
         // BR in [16.00, 22.86]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_BaBar_2012
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             1.02e-7, +0.47e-7, -0.42e-7, +0.06e-7, -0.06e-7
         };
 
@@ -1250,49 +1250,49 @@ namespace eos
         // A_FB in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_BaBar_2012
         {
-            "B->K^*ll::A_FBavg@LargeRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             -0.17, +0.14, -0.12, +0.07, -0.07
         };
         // A_FB in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_BaBar_2012
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.34, +0.15, -0.08, +0.07, -0.07
         };
         // A_FB in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_BaBar_2012
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.34, +0.21, -0.19, +0.07, -0.07
         };
         // F_L in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_BaBar_2012
         {
-            "B->K^*ll::F_Lavg@LargeRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.25, +0.09, -0.08, +0.03, -0.03
         };
         // F_L in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_BaBar_2012
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.43, +0.10, -0.13, +0.09, -0.09
         };
         // F_L in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_BaBar_2012
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.55, +0.15, -0.17, +0.03, -0.03
         };
 
@@ -1388,7 +1388,7 @@ namespace eos
         {
             "B->Kll::BRavg@LargeRecoil",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" } },
             1.11e-7, +0.52e-7, -0.52e-7, +0.14e-7, -0.14e-7
         };
         // BR in [14.18, 16.00]
@@ -1396,7 +1396,7 @@ namespace eos
         {
             "B->Kll::BRavg@LowRecoil",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" } },
             0.43e-7, +0.18e-7, -0.18e-7, +0.04e-7, -0.04e-7
         };
         // BR in [16.00, 22.86]
@@ -1404,7 +1404,7 @@ namespace eos
         {
             "B->Kll::BRavg@LowRecoil",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 22.86 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" } },
             0.26e-7, +0.15e-7, -0.15e-7, +0.03e-7, -0.03e-7
         };
 
@@ -1438,25 +1438,25 @@ namespace eos
         // BR in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_CDF_2012
         {
-            "B->K^*ll::BRavg@LargeRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             1.97e-7, +0.49e-7, -0.49e-7, +0.14e-7, -0.14e-7
         };
         // BR in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CDF_2012
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             1.35e-7, +0.21e-7, -0.21e-7, +0.08e-7, -0.08e-7
         };
         // BR in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_CDF_2012
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             0.98e-7, +0.22e-7, -0.22e-7, +0.06e-7, -0.06e-7
         };
 
@@ -1464,25 +1464,25 @@ namespace eos
         // BR in [1.0, 6.0]
         static const GaussianConstraintTemplate Bplus_to_Kstarplus_dimuon_BR_1_to_6_CDF_2012
         {
-            "B->K^*ll::BRavg@LargeRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "u"  }, { "l", "mu" } },
+            Options{ { "q", "u" }, { "l", "mu" }, { "tag", "BFS2004" } },
             3.56e-7, +1.38e-7, -1.38e-7, +0.43e-7, -0.43e-7
         };
         // BR in [14.18, 16.00]
         static const GaussianConstraintTemplate Bplus_to_Kstarplus_dimuon_BR_14dot18_to_16_CDF_2012
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "u"  }, { "l", "mu" } },
+            Options{ { "q", "u" }, { "l", "mu" }, { "tag", "GP2004" } },
             1.02e-7, +0.58e-7, -0.58e-7, +0.13e-7, -0.13e-7
         };
         // BR in [16.00, 19.21]
         static const GaussianConstraintTemplate Bplus_to_Kstarplus_dimuon_BR_16_to_19dot21_CDF_2012
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "u"  }, { "l", "mu" } },
+            Options{ { "q", "u" }, { "l", "mu" }, { "tag", "GP2004" } },
             1.68e-7, +0.74e-7, -0.74e-7, +0.19e-7, -0.19e-7
         };
 
@@ -1490,97 +1490,97 @@ namespace eos
         // A_FB in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_CDF_2012
         {
-            "B->K^*ll::A_FBavg@LargeRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             -0.29, +0.21, -0.25, +0.06, -0.06
         };
         // A_FB in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_CDF_2012
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.49, +0.09, -0.10, +0.07, -0.07
         };
         // A_FB in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_CDF_2012
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.42, +0.23, -0.22, +0.09, -0.09
         };
         // F_L in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CDF_2012
         {
-            "B->K^*ll::F_Lavg@LargeRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.78, +0.13, -0.15, +0.08, -0.08
         };
         // F_L in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CDF_2012
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.45, +0.12, -0.12, +0.04, -0.04
         };
         // F_L in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_CDF_2012
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.09, +0.14, -0.12, +0.08, -0.08
         };
         // A_T^{2} in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T_2_1_to_6_CDF_2012
         {
-            "B->K^*ll::A_T^2avg@LargeRecoil",
+            "B->K^*ll::A_T^2",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             -0.45, +2.24, -2.22, +0.76, -0.76
         };
         // A_T^{2} in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T_2_14dot18_to_16_CDF_2012
         {
-            "B->K^*ll::A_T^2avg@LowRecoil",
+            "B->K^*ll::A_T^2",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.15, +0.72, -0.72, +0.14, -0.14
         };
         // A_T^{2} in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T_2_16_to_19dot21_CDF_2012
         {
-            "B->K^*ll::A_T^2avg@LowRecoil",
+            "B->K^*ll::A_T^2",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.62, +0.56, -0.53, +0.13, -0.13
         };
         // A_{im} in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_im_1_to_6_CDF_2012
         {
-            "B->K^*ll::J_9normavg@LargeRecoil",
+            "B->K^*ll::S_9", // A_im is nothing but S_9
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             0.51, +0.28, -0.29, +0.15, -0.15
         };
         // A_{im} in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_im_14dot18_to_16_CDF_2012
         {
-            "B->K^*ll::J_9normavg@LowRecoil",
+            "B->K^*ll::S_9", // A_im is nothing but S_9
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             0.16, +0.21, -0.22, +0.03, -0.03
         };
         // A_{im} in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_im_16_to_19dot21_CDF_2012
         {
-            "B->K^*ll::J_9normavg@LowRecoil",
+            "B->K^*ll::S_9", // A_im is nothing but S_9
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             0.02, +0.26, -0.27, +0.04, -0.04
         };
 
@@ -1618,121 +1618,121 @@ namespace eos
         // BR in [1.0, 6.0], multiply with bin width 5 GeV^2
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2012
         {
-            "B->K^*ll::BRavg@LargeRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             0.42e-7 * 5, +0.04e-7 * 5, -0.04e-7 * 5, +0.04e-7 * 5, -0.04e-7 * 5
         };
         // BR in [14.18, 16.00], multiply with bin width 1.82 GeV^2
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2012
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             0.59e-7 * 1.82, +0.07e-7 * 1.82, -0.07e-7 * 1.82, +0.04e-7 * 1.82, -0.04e-7 * 1.82
         };
         // BR in [16.00, 19.00], multiply with bin width 3 GeV^2 (in the preliminary results, LHCb only integrated up to exactly 19.00 GeV^2!)
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19_LHCb_2012
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             0.44e-7 * 3, +0.05e-7 * 3, -0.05e-7 * 3, +0.03e-7 * 3, -0.03e-7 * 3
         };
         // A_FB in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_LHCb_2012
         {
-            "B->K^*ll::A_FBavg@LargeRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.18, +0.06, -0.06, +0.02, -0.01
         };
         // A_FB in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_LHCb_2012
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.49, +0.06, -0.04, +0.05, -0.02
         };
         // A_FB in [16.00, 19.00] (in the preliminary results, LHCb only integrated up to exactly 19.00 GeV^2!)
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19_LHCb_2012
         {
-            "B->K^*ll::A_FBavg@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.30, +0.07, -0.07, +0.01, -0.04
         };
         // F_L in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_LHCb_2012
         {
-            "B->K^*ll::F_Lavg@LargeRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.66, +0.06, -0.06, +0.04, -0.03
         };
         // F_L in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_LHCb_2012
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.35, +0.07, -0.06, +0.07, -0.02
         };
         // F_L in [16.00, 19.00] (in the preliminary results, LHCb only integrated up to exactly 19.00 GeV^2!)
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19_LHCb_2012
         {
-            "B->K^*ll::F_Lavg@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.37, +0.06, -0.07, +0.03, -0.04
         };
         // A_{im} in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_im_1_to_6_LHCb_2012
         {
-            "B->K^*ll::J_9normavg@LargeRecoil",
+            "B->K^*ll::S_9",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.07, +0.07, -0.07, +0.02, -0.01
         };
         // A_{im} in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_im_14dot18_to_16_LHCb_2012
         {
-            "B->K^*ll::J_9normavg@LowRecoil",
+            "B->K^*ll::S_9",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.01, +0.08, -0.07, +0.04, -0.02
         };
         // A_{im} in [16.00, 19.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_im_16_to_19_LHCb_2012
         {
-            "B->K^*ll::J_9normavg@LowRecoil",
+            "B->K^*ll::S_9", // A_im is S_9
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.06, +0.09, -0.10, +0.03, -0.05
         };
         // S_3 in [1.0, 6.0], LHCb gives 2 * S_3
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_3_1_to_6_LHCb_2012
         {
-            "B->K^*ll::J_3normavg@LargeRecoil",
+            "B->K^*ll::S_3",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.10 / 2, +0.15 / 2, -0.16 / 2, +0.02 / 2, -0.01 / 2
         };
         // S_3 in [14.18, 16.00], LHCb gives 2 * S_3
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_3_14dot18_to_16_LHCb_2012
         {
-            "B->K^*ll::J_3normavg@LowRecoil",
+            "B->K^*ll::S_3",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.04 / 2, +0.15 / 2, -0.19 / 2, +0.04 / 2, -0.02 / 2
         };
         // S_3 in [16.00, 19.00], LHCb gives 2 * S_3
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_3_16_to_19_LHCb_2012
         {
-            "B->K^*ll::J_3normavg@LowRecoil",
+            "B->K^*ll::S_3",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
-            Options{ { "q", "d"  }, { "l", "mu" } },
+            Options{ { "q", "d"  }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.47 / 2, +0.21 / 2, -0.10 / 2, +0.03 / 2, -0.05 / 2
         };
 
@@ -1877,25 +1877,25 @@ namespace eos
         // Data taken from [LHCb:2012E]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_CP_1_to_6_LHCb_2012E
         {
-            "B->K^*ll::A_CP@LargeRecoil",
+            "B->K^*ll::A_CP",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             -0.058, +0.064, -0.064, +0.009, -0.009
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_CP_14dot18_to_16_LHCb_2012E
         {
-            "B->K^*ll::A_CP@LowRecoil",
+            "B->K^*ll::A_CP",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.201, +0.104, -0.104, +0.009, -0.009
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_CP_16_to_20_LHCb_2012E
         {
-            "B->K^*ll::A_CP@LowRecoil",
+            "B->K^*ll::A_CP",
             // [LHCb:2012E] gives unphysical upper kinematic range of 20.00GeV^2.
             // Reducing this to 19.81GeV^2.
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.81 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.089, +0.100, -0.100, +0.012, -0.012
         };
 
@@ -1922,44 +1922,44 @@ namespace eos
          */
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_ATLAS_2013A
         {
-            "B->K^*ll::A_FB@LargeRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             -0.07, +0.20, -0.20, +0.07, -0.07
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_ATLAS_2013A
         {
-            "B->K^*ll::A_FB@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.48, +0.19, -0.19, +0.05, -0.05
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19_ATLAS_2013A
         {
-            "B->K^*ll::A_FB@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.16, +0.10, -0.10, +0.03, -0.03
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_ATLAS_2013A
         {
-            "B->K^*ll::F_L@LargeRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.18, +0.15, -0.15, +0.03, -0.03
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_ATLAS_2013A
         {
-            "B->K^*ll::F_L@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.28, +0.16, -0.16, +0.03, -0.03
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19_ATLAS_2013A
         {
-            "B->K^*ll::F_L@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.35, +0.08, -0.08, +0.02, -0.02
         };
 
@@ -1970,65 +1970,65 @@ namespace eos
          */
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_CMS_2013A
         {
-            "B->K^*ll::BRavg@LargeRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             4.4e-8 * 5.0, +0.6e-8 * 5.0, -0.6e-8 * 5.0, +0.7e-8 * 5.0, -0.7e-8 * 5.0
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_CMS_2013A
         {
-            "B->K^*ll::A_FB@LargeRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.07, +0.12, -0.12, +0.01, -0.01
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CMS_2013A
         {
-            "B->K^*ll::F_L@LargeRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.68, +0.10, -0.10, +0.02, -0.02
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CMS_2013A
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             4.6e-8 * 1.82, +0.9e-8 * 1.82, -0.8e-8 * 1.82, +0.8e-8 * 1.82, -0.8e-8 * 1.82
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_CMS_2013A
         {
-            "B->K^*ll::A_FB@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.29, +0.09, -0.09, +0.05, -0.05
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CMS_2013A
         {
-            "B->K^*ll::F_L@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.53, +0.12, -0.12, +0.03, -0.03
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19_CMS_2013A
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             5.2e-8 * 3.0, +0.6e-8 * 3.0, -0.6e-8 * 3.0, +0.9e-8 * 3.0, -0.9e-8 * 3.0
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19_CMS_2013A
         {
-            "B->K^*ll::A_FB@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.41, +0.05, -0.05, +0.03, -0.03
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19_CMS_2013A
         {
-            "B->K^*ll::F_L@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.44, +0.07, -0.07, +0.03, -0.03
         };
 
@@ -2110,179 +2110,179 @@ namespace eos
         // BR
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2013B
         {
-            "B->K^*ll::BRavg@LargeRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             1.70e-7, +0.18e-7, -0.23e-7, +0.20e-7, -0.20e-7
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2013B
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             1.02e-7, +0.13e-7, -0.16e-7, +0.07e-7, -0.07e-7
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19_LHCb_2013B
         {
-            "B->K^*ll::BRavg@LowRecoil",
+            "B->K^*ll::BR",
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             1.23e-7, +0.15e-7, -0.17e-7, +0.12e-7, -0.12e-7
         };
         // F_L
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_LHCb_2013B
         {
-            "B->K^*ll::F_L@LargeRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.65, +0.08, -0.07, +0.03, -0.03
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_LHCb_2013B
         {
-            "B->K^*ll::F_L@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.33, +0.08, -0.07, +0.02, -0.03
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19_LHCb_2013B
         {
-            "B->K^*ll::F_L@LowRecoil",
+            "B->K^*ll::F_L",
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.38, +0.09, -0.07, +0.03, -0.03
         };
         // A_FB
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_LHCb_2013B
         {
-            "B->K^*ll::A_FB@LargeRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.17, +0.06, -0.06, +0.01, -0.01
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_LHCb_2013B
         {
-            "B->K^*ll::A_FB@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.51, +0.05, -0.07, +0.02, -0.02
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19_LHCb_2013B
         {
-            "B->K^*ll::A_FB@LowRecoil",
+            "B->K^*ll::A_FB",
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.30, +0.08, -0.08, +0.02, -0.01
         };
         // S_3
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_3_1_to_6_LHCb_2013B
         {
-            "B->K^*ll::J_3normavg@LargeRecoil",
+            "B->K^*ll::S_3",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.03, +0.07, -0.07, +0.01, -0.01
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_3_14dot18_to_16_LHCb_2013B
         {
-            "B->K^*ll::J_3normavg@LowRecoil",
+            "B->K^*ll::S_3",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.03, +0.09, -0.10, +0.01, -0.01
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_3_16_to_19_LHCb_2013B
         {
-            "B->K^*ll::J_3normavg@LowRecoil",
+            "B->K^*ll::S_3",
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.22, +0.10, -0.09, +0.02, -0.01
         };
         // S_9
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_9_1_to_6_LHCb_2013B
         {
-            "B->K^*ll::J_9normavg@LargeRecoil",
+            "B->K^*ll::S_9",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.07, +0.09, -0.08, +0.01, -0.01
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_9_14dot18_to_16_LHCb_2013B
         {
-            "B->K^*ll::J_9normavg@LowRecoil",
+            "B->K^*ll::S_9",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.00, +0.09, -0.08, +0.01, -0.01
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_9_16_to_19_LHCb_2013B
         {
-            "B->K^*ll::J_9normavg@LowRecoil",
+            "B->K^*ll::S_9",
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.06, +0.11, -0.10, +0.01, -0.01
         };
         // A_9
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_9_1_to_6_LHCb_2013B
         {
-            "B->K^*ll::A_9@LargeRecoil",
+            "B->K^*ll::A_9",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.03, +0.08, -0.08, +0.01, -0.01
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_9_14dot18_to_16_LHCb_2013B
         {
-            "B->K^*ll::A_9@LowRecoil",
+            "B->K^*ll::A_9",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.06, +0.11, -0.08, +0.01, -0.01
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_9_16_to_19_LHCb_2013B
         {
-            "B->K^*ll::A_9@LowRecoil",
+            "B->K^*ll::A_9",
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.00, +0.11, -0.10, +0.01, -0.01
         };
         // A_T^2
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T2_1_to_6_LHCb_2013B
         {
-            "B->K^*ll::A_T^2@LargeRecoil",
+            "B->K^*ll::A_T^2",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.15, +0.39, -0.41, +0.03, -0.03
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T2_14dot18_to_16_LHCb_2013B
         {
-            "B->K^*ll::A_T^2@LowRecoil",
+            "B->K^*ll::A_T^2",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.07, +0.26, -0.28, +0.02, -0.02
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T2_16_to_19_LHCb_2013B
         {
-            "B->K^*ll::A_T^2@LowRecoil",
+            "B->K^*ll::A_T^2",
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.71, +0.35, -0.26, +0.06, -0.04
         };
         // A_T^re
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_Tre_1_to_6_LHCb_2013B
         {
-            "B->K^*ll::A_T^re@LargeRecoil",
+            "B->K^*ll::A_T^re",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.66, +0.22, -0.24, +0.01, -0.04
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_Tre_14dot18_to_16_LHCb_2013B
         {
-            "B->K^*ll::A_T^re@LowRecoil",
+            "B->K^*ll::A_T^re",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -1.00, +0.05, -0.01, +0.02, -0.01
             // (unphysical) lower errors (both stat and syst) adjusted to -0.01 to work
             // around limitations in the asymmetric gaussian likelihood block.
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_Tre_16_to_19_LHCb_2013B
         {
-            "B->K^*ll::A_T^re@LowRecoil",
+            "B->K^*ll::A_T^re",
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.64, +0.15, -0.15, +0.02, -0.01
         };
         ///@}
@@ -2295,67 +2295,67 @@ namespace eos
         // P'_4, LHCb uses a different sign and a factor 1/2 relative to the theory prediction.
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_4_1_to_6_LHCb_2013C
         {
-            "B->K^*ll::P'_4@LargeRecoil",
+            "B->K^*ll::P'_4",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.58, +0.32, -0.36, +0.06, -0.06
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_4_14dot18_to_16_LHCb_2013C
         {
-            "B->K^*ll::P'_4@LowRecoil",
+            "B->K^*ll::P'_4",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.18, +0.54, -0.70, +0.08, -0.08
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_4_16_to_19_LHCb_2013C
         {
-            "B->K^*ll::P'_4@LowRecoil",
+            "B->K^*ll::P'_4",
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.70, +0.44, -0.52, +0.06, -0.06
         };
         // P'_5
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_5_1_to_6_LHCb_2013C
         {
-            "B->K^*ll::P'_5@LargeRecoil",
+            "B->K^*ll::P'_5",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.21, +0.20, -0.21, +0.03, -0.03
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_5_14dot18_to_16_LHCb_2013C
         {
-            "B->K^*ll::P'_5@LowRecoil",
+            "B->K^*ll::P'_5",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.79, +0.20, -0.13, +0.18, -0.18
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_5_16_to_19_LHCb_2013C
         {
-            "B->K^*ll::P'_5@LowRecoil",
+            "B->K^*ll::P'_5",
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.60, +0.19, -0.16, +0.09, -0.09
         };
         // P'_6, LHCb uses a different sign
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_6_1_to_6_LHCb_2013C
         {
-            "B->K^*ll::P'_6@LargeRecoil",
+            "B->K^*ll::P'_6",
             Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
             +0.18, +0.21, -0.21, +0.03, -0.03
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_6_14dot18_to_16_LHCb_2013C
         {
-            "B->K^*ll::P'_6@LowRecoil",
+            "B->K^*ll::P'_6",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             +0.18, +0.24, -0.25, +0.03, -0.03
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_6_16_to_19_LHCb_2013C
         {
-            "B->K^*ll::P'_6@LowRecoil",
+            "B->K^*ll::P'_6",
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
-            Options{ { "q", "d" }, { "l", "mu" } },
+            Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
             -0.31, +0.37, -0.38, +0.03, -0.03
         };
         ///@}
@@ -2536,7 +2536,7 @@ namespace eos
          */
         static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_1dot1_to_2_LHCb_2015A
         {
-            {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
+            {{ "B->K^*ll::F_L", "B->K^*ll::S_3", "B->K^*ll::S_4","B->K^*ll::S_5", "B->K^*ll::A_FB" }},
             {{
                  Kinematics{ { "s_min", 1.1 }, { "s_max", 2.0 } },
                  Kinematics{ { "s_min", 1.1 }, { "s_max", 2.0 } },
@@ -2545,11 +2545,11 @@ namespace eos
                  Kinematics{ { "s_min", 1.1 }, { "s_max", 2.0 } }
             }},
             {{
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } }
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } }
             }},
             {{  0.768,  0.065,  0.127,  0.286, -0.333 }},
             {{  0.0,    0.0,    0.0,    0.0,    0.0   }},
@@ -2565,7 +2565,7 @@ namespace eos
         };
         static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_2_to_3_LHCb_2015A
         {
-            {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
+            {{ "B->K^*ll::F_L", "B->K^*ll::S_3", "B->K^*ll::S_4","B->K^*ll::S_5", "B->K^*ll::A_FB" }},
             {{
                  Kinematics{ { "s_min", 2.0 }, { "s_max", 3.0 } },
                  Kinematics{ { "s_min", 2.0 }, { "s_max", 3.0 } },
@@ -2574,11 +2574,11 @@ namespace eos
                  Kinematics{ { "s_min", 2.0 }, { "s_max", 3.0 } }
             }},
             {{
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } }
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } }
             }},
             {{  0.690,  0.006, -0.339,  0.206, -0.158 }},
             {{  0.0,    0.0,    0.0,    0.0,    0.0   }},
@@ -2594,7 +2594,7 @@ namespace eos
         };
         static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_3_to_4_LHCb_2015A
         {
-            {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
+            {{ "B->K^*ll::F_L", "B->K^*ll::S_3", "B->K^*ll::S_4","B->K^*ll::S_5", "B->K^*ll::A_FB" }},
             {{
                  Kinematics{ { "s_min", 3.0 }, { "s_max", 4.0 } },
                  Kinematics{ { "s_min", 3.0 }, { "s_max", 4.0 } },
@@ -2603,11 +2603,11 @@ namespace eos
                  Kinematics{ { "s_min", 3.0 }, { "s_max", 4.0 } }
             }},
             {{
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } }
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } }
             }},
             {{  0.873,  0.078, -0.046, -0.110, -0.041 }},
             {{  0.0,    0.0,    0.0,    0.0,    0.0   }},
@@ -2623,7 +2623,7 @@ namespace eos
         };
         static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_4_to_5_LHCb_2015A
         {
-            {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
+            {{ "B->K^*ll::F_L", "B->K^*ll::S_3", "B->K^*ll::S_4","B->K^*ll::S_5", "B->K^*ll::A_FB" }},
             {{
                  Kinematics{ { "s_min", 4.0 }, { "s_max", 5.0 } },
                  Kinematics{ { "s_min", 4.0 }, { "s_max", 5.0 } },
@@ -2632,11 +2632,11 @@ namespace eos
                  Kinematics{ { "s_min", 4.0 }, { "s_max", 5.0 } }
             }},
             {{
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } }
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } }
             }},
             {{  0.899,  0.200, -0.148, -0.306, +0.052 }},
             {{  0.0,    0.0,    0.0,    0.0,    0.0   }},
@@ -2652,7 +2652,7 @@ namespace eos
         };
         static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_5_to_6_LHCb_2015A
         {
-            {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
+            {{ "B->K^*ll::F_L", "B->K^*ll::S_3", "B->K^*ll::S_4","B->K^*ll::S_5", "B->K^*ll::A_FB" }},
             {{
                  Kinematics{ { "s_min", 5.0 }, { "s_max", 6.0 } },
                  Kinematics{ { "s_min", 5.0 }, { "s_max", 6.0 } },
@@ -2661,11 +2661,11 @@ namespace eos
                  Kinematics{ { "s_min", 5.0 }, { "s_max", 6.0 } }
             }},
             {{
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } },
-                 Options{ { "q", "d" }, { "l", "mu" } }
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                 Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } }
             }},
             {{  0.644, -0.122, -0.273, -0.095, +0.057 }},
             {{  0.0,    0.0,    0.0,    0.0,    0.0   }},

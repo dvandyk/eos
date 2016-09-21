@@ -22,6 +22,7 @@
 #include <eos/b-decays/b-to-pi-l-x-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
+#include <eos/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
 #include <eos/utils/concrete-signal-pdf.hh>
@@ -161,7 +162,7 @@ namespace eos
                     )),
 
             /* Exclusive Rare B Decays */
-
+#if 0
             make_signal_pdf("B->Kll::d^2Gamma@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::two_differential_decay_width,
                     Options{ },
@@ -177,25 +178,25 @@ namespace eos
                         KinematicRange{ "s", 15.00, 22.87, BToKDilepton<LowRecoil>::kinematics_description_s },
                         KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKDilepton<LowRecoil>::kinematics_description_c_theta_l }
                     )),
-
+#endif
             make_signal_pdf("B->K^*ll::d^4Gamma@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::four_differential_decay_width,
+                    &BToKstarDilepton::decay_width,
                     Options{ },
                     std::make_tuple(
-                        KinematicRange{ "s", 1.00, 6.00, BToKstarDilepton<LargeRecoil>::kinematics_description_s },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_l },
-                        KinematicRange{ "cos(theta_k)", -1.0, +1.0, BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_k },
-                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToKstarDilepton<LargeRecoil>::kinematics_description_phi }
+                        KinematicRange{ "s", 1.00, 6.00, BToKstarDilepton::kinematics_description_s },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKstarDilepton::kinematics_description_c_theta_l },
+                        KinematicRange{ "cos(theta_k)", -1.0, +1.0, BToKstarDilepton::kinematics_description_c_theta_k },
+                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToKstarDilepton::kinematics_description_phi }
                     )),
 
             make_signal_pdf("B->K^*ll::d^4Gamma@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::four_differential_decay_width,
+                    &BToKstarDilepton::decay_width,
                     Options{ },
                     std::make_tuple(
-                        KinematicRange{ "s", 15.00, 19.21, BToKstarDilepton<LowRecoil>::kinematics_description_s },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKstarDilepton<LowRecoil>::kinematics_description_c_theta_l },
-                        KinematicRange{ "cos(theta_k)", -1.0, +1.0, BToKstarDilepton<LowRecoil>::kinematics_description_c_theta_k },
-                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToKstarDilepton<LowRecoil>::kinematics_description_phi }
+                        KinematicRange{ "s", 15.00, 19.21, BToKstarDilepton::kinematics_description_s },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKstarDilepton::kinematics_description_c_theta_l },
+                        KinematicRange{ "cos(theta_k)", -1.0, +1.0, BToKstarDilepton::kinematics_description_c_theta_k },
+                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToKstarDilepton::kinematics_description_phi }
                     )),
         };
 
