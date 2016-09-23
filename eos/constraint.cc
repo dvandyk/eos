@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2016 Marcin Chrzaszcz
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -2534,7 +2535,7 @@ namespace eos
          * Data taken from [LHCb:2015A], table 6, 50 and appendix F.
          * We combine correlations between the statistic uncertainties and systematic uncertainties.
          */
-        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_1dot1_to_2_LHCb_2015A
+        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_mom_1dot1_to_2_LHCb_2015A
         {
             {{ "B->K^*ll::F_L", "B->K^*ll::S_3", "B->K^*ll::S_4","B->K^*ll::S_5", "B->K^*ll::A_FB" }},
             {{
@@ -2563,7 +2564,7 @@ namespace eos
                 {{ +0.01, +0.05, -0.03, -0.06, +1.00 }},
             }}
         };
-        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_2_to_3_LHCb_2015A
+        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_mom_2_to_3_LHCb_2015A
         {
             {{ "B->K^*ll::F_L", "B->K^*ll::S_3", "B->K^*ll::S_4","B->K^*ll::S_5", "B->K^*ll::A_FB" }},
             {{
@@ -2592,7 +2593,7 @@ namespace eos
                 {{ +0.12, +0.03, -0.00, -0.10, +1.00 }},
             }}
         };
-        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_3_to_4_LHCb_2015A
+        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_mom_3_to_4_LHCb_2015A
         {
             {{ "B->K^*ll::F_L", "B->K^*ll::S_3", "B->K^*ll::S_4","B->K^*ll::S_5", "B->K^*ll::A_FB" }},
             {{
@@ -2621,7 +2622,7 @@ namespace eos
                 {{ -0.02, +0.02, +0.05, +0.01, +1.00 }},
             }}
         };
-        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_4_to_5_LHCb_2015A
+        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_mom_4_to_5_LHCb_2015A
         {
             {{ "B->K^*ll::F_L", "B->K^*ll::S_3", "B->K^*ll::S_4","B->K^*ll::S_5", "B->K^*ll::A_FB" }},
             {{
@@ -2650,7 +2651,7 @@ namespace eos
                 {{ -0.03, +0.03, -0.03, -0.03, +1.00 }},
             }}
         };
-        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_5_to_6_LHCb_2015A
+        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_mom_5_to_6_LHCb_2015A
         {
             {{ "B->K^*ll::F_L", "B->K^*ll::S_3", "B->K^*ll::S_4","B->K^*ll::S_5", "B->K^*ll::A_FB" }},
             {{
@@ -2677,6 +2678,265 @@ namespace eos
                 {{ -0.02, -0.03, +1.00, +0.09, +0.03 }},
                 {{ -0.02, -0.07, +0.09, +1.00, -0.07 }},
                 {{ -0.02, -0.10, +0.03, -0.07, +1.00 }},
+            }}
+        };
+
+        /*
+         * LHCb Collaboration
+         *
+         * Data taken from [LHCb:2015A], table 4, p.39 and appendix C.
+         * We combine correlations between the statistic uncertainties and systematic uncertainties.
+         */
+        static const MultivariateGaussianConstraintTemplate<8> Bzero_to_Kstarzero_dimuon_aobs_llh_0dot1_to_0dot98_LHCb_2015A
+        {
+            {{
+                "B->K^*ll::F_L",  "B->K^*ll::S_3", "B->K^*ll::S_4", "B->K^*ll::S_5",
+                "B->K^*ll::A_FB", "B->K^*ll::S_7", "B->K^*ll::S_8", "B->K^*ll::S_9"
+            }},
+            {{
+                Kinematics{ { "s_min", 0.1 }, { "s_max", 0.98 } },
+                Kinematics{ { "s_min", 0.1 }, { "s_max", 0.98 } },
+                Kinematics{ { "s_min", 0.1 }, { "s_max", 0.98 } },
+                Kinematics{ { "s_min", 0.1 }, { "s_max", 0.98 } },
+                Kinematics{ { "s_min", 0.1 }, { "s_max", 0.98 } },
+                Kinematics{ { "s_min", 0.1 }, { "s_max", 0.98 } },
+                Kinematics{ { "s_min", 0.1 }, { "s_max", 0.98 } },
+                Kinematics{ { "s_min", 0.1 }, { "s_max", 0.98 } },
+            }},
+            {{
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } }
+            }},
+            {{  0.263, -0.036,  0.082,  0.170, -0.003,  0.015,  0.079, -0.083 }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0   }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0   }},
+            {{  0.048,  0.063,  0.069,  0.061,  0.058,  0.059,  0.076,  0.057 }},
+            {{
+                {{   1.00,  0.06,  0.00,  0.03,  0.04, -0.02,  0.07,  0.08 }},
+                {{   0.06,  1.00,  0.01,  0.10, -0.00, -0.07, -0.01, -0.03 }},
+                {{   0.00,  0.01,  1.00,  0.08,  0.11, -0.00,  0.07,  0.02 }},
+                {{   0.03,  0.10,  0.08,  1.00,  0.05, -0.01,  0.00,  0.04 }},
+                {{   0.04, -0.00,  0.11,  0.05,  1.00,  0.03, -0.07,  0.02 }},
+                {{  -0.02, -0.07, -0.00, -0.01,  0.03,  1.00,  0.01,  0.11 }},
+                {{   0.07, -0.01,  0.07,  0.00, -0.07,  0.01,  1.00,  0.02 }},
+                {{   0.08, -0.03,  0.02,  0.04,  0.02,  0.11,  0.02,  1.00 }},
+            }}
+        };
+
+        static const MultivariateGaussianConstraintTemplate<8> Bzero_to_Kstarzero_dimuon_aobs_llh_1dot1_to_2dot5_LHCb_2015A
+        {
+            {{
+                "B->K^*ll::F_L",  "B->K^*ll::S_3", "B->K^*ll::S_4", "B->K^*ll::S_5",
+                "B->K^*ll::A_FB", "B->K^*ll::S_7", "B->K^*ll::S_8", "B->K^*ll::S_9"
+            }},
+            {{
+                Kinematics{ { "s_min", 1.1 }, { "s_max", 2.5 } },
+                Kinematics{ { "s_min", 1.1 }, { "s_max", 2.5 } },
+                Kinematics{ { "s_min", 1.1 }, { "s_max", 2.5 } },
+                Kinematics{ { "s_min", 1.1 }, { "s_max", 2.5 } },
+                Kinematics{ { "s_min", 1.1 }, { "s_max", 2.5 } },
+                Kinematics{ { "s_min", 1.1 }, { "s_max", 2.5 } },
+                Kinematics{ { "s_min", 1.1 }, { "s_max", 2.5 } },
+                Kinematics{ { "s_min", 1.1 }, { "s_max", 2.5 } },
+            }},
+            {{
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } }
+            }},
+            {{  0.660, -0.077, -0.077,  0.137, -0.191, -0.219, -0.098, -0.119 }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0   }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0   }},
+            {{  0.083,  0.096,  0.112,  0.097,  0.075,  0.099,  0.116,  0.096 }},
+            {{
+                {{   1.00,  0.09,  0.07,  0.07,  0.09, -0.05, -0.04,  0.08 }},
+                {{   0.09,  1.00, -0.04,  0.04,  0.01,  0.13,  0.09,  0.12 }},
+                {{   0.07, -0.04,  1.00, -0.22, -0.01, -0.00, -0.05,  0.03 }},
+                {{   0.07,  0.04, -0.22,  1.00, -0.14, -0.11, -0.03, -0.21 }},
+                {{   0.09,  0.01, -0.01, -0.14,  1.00, -0.03, -0.10, -0.11 }},
+                {{  -0.05,  0.13, -0.00, -0.11, -0.03,  1.00, -0.11,  0.23 }},
+                {{  -0.04,  0.09, -0.05, -0.03, -0.10, -0.11,  1.00, -0.04 }},
+                {{   0.08,  0.12,  0.03, -0.21, -0.11,  0.23, -0.04,  1.00 }},
+            }}
+        };
+
+        static const MultivariateGaussianConstraintTemplate<8> Bzero_to_Kstarzero_dimuon_aobs_llh_2dot5_to_4dot0_LHCb_2015A
+        {
+            {{
+                "B->K^*ll::F_L",  "B->K^*ll::S_3", "B->K^*ll::S_4", "B->K^*ll::S_5",
+                "B->K^*ll::A_FB", "B->K^*ll::S_7", "B->K^*ll::S_8", "B->K^*ll::S_9"
+            }},
+            {{
+                Kinematics{ { "s_min", 2.5 }, { "s_max", 4.0 } },
+                Kinematics{ { "s_min", 2.5 }, { "s_max", 4.0 } },
+                Kinematics{ { "s_min", 2.5 }, { "s_max", 4.0 } },
+                Kinematics{ { "s_min", 2.5 }, { "s_max", 4.0 } },
+                Kinematics{ { "s_min", 2.5 }, { "s_max", 4.0 } },
+                Kinematics{ { "s_min", 2.5 }, { "s_max", 4.0 } },
+                Kinematics{ { "s_min", 2.5 }, { "s_max", 4.0 } },
+                Kinematics{ { "s_min", 2.5 }, { "s_max", 4.0 } },
+            }},
+            {{
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } }
+            }},
+            {{  0.876, 0.035, -0.234,  -0.022, -0.118,  0.068,  0.030, -0.092 }},
+            {{  0.0,   0.0,    0.0,     0.0,    0.0,    0.0,    0.0,    0.0   }},
+            {{  0.0,   0.0,    0.0,     0.0,    0.0,    0.0,    0.0,    0.0   }},
+            {{  0.104, 0.095,  0.136,   0.107,  0.086,  0.116,  0.130,  0.115 }},
+            {{
+                {{  1.00, -0.13, -0.14,  0.01, -0.03,  0.10, -0.03, -0.01 }},
+                {{ -0.13,  1.00, -0.06,  0.09,  0.07, -0.02,  0.01, -0.07 }},
+                {{ -0.14, -0.06,  1.00, -0.19, -0.09, -0.05,  0.12,  0.07 }},
+                {{  0.01,  0.09, -0.19,  1.00, -0.01,  0.05, -0.02,  0.10 }},
+                {{ -0.03,  0.07, -0.09, -0.01,  1.00, -0.01, -0.10,  0.10 }},
+                {{  0.10, -0.02, -0.05,  0.05, -0.01,  1.00,  0.07, -0.05 }},
+                {{ -0.03,  0.01,  0.12, -0.02, -0.10,  0.07,  1.00, -0.01 }},
+                {{ -0.01, -0.07,  0.07,  0.10,  0.10, -0.05, -0.01,  1.00 }},
+            }}
+        };
+
+
+        static const MultivariateGaussianConstraintTemplate<8> Bzero_to_Kstarzero_dimuon_aobs_llh_4dot0_to_6dot0_LHCb_2015A
+        {
+            {{
+                "B->K^*ll::F_L",  "B->K^*ll::S_3", "B->K^*ll::S_4", "B->K^*ll::S_5",
+                "B->K^*ll::A_FB", "B->K^*ll::S_7", "B->K^*ll::S_8", "B->K^*ll::S_9"
+            }},
+            {{
+                Kinematics{ { "s_min", 4.0 }, { "s_max", 6.0 } },
+                Kinematics{ { "s_min", 4.0 }, { "s_max", 6.0 } },
+                Kinematics{ { "s_min", 4.0 }, { "s_max", 6.0 } },
+                Kinematics{ { "s_min", 4.0 }, { "s_max", 6.0 } },
+                Kinematics{ { "s_min", 4.0 }, { "s_max", 6.0 } },
+                Kinematics{ { "s_min", 4.0 }, { "s_max", 6.0 } },
+                Kinematics{ { "s_min", 4.0 }, { "s_max", 6.0 } },
+                Kinematics{ { "s_min", 4.0 }, { "s_max", 6.0 } },
+            }},
+            {{
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } }
+            }},
+            {{  0.611,  0.035,   -0.219,  -0.146,  0.025,  -0.016,  0.167, -0.032 }},
+            {{  0.0,    0.0,      0.0,     0.0,    0.0,     0.0,    0.0,    0.0   }},
+            {{  0.0,    0.0,      0.0,     0.0,    0.0,     0.0,    0.0,    0.0   }},
+            {{  0.055,  0.069,    0.085,   0.078,  0.052,   0.081,  0.093,  0.071 }},
+            {{
+                {{  1.00, -0.03,  0.09,  0.10, -0.05, -0.10,  0.04,  0.00 }},
+                {{ -0.03,  1.00, -0.04, -0.03,  0.09, -0.10, -0.00, -0.12 }},
+                {{  0.09, -0.04,  1.00,  0.10, -0.10, -0.02, -0.04,  0.04 }},
+                {{  0.10, -0.03,  0.10,  1.00, -0.06, -0.03, -0.01, -0.04 }},
+                {{ -0.05,  0.09, -0.10, -0.06,  1.00,  0.03,  0.07, -0.03 }},
+                {{ -0.10, -0.10, -0.02, -0.03,  0.03,  1.00,  0.06, -0.15 }},
+                {{  0.04, -0.00, -0.04, -0.01,  0.07,  0.06,  1.00,  0.03 }},
+                {{  0.00, -0.12,  0.04, -0.04, -0.03, -0.15,  0.03,  1.00 }},
+            }}
+        };
+
+        static const MultivariateGaussianConstraintTemplate<8> Bzero_to_Kstarzero_dimuon_aobs_llh_6dot0_to_8dot0_LHCb_2015A
+        {
+            {{
+                "B->K^*ll::F_L",  "B->K^*ll::S_3", "B->K^*ll::S_4", "B->K^*ll::S_5",
+                "B->K^*ll::A_FB", "B->K^*ll::S_7", "B->K^*ll::S_8", "B->K^*ll::S_9"
+            }},
+            {{
+                Kinematics{ { "s_min", 6.0 }, { "s_max", 8.0 } },
+                Kinematics{ { "s_min", 6.0 }, { "s_max", 8.0 } },
+                Kinematics{ { "s_min", 6.0 }, { "s_max", 8.0 } },
+                Kinematics{ { "s_min", 6.0 }, { "s_max", 8.0 } },
+                Kinematics{ { "s_min", 6.0 }, { "s_max", 8.0 } },
+                Kinematics{ { "s_min", 6.0 }, { "s_max", 8.0 } },
+                Kinematics{ { "s_min", 6.0 }, { "s_max", 8.0 } },
+                Kinematics{ { "s_min", 6.0 }, { "s_max", 8.0 } },
+            }},
+            {{
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "BFS2004" } }
+            }},
+            {{  0.579,  -0.042,   -0.296,  -0.249,  0.152,  -0.047,  -0.085, -0.024 }},
+            {{  0.0,     0.0,      0.0,     0.0,    0.0,     0.0,     0.0,    0.0   }},
+            {{  0.0,     0.0,      0.0,     0.0,    0.0,     0.0,     0.0,    0.0   }},
+            {{  0.048,   0.060,    0.066,   0.061,  0.041,  0.067,   0.071,   0.060 }},
+            {{
+                {{  1.00,  0.03,  0.06,  0.03, -0.31, -0.08, -0.01, -0.06 }},
+                {{  0.03,  1.00, -0.16, -0.23,  0.01,  0.02,  0.02, -0.07 }},
+                {{  0.06, -0.16,  1.00, -0.13, -0.12, -0.01, -0.11,  0.01 }},
+                {{  0.03, -0.23, -0.13,  1.00, -0.16, -0.14, -0.01, -0.04 }},
+                {{ -0.31,  0.01, -0.12, -0.16,  1.00, -0.01,  0.04,  0.02 }},
+                {{ -0.08,  0.02, -0.01, -0.14, -0.01,  1.00,  0.10, -0.05 }},
+                {{ -0.01,  0.02, -0.11, -0.01,  0.04,  0.10,  1.00, -0.10 }},
+                {{ -0.06, -0.07,  0.01, -0.04,  0.02, -0.05, -0.10,  1.00 }},
+            }}
+        };
+
+        static const MultivariateGaussianConstraintTemplate<8> Bzero_to_Kstarzero_dimuon_aobs_llh_15dot0_to_19dot0_LHCb_2015A
+        {
+            {{
+                 "B->K^*ll::F_L", "B->K^*ll::S_3", "B->K^*ll::S_4","B->K^*ll::S_5",
+                 "B->K^*ll::A_FB", "B->K^*ll::S_7", "B->K^*ll::S_8", "B->K^*ll::S_9"
+            }},
+            {{
+                Kinematics{ { "s_min", 15.0 }, { "s_max", 19.0 } },
+                Kinematics{ { "s_min", 15.0 }, { "s_max", 19.0 } },
+                Kinematics{ { "s_min", 15.0 }, { "s_max", 19.0 } },
+                Kinematics{ { "s_min", 15.0 }, { "s_max", 19.0 } },
+                Kinematics{ { "s_min", 15.0 }, { "s_max", 19.0 } },
+                Kinematics{ { "s_min", 15.0 }, { "s_max", 19.0 } },
+                Kinematics{ { "s_min", 15.0 }, { "s_max", 19.0 } },
+                Kinematics{ { "s_min", 15.0 }, { "s_max", 19.0 } },
+            }},
+            {{
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } },
+                Options{ { "q", "d" }, { "l", "mu" }, { "tag", "GP2004" } }
+            }},
+            {{  0.344,  -0.163,   -0.284,  -0.325,  0.355,   0.048,   0.028, -0.053  }},
+            {{  0.0,     0.0,      0.0,     0.0,    0.0,     0.0,     0.0,    0.0    }},
+            {{  0.0,     0.0,      0.0,     0.0,    0.0,     0.0,     0.0,    0.0    }},
+            {{  0.030,   0.034,    0.040,   0.038,  0.028,   0.043,   0.045,  0.039  }},
+            {{
+                {{  1.00,  0.17, -0.03, -0.02, -0.39,  0.01, -0.00,  0.11 }},
+                {{  0.17,  1.00, -0.15, -0.19,  0.05, -0.02, -0.04, -0.02 }},
+                {{ -0.03, -0.15,  1.00,  0.06, -0.12,  0.03,  0.14,  0.01 }},
+                {{ -0.02, -0.19,  0.06,  1.00, -0.12,  0.12,  0.04,  0.02 }},
+                {{ -0.39,  0.05, -0.12, -0.12,  1.00,  0.00, -0.02, -0.01 }},
+                {{  0.01, -0.02,  0.03,  0.12,  0.00,  1.00,  0.24, -0.19 }},
+                {{ -0.00, -0.04,  0.14,  0.04, -0.02,  0.24,  1.00, -0.13 }},
+                {{  0.11, -0.02,  0.01,  0.02, -0.01, -0.19, -0.13,  1.00 }},
             }}
         };
 
@@ -4067,12 +4327,19 @@ namespace eos
             { "B^0_d->mu^+mu^-::BR@CMS-LHCb-2014", make_factory(templates::Bzero_to_dimuon_CMS_LHCb_2014A) },
 
             /* 2015 */
-            // LHCb
-            { "B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_1dot1_to_2_LHCb_2015A) },
-            { "B^0->K^*0mu^+mu^-::AngularObservables[2.00,3.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_2_to_3_LHCb_2015A) },
-            { "B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_3_to_4_LHCb_2015A) },
-            { "B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_4_to_5_LHCb_2015A) },
-            { "B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_5_to_6_LHCb_2015A) },
+            // LHCb (Method of Moments)
+            { "B^0->K^*0mu^+mu^-::AngularObservables[MoM:1.10,2.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_mom_1dot1_to_2_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[MoM:2.00,3.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_mom_2_to_3_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[MoM:3.00,4.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_mom_3_to_4_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[MoM:4.00,5.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_mom_4_to_5_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[MoM:5.00,6.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_mom_5_to_6_LHCb_2015A) },
+            // LHCb (Log Likelihood)
+            { "B^0->K^*0mu^+mu^-::AngularObservables[LLH:0.10,0.98]@LHCb-2015A",   make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_llh_0dot1_to_0dot98_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[LLH:1.10,2.50]@LHCb-2015A",   make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_llh_1dot1_to_2dot5_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[LLH:2.50,4.00]@LHCb-2015A",   make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_llh_2dot5_to_4dot0_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[LLH:4.00,6.00]@LHCb-2015A",   make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_llh_4dot0_to_6dot0_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[LLH:6.00,8.00]@LHCb-2015A",   make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_llh_6dot0_to_8dot0_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[LLH:15.00,19.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_llh_15dot0_to_19dot0_LHCb_2015A) },
             // LHCb
             { "Lambda_b->Lambdamu^+mu^-::BR[15.0,20.0]@LHCb-2015B", make_factory(templates::Lambdab_to_Lambda_dimuon_br_15_to_20_LHCb_2015B) },
             { "Lambda_b->Lambdamu^+mu^-::F_0[15.0,20.0]@LHCb-2015B", make_factory(templates::Lambdab_to_Lambda_dimuon_f_0_15_to_20_LHCb_2015B) },
