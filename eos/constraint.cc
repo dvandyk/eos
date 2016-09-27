@@ -4284,12 +4284,9 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::S_9[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_9_1_to_6_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::S_9[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_9_14dot18_to_16_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::S_9[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_9_16_to_19_LHCb_2013B) },
-            // The following observables have not yet been implemented.
-#if 0
             { "B^0->K^*0mu^+mu^-::A_9[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_9_1_to_6_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_9[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_9_14dot18_to_16_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_9[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_9_16_to_19_LHCb_2013B) },
-#endif
             { "B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T2_1_to_6_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T2_14dot18_to_16_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^2[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T2_16_to_19_LHCb_2013B) },
