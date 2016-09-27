@@ -3211,7 +3211,7 @@ namespace eos
          * Central values, uncertainties and correlation matrix as extracted
          * from  the ancillary file http://arxiv.org/src/1503.05534v2/anc/BKstar_LCSR.json.
          */
-        static const MultivariateGaussianConstraintTemplate<11> B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsr_parameters
+        static const MultivariateGaussianConstraintTemplate<11> B_to_Kstar_V_A0_A1_A12_BSZ_2015_lcsr_parameters
         {
             {{
                 "B->K^*::alpha^A0_0@BSZ2015",  "B->K^*::alpha^A0_1@BSZ2015",  "B->K^*::alpha^A0_2@BSZ2015",
@@ -3276,7 +3276,7 @@ namespace eos
          * Central values, uncertainties and correlation matrix as extracted
          * from  the ancillary file http://arxiv.org/src/1503.05534v2/anc/BKstar_LCSR-Lattice.json.
          */
-        static const MultivariateGaussianConstraintTemplate<11> B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsrlattice_parameters
+        static const MultivariateGaussianConstraintTemplate<11> B_to_Kstar_V_A0_A1_A12_BSZ_2015_lcsrlattice_parameters
         {
             {{
                 "B->K^*::alpha^A0_0@BSZ2015",  "B->K^*::alpha^A0_1@BSZ2015",  "B->K^*::alpha^A0_2@BSZ2015",
@@ -3299,7 +3299,7 @@ namespace eos
                 0.369196, -1.36584,  0.128191,
                 0.29725,   0.392378, 1.18916,
                 /*A_12*/   0.533638, 0.483166,
-                0.376313, -1.16597, 2.42443
+                0.376313, -1.16597,  2.42443
             }},
             {{
                 0.0289419, 0.256849, 1.63438,
@@ -4362,8 +4362,8 @@ namespace eos
             { "Lambda_b->Lambda::f_long^V@BFvD2014", make_factory(templates::LambdaB_to_Lambda_flongV_13dot5_to_20dot3_BFvD2014) },
             { "Lambda_b->Lambda::f_long^A@BFvD2014", make_factory(templates::LambdaB_to_Lambda_flongA_13dot5_to_20dot3_BFvD2014) },
 
-            { "B->K^*::V+A_0+A_1+A_2@BSZ2015[LCSR]", make_factory(templates::B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsr_parameters) },
-            { "B->K^*::V+A_0+A_1+A_2@BSZ2015[LCSR+Lattice]", make_factory(templates::B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsrlattice_parameters) },
+            { "B->K^*::V+A_0+A_1+A_12@BSZ2015[LCSR]",         make_factory(templates::B_to_Kstar_V_A0_A1_A12_BSZ_2015_lcsr_parameters) },
+            { "B->K^*::V+A_0+A_1+A_12@BSZ2015[LCSR+Lattice]", make_factory(templates::B_to_Kstar_V_A0_A1_A12_BSZ_2015_lcsrlattice_parameters) },
 
             { "B->K^*::V+A_0+A_1+A_12@HLMW2015", make_factory(templates::B_to_Kstar_V_A0_A1_A12_11dot9_to_17dot8_HLMW_2015) },
 
