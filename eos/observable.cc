@@ -264,10 +264,10 @@ namespace eos
 
             // Zero-Recoil Sum Rule for the Lambda_b -> Lambda_c Form Factors
             make_observable("Lambda_b->Lambda_c::F(1)",
-                    &ZeroRecoilSumRule<LambdaBToC>::vector_current),
+                    &ZeroRecoilSumRule<LambdaBToLambdaC>::vector_current),
 
             make_observable("Lambda_b->Lambda_c::G(1)",
-                    &ZeroRecoilSumRule<LambdaBToC>::axialvector_current),
+                    &ZeroRecoilSumRule<LambdaBToLambdaC>::axialvector_current),
 
             /* Exclusive Decays */
 
