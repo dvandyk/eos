@@ -191,6 +191,14 @@ namespace eos
             make_observable("B->D::f_0(s)", "B->D",
                     &FormFactors<PToP>::f_0),
 
+            // Zero-Recoil Sum Rule for the B -> D Form Factors
+            make_observable("B->D::G(1)",
+                    &ZeroRecoilSumRule<BToD>::vector_current),
+
+            // Zero-Recoil Sum Rule for the B -> D^* Form Factors
+            make_observable("B->D^*::F(1)",
+                    &ZeroRecoilSumRule<BToDstar>::axialvector_current),
+
             // B_s -> K^* Form Factors
             make_observable("B_s->K^*::V(s)", "B_s->K^*",
                     &FormFactors<PToV>::v),

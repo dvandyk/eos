@@ -613,6 +613,10 @@ namespace eos
             // Parameterize unknown admixture of l=e, l=mu in B->X_sll
             Parameter::Template{"exp::Admixture-BR(B->X_sll)",                   +0.95,            +1.0,            +1.05         }, // BR varies by up to +/-5% between l=mu and l=e
 
+            // Zero-Recoil Sum Rule for B -> D form factor
+            Parameter::Template{"B->D::mu@ZRSR",                                 +0.75,           +0.75,           +0.75          },
+            Parameter::Template{"B->D::wM@ZRSR",                                 +0.75,           +0.75,           +0.75          },
+
             // Zero-Recoil Sum Rule for Lambda_b -> Lambca_c form factor
             Parameter::Template{"Lambda_b->Lambda_c::mu@ZRSR",                   +0.75,           +0.75,           +0.75          },
             Parameter::Template{"Lambda_b->Lambda_c::wM@ZRSR",                   +0.75,           +0.75,           +0.75          },

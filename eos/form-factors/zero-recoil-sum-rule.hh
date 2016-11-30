@@ -45,6 +45,38 @@ namespace eos
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
     };
+
+    template <>
+    class ZeroRecoilSumRule<BToD> :
+        public ParameterUser,
+        public PrivateImplementationPattern<ZeroRecoilSumRule<BToD>>
+    {
+        public:
+            ZeroRecoilSumRule(const Parameters &, const Options &);
+
+            ~ZeroRecoilSumRule();
+
+            double vector_current() const;
+
+            /* Diagnostics for unit tests */
+            Diagnostics diagnostics() const;
+    };
+
+    template <>
+    class ZeroRecoilSumRule<BToDstar> :
+        public ParameterUser,
+        public PrivateImplementationPattern<ZeroRecoilSumRule<BToDstar>>
+    {
+        public:
+            ZeroRecoilSumRule(const Parameters &, const Options &);
+
+            ~ZeroRecoilSumRule();
+
+            double axialvector_current() const;
+
+            /* Diagnostics for unit tests */
+            Diagnostics diagnostics() const;
+    };
 }
 
 #endif
