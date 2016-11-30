@@ -592,10 +592,10 @@ namespace eos
             Parameter::Template{"HQET::lambda_2",                                +0.12,           +0.12,           +0.12          }, // cf. [ALGH2001], Table 2, p. 13
 
             // Heavy Quark Expansion parameters for hadronic matrix elements ~ <B|O|B>
-            Parameter::Template{"B->B::mu_pi^2@1GeV",                            +0.35,           +0.45,           +0.55          }, // cf. [BBMU2003], Eq. (19), p. 9
-            Parameter::Template{"B->B::mu_G^2@1GeV",                             +0.33,           +0.35,           +0.38          }, // cf. [BBMU2003], Eq. (17), p. 9
-            Parameter::Template{"B->B::rho_D^3@1GeV",                            +0.10,           +0.20,           +0.30          }, // cf. [BBMU2003], between Eqs. (19),(20), p. 9
-            Parameter::Template{"B->B::rho_LS^3@1GeV",                           -0.30,           -0.15,           -0.00          }, // cf. [BBMU2003], Eq. (20), p. 9
+            Parameter::Template{"B->B::mu_pi^2@1GeV",                            +0.397,          +0.464,          +0.531          }, // cf. [AGHN2014], Table III a), p. 3
+            Parameter::Template{"B->B::mu_G^2@1GeV",                             +0.272,          +0.333,          +0.394          }, // cf. [AGHN2014], Table III a), p. 3
+            Parameter::Template{"B->B::rho_D^3@1GeV",                            +0.135,          +0.175,          +0.215          }, // cf. [AGHN2014], Table III a), p. 3
+            Parameter::Template{"B->B::rho_LS^3@1GeV",                           -0.242,          -0.146,          -0.050          }, // cf. [AGHN2014], Table III a), p. 3
 
             // Heavy Quark Expansion parameters for hadronic matrix elements ~ <Lambda_b|O|Lambda_b>
             Parameter::Template{"Lambda_b->Lambda_b::mu_pi^2@1GeV",              +0.40,           +0.50,           +0.60          }, // cf. [MvD2015]
