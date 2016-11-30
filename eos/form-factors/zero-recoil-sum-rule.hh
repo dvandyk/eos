@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015 Danny van Dyk
+ * Copyright (c) 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,6 +20,7 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_ZERO_RECOIL_SUM_RULE_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_ZERO_RECOIL_SUM_RULE_HH 1
 
+#include <eos/transitions.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
@@ -28,12 +29,10 @@ namespace eos
 {
     template <typename Tag_> class ZeroRecoilSumRule;
 
-    class LambdaBToC {};
-
     template <>
-    class ZeroRecoilSumRule<LambdaBToC> :
+    class ZeroRecoilSumRule<LambdaBToLambdaC> :
         public ParameterUser,
-        public PrivateImplementationPattern<ZeroRecoilSumRule<LambdaBToC>>
+        public PrivateImplementationPattern<ZeroRecoilSumRule<LambdaBToLambdaC>>
     {
         public:
             ZeroRecoilSumRule(const Parameters &, const Options &);

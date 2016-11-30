@@ -5,12 +5,10 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/power_of.hh>
 
-#include <iostream>
-
 namespace eos
 {
     template <>
-    struct Implementation<ZeroRecoilSumRule<LambdaBToC>>
+    struct Implementation<ZeroRecoilSumRule<LambdaBToLambdaC>>
     {
         std::shared_ptr<Model> model;
 
@@ -45,11 +43,6 @@ namespace eos
             const double mu2 = mu() * mu();
             const double mu_p = mu() - mc + std::sqrt(mc2 + mu2), mu_p2 = mu_p * mu_p;
 
-            //std::cout << "alpha_s = " << a_s << std::endl;
-            //std::cout << "m_b     = " << mb << std::endl;
-            //std::cout << "m_c     = " << mc << std::endl;
-            //std::cout << "mu'     = " << mu_p << std::endl;
-
             const double etaApert = 1.0 + a_s / M_PI * ((mb + mc) / (mb - mc) * log(mb / mc) - 8.0 / 3.0);
             const double etaAsoft = - a_s * mu2 / (3.0 * M_PI) * (1.0 / mc2 + 2.0 / (3.0 * mb * mc) + 1.0 / mb2);
             const double etaAspec = 4.0 * a_s / (3.0 * M_PI) * (
@@ -58,11 +51,10 @@ namespace eos
                         - (3.0 * mb - mc) * (mb + mc) / (12.0 * mb2) * log((mc + mu_p) / (mc + wM))
                     );
 
-            //std::cout << "etaApert = " << etaApert << std::endl;
-            //std::cout << "etaAsoft = " << etaAsoft << std::endl;
-            //std::cout << "etaAspec = " << etaAspec << std::endl;
-
-            return power_of<2>(etaApert) - etaAsoft + etaAspec;
+            // cf. [GMU2012], eq. (10), p. 7. Note that our etaSpec
+            // correspond to eq. (15), and therefore enters with a
+            // relative sign compared to the original eq. (10).
+            return power_of<2>(etaApert) - 2.0 * etaAsoft + etaAspec;
         }
 
         inline double deltaA() const
@@ -87,11 +79,6 @@ namespace eos
             const double mu = this->mu(), mu2 = mu * mu;
             const double wb = std::sqrt(mu2 + mb2), wb3 = wb * wb * wb;
             const double wc = std::sqrt(mu2 + mc2), wc3 = wc * wc * wc;
-
-            //std::cout << "alpha_s = " << a_s << std::endl;
-            //std::cout << "m_b     = " << mb << std::endl;
-            //std::cout << "m_c     = " << mc << std::endl;
-
 
             const double xiVnlo1 =
                 (3.0 * mb2 + 2.0 * mc * mb + 3.0 * mc2) / (2.0 * (mb2 - mc2)) * log((mu + wb) / (mu + wc))
