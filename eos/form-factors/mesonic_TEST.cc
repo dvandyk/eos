@@ -43,6 +43,8 @@ class BToDstarFKN2012FormFactorsTest :
             Parameters p = Parameters::Defaults();
             std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->D^*@FKN2012", p);
 
+            p["mass::B_d"]               = 5.279;
+            p["mass::D^*+"]              = 2.007;
             p["B->D^*::h_A1(1)@FKN2012"] = +0.9210;
             p["B->D^*::rho^2@FKN2012"]   = +1.2140;
             p["B->D^*::R_1(1)@FKN2012"]  = +1.4010;

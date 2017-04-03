@@ -26,6 +26,8 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/save.hh>
 
+#include <iostream>
+
 namespace eos
 {
     template <>
@@ -134,8 +136,9 @@ namespace eos
                 const double & z, const double & phi, const double & zst) const
         {
             std::function<double (const double &)> integrand = std::bind(&Implementation<BToDstarLeptonInclusiveNeutrinos>::differential_decay_width_3nu, this, std::placeholders::_1);
-            const double s_min = 3.16, s_max = power_of<2>(m_B() - m_Dstar());
-            const double Gamma_3 = integrate(integrand, 128, s_min, s_max);
+            const double s_min = m_tau() * m_tau(), s_max = power_of<2>(m_B() - m_Dstar());
+            const double Gamma_3 = integrate(integrand, 256, s_min, s_max);
+            std::cout << "Gamma_3 = " << Gamma_3 << std::endl;
 
             const double mB = m_B(), mB2 = mB * mB;
             const double mDstar = m_Dstar(), mDstar2 = mDstar * mDstar;
