@@ -46,6 +46,8 @@ namespace eos
 
     struct PToPP { };
 
+    struct PToGamma { };
+
     template <>
     class FormFactors<PToV> :
         public ParameterUser
@@ -114,6 +116,27 @@ namespace eos
         public:
             static std::shared_ptr<FormFactors<PToPP>> create(const std::string & label, const Parameters & parameters, const Options & options);
     };
+
+    /* P -> gamma form factors */
+
+    template <>
+    class FormFactors<PToGamma> :
+        public ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            virtual double f_v(const double & Egamma) const = 0;
+            virtual double f_a(const double & Egamma) const = 0;
+    };
+
+    template <>
+    class FormFactorFactory<PToGamma>
+    {
+        public:
+            static std::shared_ptr<FormFactors<PToGamma>> create(const std::string & label, const Parameters & parameters, const Options & options = {});
+    };
+
 }
 
 

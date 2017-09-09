@@ -49,6 +49,13 @@
     max:     2.0
     comments: " // GeV, cf. [BFvD2016]"
 
+# form factor parameters for QCDF calculation according to [BFvD2016]
+"B->gamma::mu@QCDF" :
+    central: 1.5
+    min:     1.0
+    max:     2.0
+    comments: " // GeV, cf. [BR2011]"
+
 # form factor parameters for B->pi, B->K in [BCL2008] parametrization, with
 # f_+ taken from [IKMvD2014]
 "B->pi::f_+(0)@BCL2008" :

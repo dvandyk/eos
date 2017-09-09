@@ -19,6 +19,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/form-factors/analytic-b-to-gamma.hh>
 #include <eos/form-factors/analytic-b-to-pi.hh>
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/mesonic-impl.hh>
@@ -389,6 +390,51 @@ namespace eos
             return result;
 
         result = std::shared_ptr<FormFactors<PToPP>>(i->second(parameters, options));
+
+        return result;
+    }
+
+    /* B -> gamma Processes */
+
+    FormFactors<PToGamma>::~FormFactors()
+    {
+    }
+
+    std::shared_ptr<FormFactors<PToGamma>>
+    FormFactorFactory<PToGamma>::create(const std::string & label, const Parameters & parameters, const Options & options)
+    {
+        std::shared_ptr<FormFactors<PToGamma>> result;
+
+        typedef std::tuple<std::string, std::string> KeyType;
+        typedef std::function<FormFactors<PToGamma> * (const Parameters &, const Options &)> ValueType;
+        static const std::map<KeyType, ValueType> form_factors
+        {
+            // analytic computations
+            { KeyType("B->gamma",    "QCDF"), &AnalyticFormFactorBToGammaQCDF::make   },
+        };
+
+        /*
+         * Labels have the form
+         *
+         *   PROCESS@NAME
+         *
+         * The brackets indicate the latter part to be optional.
+         */
+
+        std::string process, name, input(label);
+
+        std::string::size_type sep_at(input.find('@'));
+        if (std::string::npos == sep_at)
+            return result;
+
+        name = input.substr(sep_at + 1);
+        process = input.substr(0, sep_at);
+
+        auto i = form_factors.find(KeyType(process, name));
+        if (form_factors.cend() == i)
+            return result;
+
+        result = std::shared_ptr<FormFactors<PToGamma>>(i->second(parameters, options));
 
         return result;
     }

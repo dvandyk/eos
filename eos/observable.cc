@@ -117,6 +117,13 @@ namespace eos
 
             /* Form Factor for the Exclusive Decays */
 
+            // B -> gamma Form Factors
+            make_observable("B->gamma::F_V(Egamma)", "B->gamma", "Egamma",
+                    &FormFactors<PToGamma>::f_v),
+
+            make_observable("B->gamma::F_A(Egamma)", "B->gamma", "Egamma",
+                    &FormFactors<PToGamma>::f_a),
+
             // B -> pi Form Factors
             make_observable("B->pi::f_+(s)", "B->pi", "s",
                     &FormFactors<PToP>::f_p),
