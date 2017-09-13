@@ -35,6 +35,8 @@ namespace eos
 
             qnp::Prefix _process;
 
+            std::string _kinematic_variable;
+
             Parameters _parameters;
 
             Kinematics _kinematics;
@@ -50,15 +52,17 @@ namespace eos
         public:
             FormFactorAdapter(const QualifiedName & name,
                     const qnp::Prefix & process,
+                    const std::string & kinematic_variable,
                     const Parameters & parameters,
                     const Kinematics & kinematics,
                     const Options & options,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_function) :
                 _name(name),
                 _process(process),
+                _kinematic_variable(kinematic_variable),
                 _parameters(parameters),
                 _kinematics(kinematics),
-                _s(kinematics["s"]),
+                _s(kinematics[_kinematic_variable]),
                 _options(options),
                 _form_factor_function(form_factor_function)
             {
@@ -97,12 +101,12 @@ namespace eos
 
             virtual ObservablePtr clone() const
             {
-                return ObservablePtr(new FormFactorAdapter(_name, _process, _parameters.clone(), _kinematics.clone(), _options, _form_factor_function));
+                return ObservablePtr(new FormFactorAdapter(_name, _process, _kinematic_variable, _parameters.clone(), _kinematics.clone(), _options, _form_factor_function));
             }
 
             virtual ObservablePtr clone(const Parameters & parameters) const
             {
-                return ObservablePtr(new FormFactorAdapter(_name, _process, parameters, _kinematics.clone(), _options, _form_factor_function));
+                return ObservablePtr(new FormFactorAdapter(_name, _process, _kinematic_variable, parameters, _kinematics.clone(), _options, _form_factor_function));
             }
     };
 
@@ -115,14 +119,18 @@ namespace eos
 
             qnp::Prefix _process;
 
+            std::string _kinematic_variable;
+
             std::function<double (const FormFactors<Transition_> *, const double &)> _form_factor_function;
 
         public:
             FormFactorAdapterEntry(const QualifiedName & name,
                     const qnp::Prefix & process,
+                    const std::string & kinematic_variable,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_function) :
                 _name(name),
                 _process(process),
+                _kinematic_variable(kinematic_variable),
                 _form_factor_function(form_factor_function)
             {
             }
@@ -133,7 +141,7 @@ namespace eos
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
-                return ObservablePtr(new FormFactorAdapter<Transition_>(_name, _process, parameters, kinematics, options, _form_factor_function));
+                return ObservablePtr(new FormFactorAdapter<Transition_>(_name, _process, _kinematic_variable, parameters, kinematics, options, _form_factor_function));
             }
 
             virtual std::ostream & insert(std::ostream & os) const

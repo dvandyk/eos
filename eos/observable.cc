@@ -85,12 +85,13 @@ namespace eos
     template <typename Transition_>
     std::pair<QualifiedName, ObservableEntry *> make_observable(const char * name,
             const char * process,
+            const char * kinematic_variable,
             double (FormFactors<Transition_>::* function)(const double &) const)
     {
         QualifiedName qn(name);
         qnp::Prefix pp(process);
 
-        return std::make_pair(qn, new FormFactorAdapterEntry<Transition_>(qn, pp, function));
+        return std::make_pair(qn, new FormFactorAdapterEntry<Transition_>(qn, pp, kinematic_variable, function));
     }
 
     template <typename Transition_>
@@ -117,19 +118,19 @@ namespace eos
             /* Form Factor for the Exclusive Decays */
 
             // B -> pi Form Factors
-            make_observable("B->pi::f_+(s)", "B->pi",
+            make_observable("B->pi::f_+(s)", "B->pi", "s",
                     &FormFactors<PToP>::f_p),
 
-            make_observable("B->pi::f_+'(s)", "B->pi",
+            make_observable("B->pi::f_+'(s)", "B->pi", "s",
                     &FormFactors<PToP>::f_p_d1),
 
-            make_observable("B->pi::f_+''(s)", "B->pi",
+            make_observable("B->pi::f_+''(s)", "B->pi", "s",
                     &FormFactors<PToP>::f_p_d2),
 
-            make_observable("B->pi::f_T(s)", "B->pi",
+            make_observable("B->pi::f_T(s)", "B->pi", "s",
                     &FormFactors<PToP>::f_t),
 
-            make_observable("B->pi::f_0(s)", "B->pi",
+            make_observable("B->pi::f_0(s)", "B->pi", "s",
                     &FormFactors<PToP>::f_0),
 
             // B -> pi Form Factors (auxiliary variables, e.g. for determining the
@@ -145,41 +146,41 @@ namespace eos
                     &AnalyticFormFactorBToPiDKMMO2008::decay_constant),
 
             // B -> K Form Factors
-            make_observable("B->K::f_+(s)", "B->K",
+            make_observable("B->K::f_+(s)", "B->K", "s",
                     &FormFactors<PToP>::f_p),
 
-            make_observable("B->K::f_T(s)", "B->K",
+            make_observable("B->K::f_T(s)", "B->K", "s",
                     &FormFactors<PToP>::f_t),
 
-            make_observable("B->K::f_0(s)", "B->K",
+            make_observable("B->K::f_0(s)", "B->K", "s",
                     &FormFactors<PToP>::f_0),
 
             // B -> K^* Form Factors
-            make_observable("B->K^*::V(s)", "B->K^*",
+            make_observable("B->K^*::V(s)", "B->K^*", "s",
                     &FormFactors<PToV>::v),
 
-            make_observable("B->K^*::A_0(s)", "B->K^*",
+            make_observable("B->K^*::A_0(s)", "B->K^*", "s",
                     &FormFactors<PToV>::a_0),
 
-            make_observable("B->K^*::A_1(s)", "B->K^*",
+            make_observable("B->K^*::A_1(s)", "B->K^*", "s",
                     &FormFactors<PToV>::a_1),
 
-            make_observable("B->K^*::A_2(s)", "B->K^*",
+            make_observable("B->K^*::A_2(s)", "B->K^*", "s",
                     &FormFactors<PToV>::a_2),
 
-            make_observable("B->K^*::A_12(s)", "B->K^*",
+            make_observable("B->K^*::A_12(s)", "B->K^*", "s",
                     &FormFactors<PToV>::a_12),
 
-            make_observable("B->K^*::T_1(s)", "B->K^*",
+            make_observable("B->K^*::T_1(s)", "B->K^*", "s",
                     &FormFactors<PToV>::t_1),
 
-            make_observable("B->K^*::T_2(s)", "B->K^*",
+            make_observable("B->K^*::T_2(s)", "B->K^*", "s",
                     &FormFactors<PToV>::t_2),
 
-            make_observable("B->K^*::T_3(s)", "B->K^*",
+            make_observable("B->K^*::T_3(s)", "B->K^*", "s",
                     &FormFactors<PToV>::t_3),
 
-            make_observable("B->K^*::T_23(s)", "B->K^*",
+            make_observable("B->K^*::T_23(s)", "B->K^*", "s",
                     &FormFactors<PToV>::t_23),
 
             make_observable("B->K^*::V(s)/A_1(s)", "B->K^*",
@@ -195,26 +196,26 @@ namespace eos
                     &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2),
 
             // B -> D Form Factors
-            make_observable("B->D::f_+(s)", "B->D",
+            make_observable("B->D::f_+(s)", "B->D", "s",
                     &FormFactors<PToP>::f_p),
 
-            make_observable("B->D::f_0(s)", "B->D",
+            make_observable("B->D::f_0(s)", "B->D", "s",
                     &FormFactors<PToP>::f_0),
 
             // B_s -> K^* Form Factors
-            make_observable("B_s->K^*::V(s)", "B_s->K^*",
+            make_observable("B_s->K^*::V(s)", "B_s->K^*", "s",
                     &FormFactors<PToV>::v),
 
-            make_observable("B_s->K^*::A_0(s)", "B_s->K^*",
+            make_observable("B_s->K^*::A_0(s)", "B_s->K^*", "s",
                     &FormFactors<PToV>::a_0),
 
-            make_observable("B_s->K^*::A_1(s)", "B_s->K^*",
+            make_observable("B_s->K^*::A_1(s)", "B_s->K^*", "s",
                     &FormFactors<PToV>::a_1),
 
-            make_observable("B_s->K^*::A_2(s)", "B_s->K^*",
+            make_observable("B_s->K^*::A_2(s)", "B_s->K^*", "s",
                     &FormFactors<PToV>::a_2),
 
-            make_observable("B_s->K^*::A_12(s)", "B_s->K^*",
+            make_observable("B_s->K^*::A_12(s)", "B_s->K^*", "s",
                     &FormFactors<PToV>::a_12),
 
             make_observable("B->pipi::Im{F_perp}(q2,k2,z)",
@@ -234,34 +235,34 @@ namespace eos
                     std::make_tuple("q2", "k2", "z")),
 
             // Lambda_b -> Lambda Form Factors
-            make_observable("Lambda_b->Lambda::f_time^V(s)", "Lambda_b->Lambda",
+            make_observable("Lambda_b->Lambda::f_time^V(s)", "Lambda_b->Lambda", "s",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_v),
 
-            make_observable("Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda",
+            make_observable("Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda", "s",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_v),
 
-            make_observable("Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda",
+            make_observable("Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda", "s",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_v),
 
-            make_observable("Lambda_b->Lambda::f_time^A(s)", "Lambda_b->Lambda",
+            make_observable("Lambda_b->Lambda::f_time^A(s)", "Lambda_b->Lambda", "s",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_a),
 
-            make_observable("Lambda_b->Lambda::f_long^A(s)", "Lambda_b->Lambda",
+            make_observable("Lambda_b->Lambda::f_long^A(s)", "Lambda_b->Lambda", "s",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_a),
 
-            make_observable("Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda",
+            make_observable("Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda", "s",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_a),
 
-            make_observable("Lambda_b->Lambda::f_long^T(s)", "Lambda_b->Lambda",
+            make_observable("Lambda_b->Lambda::f_long^T(s)", "Lambda_b->Lambda", "s",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t),
 
-            make_observable("Lambda_b->Lambda::f_perp^T(s)", "Lambda_b->Lambda",
+            make_observable("Lambda_b->Lambda::f_perp^T(s)", "Lambda_b->Lambda", "s",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t),
 
-            make_observable("Lambda_b->Lambda::f_long^T5(s)", "Lambda_b->Lambda",
+            make_observable("Lambda_b->Lambda::f_long^T5(s)", "Lambda_b->Lambda", "s",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t5),
 
-            make_observable("Lambda_b->Lambda::f_perp^T5(s)", "Lambda_b->Lambda",
+            make_observable("Lambda_b->Lambda::f_perp^T5(s)", "Lambda_b->Lambda", "s",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t5),
 
             // Zero-Recoil Sum Rule for the Lambda_b -> Lambda_c Form Factors
