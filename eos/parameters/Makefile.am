@@ -2,6 +2,7 @@ CLEANFILES = *~
 MAINTAINERCLEANFILES = Makefile.in
 
 PARAMETER_FILES = \
+	b-lcda.yaml \
 	b-to-s-fcnc.yaml \
 	b-to-s-long-distance.yaml \
 	b-to-u-cc.yaml \
