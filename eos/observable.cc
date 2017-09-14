@@ -25,6 +25,7 @@
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/b-decays/b-to-l-nu.hh>
+#include <eos/b-decays/b-to-gamma-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/b-to-d-l-nu.hh>
@@ -286,6 +287,27 @@ namespace eos
             // B_q -> l nubar
             make_observable("B_u->lnu::BR",
                     &BToLeptonNeutrino::branching_ratio),
+
+            // B_u -> gamma l nubar
+            make_observable("B->gammalnu::dBR/dEgamma",
+                    &BToGammaLeptonNeutrino::differential_branching_ratio,
+                    std::make_tuple("Egamma")),
+
+            make_observable("B->gammalnu::BR",
+                    &BToGammaLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple("Egamma_min", "Egamma_max")),
+
+            make_observable("B->gammalnu::A_FB",
+                    &BToGammaLeptonNeutrino::integrated_forward_backward_asymmetry,
+                    std::make_tuple("Egamma_min", "Egamma_max")),
+
+            make_observable("B->gammalnu::M_1",
+                    &BToGammaLeptonNeutrino::integrated_photon_energy_moment_1,
+                    std::make_tuple("Egamma_min", "Egamma_max")),
+
+            make_observable("B->gammalnu::M_2",
+                    &BToGammaLeptonNeutrino::integrated_photon_energy_moment_2,
+                    std::make_tuple("Egamma_min", "Egamma_max")),
 
             // B -> pi l nu
             make_observable("B->pilnu::dBR/ds",

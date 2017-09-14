@@ -7,6 +7,7 @@ lib_LTLIBRARIES = libeosbdecays.la
 libeosbdecays_la_SOURCES = \
 	b-to-d-l-nu.cc b-to-d-l-nu.hh \
 	b-to-d-l-x-nu.cc b-to-d-l-x-nu.hh \
+	b-to-gamma-l-nu.cc b-to-gamma-l-nu.hh \
 	b-to-l-nu.cc b-to-l-nu.hh \
 	b-to-pi-l-nu.cc b-to-pi-l-nu.hh \
 	b-to-pi-pi-l-nu.cc b-to-pi-pi-l-nu.hh \
