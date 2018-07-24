@@ -17,6 +17,7 @@ libeosformfactors_la_SOURCES = \
 	hqet-b-to-c.hh hqet-b-to-c.cc \
 	kstar-lcdas.cc kstar-lcdas.hh \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
+	mesonic-hqet.hh \
 	pi-lcdas.cc pi-lcdas.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
 libeosformfactors_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
@@ -50,6 +51,7 @@ TESTS = \
 	hqet-b-to-c_TEST \
 	kstar-lcdas_TEST \
 	mesonic_TEST \
+	mesonic-hqet_TEST \
 	pi-lcdas_TEST
 LDADD = \
 	$(top_builddir)/test/libeostest.a \
@@ -78,5 +80,7 @@ hqet_b_to_c_TEST_SOURCES = hqet-b-to-c_TEST.cc
 kstar_lcdas_TEST_SOURCES = kstar-lcdas_TEST.cc
 
 mesonic_TEST_SOURCES = mesonic_TEST.cc
+
+mesonic_hqet_TEST_SOURCES = mesonic-hqet_TEST.cc
 
 pi_lcdas_TEST_SOURCES = pi-lcdas_TEST.cc
