@@ -31,10 +31,15 @@
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/utils/derivative.hh>
 #include <eos/utils/kinematic.hh>
+#include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/polylog.hh>
 #include <eos/utils/power_of.hh>
+
 #include <array>
 #include <limits>
+
+#include <iostream> // <-- TODO: Remove!
 
 namespace eos
 {
