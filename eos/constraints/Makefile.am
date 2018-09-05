@@ -3,6 +3,7 @@ MAINTAINERCLEANFILES = Makefile.in
 
 CONSTRAINTS_FILES = \
 	Bq-to-ll.yaml \
+	B-to-D-pi-l-nu.yaml \
 	B-to-K-ll.yaml \
 	B-to-Kstar-gamma.yaml \
 	B-to-Kstar-ll.yaml \
