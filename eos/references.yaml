@@ -127,6 +127,12 @@
     journal: "Phys.Rev. D88 (2013) 3, 032005"
     eprint: "arXiv:1306.2781 [hep-ex]"
 
+"Belle:2017A" :
+    authors: "Abdesselam, A. et al."
+    collaboration: "BELLE"
+    title: "Precise determination of the CKM matrix element |Vcb| with B0 -> D* l^- nubar decays with hadronic tagging at Belle"
+    eprint: "arXiv:1702.01521 [hep-ex]"
+
 "CDF:2011A" :
     authors: "Aaltonen, T. et al."
     collaboration: "CDF"
