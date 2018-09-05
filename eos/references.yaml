@@ -558,6 +558,11 @@
     title: "An effective theory approach to NP in b -> u and b -> c leptonic and semileptonic decays"
     eprint: "arXiv:1307.6653"
 
+"DDS2014" :
+    authors: "Duraisamy, M. and Datta, A. and Sharma, P."
+    title: "The Azimuthal B -> D^* tau nubar Angular Distribution with Tensor Operators"
+    eprint: "arXiv:1405.3719"
+
 "DKMMO2008" :
     authors: ["Duplancic, G.", "Khodjamirian, A.", "Mannel, Th.", "Melic, B.", "Offen, N."]
     title: "Light-cone sum rules for B -> pi form factors revisited"
