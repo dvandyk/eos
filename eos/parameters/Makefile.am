@@ -6,6 +6,7 @@ PARAMETER_FILES = \
 	b-to-s-long-distance.yaml \
 	b-to-u-cc.yaml \
 	b-to-c-cc.yaml \
+	b-to-d-pi-l-nu.yaml \
 	ckm.yaml \
 	decay-constants.yaml \
 	form-factors.yaml \

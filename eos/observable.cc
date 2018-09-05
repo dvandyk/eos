@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2010-2018 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018 Ahmet Kokulu
  *
@@ -31,6 +31,7 @@
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/b-to-d-l-nu.hh>
 #include <eos/b-decays/b-to-dstar-l-nu.hh>
+#include <eos/b-decays/b-to-d-pi-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2595-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
@@ -477,6 +478,19 @@ namespace eos
 
             make_observable("B->D^*lnu::R_D",
                             &BToDstarLeptonNeutrino::integrated_r_d),
+
+            // B -> D pi l nu
+            make_observable("B->Dpilnu::P(c_D_min,c_D_max)",
+                            &BToDPiLeptonNeutrino::integrated_pdf_d,
+                            std::make_tuple("c_D_min", "c_D_max")),
+
+            make_observable("B->Dpilnu::P(c_l_min,c_l_max)",
+                            &BToDPiLeptonNeutrino::integrated_pdf_l,
+                            std::make_tuple("c_l_min", "c_l_max")),
+
+            make_observable("B->Dpilnu::P(phi_min,phi_max)",
+                            &BToDPiLeptonNeutrino::integrated_pdf_phi,
+                            std::make_tuple("phi_min", "phi_max")),
 
             // B_s -> K^* l nubar
             make_observable("B_s->K^*lnu::F_perp(s)",
