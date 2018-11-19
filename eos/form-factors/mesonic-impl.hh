@@ -1627,6 +1627,18 @@ namespace eos
         static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
         static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
     };
+
+    /* V -> V Processes */
+
+    struct BstarToDstar {
+        static constexpr const char * label = "B^*->D^*";
+        static constexpr const double mV1 = 5.324;
+        static constexpr const double mV2 = 2.010;
+        static constexpr const double mBc = 6.2751;
+        static constexpr const double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
+        static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
+        static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+    };
 }
 
 #endif

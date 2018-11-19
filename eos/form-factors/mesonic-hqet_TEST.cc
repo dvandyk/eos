@@ -324,22 +324,40 @@ class BstarToDHQETFormFactorsTest :
                 std::make_pair( 0.381601, eps), // C_{A_3}
 
                 /* HQET form factors at w = 1.4 */
-                std::make_pair(+0.670369, eps), // h_{Abar_1}
-                std::make_pair(-0.067144, eps), // h_{Abar_2}
-                std::make_pair(+0.748717, eps), // h_{Abar_3}
-                std::make_pair(+0.785744, eps), // h_{Vbar}
+                std::make_pair(+0.670369, eps), // h_{1}
+                std::make_pair(-0.067144, eps), // h_{2}
+                std::make_pair(+0.748717, eps), // h_{3}
+                std::make_pair(+0.785744, eps), // h_{4}
+                std::make_pair(+0.670369, eps), // h_{5}
+                std::make_pair(-0.067144, eps), // h_{6}
+                std::make_pair(+0.748717, eps), // h_{7}
+                std::make_pair(+0.785744, eps), // h_{8}
+                std::make_pair(+0.748717, eps), // h_{9}
+                std::make_pair(+0.785744, eps), // h_{10}
 
                 /* HQET form factors at w = 1.2 */
-                std::make_pair(+0.788237, eps), // h_{Abar_1}
-                std::make_pair(-0.087100, eps), // h_{Abar_2}
-                std::make_pair(+0.891686, eps), // h_{Abar_3}
-                std::make_pair(+0.941604, eps), // h_{Vbar}
+                std::make_pair(+0.670369, eps), // h_{1}
+                std::make_pair(-0.067144, eps), // h_{2}
+                std::make_pair(+0.748717, eps), // h_{3}
+                std::make_pair(+0.785744, eps), // h_{4}
+                std::make_pair(+0.670369, eps), // h_{5}
+                std::make_pair(-0.067144, eps), // h_{6}
+                std::make_pair(+0.748717, eps), // h_{7}
+                std::make_pair(+0.785744, eps), // h_{8}
+                std::make_pair(+0.748717, eps), // h_{9}
+                std::make_pair(+0.785744, eps), // h_{10}
 
                 /* HQET form factors at w = 1.0 */
-                std::make_pair(+0.965109, eps), // h_{Abar_1}
-                std::make_pair(-0.119119, eps), // h_{Abar_2}
-                std::make_pair(+1.109067, eps), // h_{Abar_3}
-                std::make_pair(+1.180068, eps), // h_{Vbar}
+                std::make_pair(+0.670369, eps), // h_{1}
+                std::make_pair(-0.067144, eps), // h_{2}
+                std::make_pair(+0.748717, eps), // h_{3}
+                std::make_pair(+0.785744, eps), // h_{4}
+                std::make_pair(+0.670369, eps), // h_{5}
+                std::make_pair(-0.067144, eps), // h_{6}
+                std::make_pair(+0.748717, eps), // h_{7}
+                std::make_pair(+0.785744, eps), // h_{8}
+                std::make_pair(+0.748717, eps), // h_{9}
+                std::make_pair(+0.785744, eps), // h_{10}
             };
 
             TEST_CHECK_DIAGNOSTICS(diag, ref);

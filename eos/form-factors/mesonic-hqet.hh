@@ -976,11 +976,6 @@ namespace eos
 
             virtual double h_vbar(const double & q2) const
             {
-                auto print = [](const std::string & l, const double & x) -> const double &
-                {
-                    std::cout << l << ": " << x << std::endl;
-                };
-
                 const double m_b_1S = _m_b_1S();
                 const double m_c_1S = _m_c_1S();
 
@@ -1118,6 +1113,468 @@ namespace eos
                     results.add(Diagnostics::Entry{ h_abar_2(_q2(1.0)), "h_Abar2(w = 1.0)" });
                     results.add(Diagnostics::Entry{ h_abar_3(_q2(1.0)), "h_Abar3(w = 1.0)" });
                     results.add(Diagnostics::Entry{ h_vbar (_q2(1.0)),  "h_Vbar (w = 1.0)" });
+                }
+
+                return results;
+            }
+    };
+
+    template <typename Process_> class HQETFormFactors<Process_, VToV> :
+        public HQETFormFactorBase,
+        public FormFactors<VToV>
+    {
+        private:
+            /*
+             * Kinematics
+             */
+            virtual double _w(const double & q2) const override
+            {
+                static constexpr double mV1 = Process_::mV1, mV12 = power_of<2>(Process_::mV1);
+                static constexpr double mV2 = Process_::mV2, mV22 = power_of<2>(Process_::mV2);
+
+                return (mV12 + mV22 - q2) / (2.0 * mV1 * mV2);
+            }
+
+            virtual double _q2(const double & w) const override
+            {
+                static constexpr double mV1 = Process_::mV1, mV12 = power_of<2>(Process_::mV1);
+                static constexpr double mV2 = Process_::mV2, mV22 = power_of<2>(Process_::mV2);
+
+                return mV12 + mV22 - 2.0 * mV1 * mV2 * w;
+            }
+
+            virtual double _z(const double & q2) const override
+            {
+                const double w = _w(q2);
+
+                return (std::sqrt(w + 1.0) - std::sqrt(2.0)) / (std::sqrt(w + 1.0) + std::sqrt(2.0));
+            }
+
+        public:
+            HQETFormFactors(const Parameters & p, const Options & o) :
+                HQETFormFactorBase(p, o)
+            {
+            }
+
+            ~HQETFormFactors() = default;
+
+            static FormFactors<VToV> * make(const Parameters & parameters, const Options & options)
+            {
+                return new HQETFormFactors(parameters, options);
+            }
+
+            /* HQET form factors h_i */
+
+            // vector current
+            virtual double h_1(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+                const double chi3 = _chi3(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L2 = -4.0 * chi3;
+
+                double result = 1.0 + as * (_CV1(w, z) + (w + 1.0) / 2.0 * (_CV2(w, z) + _CV3(w, z)));
+                result += eps_c * L2;
+                result += eps_b * L2;
+
+                return result * xi;
+            }
+
+            virtual double h_2(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+                const double chi3 = _chi3(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L5 = -1.0;
+
+                double result = as * (w + 1.0) / 2.0 * (_CV2(w, z) - _CV3(w, z));
+                result += eps_c * L5;
+                result -= eps_b * L5;
+
+                return result * xi;
+            }
+
+            virtual double h_3(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+                const double chi3 = _chi3(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L1 = -4.0 * (w - 1.0) * chi2 + 12.0 * chi3;
+                const double L2 = -4.0 * chi3;
+                const double L3 = 4.0 * chi2;
+                const double L4 = 2.0 * eta - 1.0;
+                const double L5 = -1.0;
+                const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+                double result = (1.0 + as * _CV1(w, z));
+                result += eps_c * (L2 + L5 + (w - 1.0) * L3 - (w + 1.0) * L6);
+                result += eps_b * (L2 - L5);
+
+                return result * xi;
+            }
+
+            virtual double h_4(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+                const double chi3 = _chi3(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L1 = -4.0 * (w - 1.0) * chi2 + 12.0 * chi3;
+                const double L2 = -4.0 * chi3;
+                const double L3 = 4.0 * chi2;
+                const double L4 = 2.0 * eta - 1.0;
+                const double L5 = -1.0;
+                const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+                double result = (1.0 + as * _CV1(w, z));
+                result += eps_b * (L2 + L5 + (w - 1.0) * L3 - (w + 1.0) * L6);
+                result += eps_c * (L2 - L5);
+
+                return result * xi;
+            }
+
+            virtual double h_5(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L3 = 4.0 * chi2;
+                const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+                double result = (0.0 - as * _CV2(w, z));
+                result += eps_c * (L3 - L6);
+
+                return result * xi;
+            }
+
+            virtual double h_6(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L3 = 4.0 * chi2;
+                const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+                double result = (0.0 - as * _CV3(w, z));
+                result += eps_b * (L3 - L6);
+
+                return result * xi;
+            }
+
+            // axial current
+            virtual double h_7(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+                const double chi3 = _chi3(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L2 = -4.0 * chi3;
+
+                double result = 1.0 + as * (_CA1(w, z) + (w - 1.0) / 2.0 * (_CA2(w, z) - _CA3(w, z)));
+                result += eps_b * L2;
+                result += eps_c * L2;
+
+                return result * xi;
+            }
+
+            virtual double h_8(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+                const double chi3 = _chi3(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L5 = -1.0;
+
+                double result = as * (w + 1.0) / 2.0 * (_CA2(w, z) + _CA3(w, z));
+                result += eps_b * L5;
+                result -= eps_c * L5;
+
+                return result * xi;
+            }
+
+            virtual double h_9(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L3 = 4.0 * chi2;
+                const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+                double result = (0.0 - as * _CA2(w, z));
+                result += eps_c * (L3 - L6);
+
+                return result * xi;
+            }
+
+            virtual double h_10(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L3 = 4.0 * chi2;
+                const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+                double result = (0.0 + as * _CA3(w, z));
+                result += eps_b * (L3 - L6);
+
+                return result * xi;
+            }
+
+            Diagnostics diagnostics() const
+            {
+                Diagnostics results;
+
+                // Inputs
+                {
+                    const double m_b = _model->m_b_msbar(this->_mu());
+                    const double m_c = _model->m_c_msbar(this->_mu());
+                    const double z   = m_c / m_b;
+                    const double wz  = _wz(z);
+
+                    results.add(Diagnostics::Entry{ z,  "z = m_c / m_b" });
+                    results.add(Diagnostics::Entry{ wz, "w_z"           });
+                }
+
+                // xi
+                {
+                    results.add(Diagnostics::Entry{ _xi(_q2(1.40)), "xi(w = 1.40)" });
+                    results.add(Diagnostics::Entry{ _xi(_q2(1.20)), "xi(w = 1.20)" });
+                    results.add(Diagnostics::Entry{ _xi(_q2(1.10)), "xi(w = 1.10)" });
+                    results.add(Diagnostics::Entry{ _xi(_q2(1.05)), "xi(w = 1.05)" });
+                    results.add(Diagnostics::Entry{ _xi(_q2(1.00)), "xi(w = 1.00)" });
+                }
+
+                // chi2
+                {
+                    results.add(Diagnostics::Entry{ _chi2(_q2(1.10)), "chi2(w = 1.10)" });
+                    results.add(Diagnostics::Entry{ _chi2(_q2(1.05)), "chi2(w = 1.05)" });
+                    results.add(Diagnostics::Entry{ _chi2(_q2(1.00)), "chi2(w = 1.00)" });
+                }
+
+                // chi3
+                {
+                    results.add(Diagnostics::Entry{ _chi3(_q2(1.10)), "chi3(w = 1.10)" });
+                    results.add(Diagnostics::Entry{ _chi3(_q2(1.05)), "chi3(w = 1.05)" });
+                    results.add(Diagnostics::Entry{ _chi3(_q2(1.00)), "chi3(w = 1.00)" });
+                }
+
+                // eta
+                {
+                    results.add(Diagnostics::Entry{ _eta(_q2(1.10)), "eta(w = 1.10)" });
+                    results.add(Diagnostics::Entry{ _eta(_q2(1.05)), "eta(w = 1.05)" });
+                    results.add(Diagnostics::Entry{ _eta(_q2(1.00)), "eta(w = 1.00)" });
+                }
+
+                // r(w)
+                {
+                    results.add(Diagnostics::Entry{ _r(1.1),     "r(w = 1.1)"     });
+                    results.add(Diagnostics::Entry{ _r(1.0007),  "r(w = 1.0007)"  });
+                    results.add(Diagnostics::Entry{ _r(1.0001),  "r(w = 1.0001)"  });
+                    results.add(Diagnostics::Entry{ _r(1.00005), "r(w = 1.00005)" });
+                    results.add(Diagnostics::Entry{ _r(1.0),     "r(w = 1.0)"     });
+                }
+
+                // Omega(w, z = 0.25)
+                {
+                    results.add(Diagnostics::Entry{ _Omega(1.1,     0.25), "Omega(w = 1.1,     z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _Omega(1.0007,  0.25), "Omega(w = 1.0007,  z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _Omega(1.0001,  0.25), "Omega(w = 1.0001,  z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _Omega(1.00005, 0.25), "Omega(w = 1.00005, z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _Omega(1.0,     0.25), "Omega(w = 1.0,     z = 0.25)" });
+                }
+
+                // Omega(w, z = 0.20)
+                {
+                    results.add(Diagnostics::Entry{ _Omega(1.1,     0.20), "Omega(w = 1.1,     z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _Omega(1.0007,  0.20), "Omega(w = 1.0007,  z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _Omega(1.0001,  0.20), "Omega(w = 1.0001,  z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _Omega(1.00005, 0.20), "Omega(w = 1.00005, z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _Omega(1.0,     0.20), "Omega(w = 1.0,     z = 0.20)" });
+                }
+
+                // WCs at w = 1.2, z = 0.20
+                {
+                    results.add(Diagnostics::Entry{ _CV1(1.2, 0.20), "C_{V_1}(w = 1.2, z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _CV2(1.2, 0.20), "C_{V_2}(w = 1.2, z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _CV3(1.2, 0.20), "C_{V_3}(w = 1.2, z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _CA1(1.2, 0.20), "C_{A_1}(w = 1.2, z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _CA2(1.2, 0.20), "C_{A_2}(w = 1.2, z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _CA3(1.2, 0.20), "C_{A_3}(w = 1.2, z = 0.20)" });
+                }
+
+                // WCs at w = 1.0, z = 0.25
+                {
+                    results.add(Diagnostics::Entry{ _CV1(1.0, 0.25), "C_{V_1}(w = 1.0, z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _CV2(1.0, 0.25), "C_{V_2}(w = 1.0, z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _CV3(1.0, 0.25), "C_{V_3}(w = 1.0, z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _CA1(1.0, 0.25), "C_{A_1}(w = 1.0, z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _CA2(1.0, 0.25), "C_{A_2}(w = 1.0, z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _CA3(1.0, 0.25), "C_{A_3}(w = 1.0, z = 0.25)" });
+                }
+
+                // HQET definition of the form factors
+                {
+                    results.add(Diagnostics::Entry{ h_1(_q2(1.4)),  "h_1 (w = 1.4)" });
+                    results.add(Diagnostics::Entry{ h_2(_q2(1.4)),  "h_2 (w = 1.4)" });
+                    results.add(Diagnostics::Entry{ h_3(_q2(1.4)),  "h_3 (w = 1.4)" });
+                    results.add(Diagnostics::Entry{ h_4(_q2(1.4)),  "h_4 (w = 1.4)" });
+                    results.add(Diagnostics::Entry{ h_5(_q2(1.4)),  "h_5 (w = 1.4)" });
+                    results.add(Diagnostics::Entry{ h_6(_q2(1.4)),  "h_6 (w = 1.4)" });
+                    results.add(Diagnostics::Entry{ h_7(_q2(1.4)),  "h_7 (w = 1.4)" });
+                    results.add(Diagnostics::Entry{ h_8(_q2(1.4)),  "h_8 (w = 1.4)" });
+                    results.add(Diagnostics::Entry{ h_9(_q2(1.4)),  "h_9 (w = 1.4)" });
+                    results.add(Diagnostics::Entry{ h_10(_q2(1.4)), "h_10(w = 1.4)" });
+
+                    results.add(Diagnostics::Entry{ h_1(_q2(1.2)),  "h_1 (w = 1.2)" });
+                    results.add(Diagnostics::Entry{ h_2(_q2(1.2)),  "h_2 (w = 1.2)" });
+                    results.add(Diagnostics::Entry{ h_3(_q2(1.2)),  "h_3 (w = 1.2)" });
+                    results.add(Diagnostics::Entry{ h_4(_q2(1.2)),  "h_4 (w = 1.2)" });
+                    results.add(Diagnostics::Entry{ h_5(_q2(1.2)),  "h_5 (w = 1.2)" });
+                    results.add(Diagnostics::Entry{ h_6(_q2(1.2)),  "h_6 (w = 1.2)" });
+                    results.add(Diagnostics::Entry{ h_7(_q2(1.2)),  "h_7 (w = 1.2)" });
+                    results.add(Diagnostics::Entry{ h_8(_q2(1.2)),  "h_8 (w = 1.2)" });
+                    results.add(Diagnostics::Entry{ h_9(_q2(1.2)),  "h_9 (w = 1.2)" });
+                    results.add(Diagnostics::Entry{ h_10(_q2(1.2)), "h_10(w = 1.2)" });
+
+                    results.add(Diagnostics::Entry{ h_1(_q2(1.0)),  "h_1 (w = 1.0)" });
+                    results.add(Diagnostics::Entry{ h_2(_q2(1.0)),  "h_2 (w = 1.0)" });
+                    results.add(Diagnostics::Entry{ h_3(_q2(1.0)),  "h_3 (w = 1.0)" });
+                    results.add(Diagnostics::Entry{ h_4(_q2(1.0)),  "h_4 (w = 1.0)" });
+                    results.add(Diagnostics::Entry{ h_5(_q2(1.0)),  "h_5 (w = 1.0)" });
+                    results.add(Diagnostics::Entry{ h_6(_q2(1.0)),  "h_6 (w = 1.0)" });
+                    results.add(Diagnostics::Entry{ h_7(_q2(1.0)),  "h_7 (w = 1.0)" });
+                    results.add(Diagnostics::Entry{ h_8(_q2(1.0)),  "h_8 (w = 1.0)" });
+                    results.add(Diagnostics::Entry{ h_9(_q2(1.0)),  "h_9 (w = 1.0)" });
+                    results.add(Diagnostics::Entry{ h_10(_q2(1.0)), "h_10(w = 1.0)" });
                 }
 
                 return results;
