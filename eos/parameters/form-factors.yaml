@@ -2114,11 +2114,27 @@
     central: 0.044
     min: -0.081
     max: 0.169
-"B(*)->D(*)::delta_a1@HQET" :
-    central: -2.299
-    min: -2.693
-    max: -1.905
-"B(*)->D(*)::delta_f+@HQET" :
+"B(*)->D(*)::l_1(1)@HQET" :
     central: +0.485
     min: +0.216
     max: +0.754
+"B(*)->D(*)::l_2(1)@HQET" :
+    central: -2.299
+    min: -2.693
+    max: -1.905
+"B(*)->D(*)::l_3(1)@HQET" :
+    central: +0.0
+    min: +0.0
+    max: +0.0
+"B(*)->D(*)::l_4(1)@HQET" :
+    central: +0.0
+    min: +0.0
+    max: +0.0
+"B(*)->D(*)::l_5(1)@HQET" :
+    central: +0.0
+    min: +0.0
+    max: +0.0
+"B(*)->D(*)::l_6(1)@HQET" :
+    central: +0.0
+    min: +0.0
+    max: +0.0

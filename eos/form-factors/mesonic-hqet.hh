@@ -38,11 +38,17 @@ namespace eos
             // parameters for the subleading Isgur-Wise function eta
             UsedParameter _etaone, _etapone;
 
-            // parameters for subsubleading 1/m_c corrections in h_A1 (B->D^*)
-            UsedParameter _delta_a1;
+            // parameters for subsubleading 1/m_c corrections in h_+ (B->D), equal to delta_{h_+}
+            UsedParameter _l1one;
 
-            // parameters for subsubleading 1/m_c corrections in h_+ (B->D)
-            UsedParameter _delta_fp;
+            // parameters for subsubleading 1/m_c corrections in h_A1 (B->D^*), equal to delta_{A_1}
+            UsedParameter _l2one;
+
+            // parameters for subsubleading 1/m_c corrections
+            UsedParameter _l3one;
+            UsedParameter _l4one;
+            UsedParameter _l5one;
+            UsedParameter _l6one;
 
         public:
             HQETFormFactorBase(const Parameters & p, const Options & o) :
@@ -54,8 +60,12 @@ namespace eos
                 _chi3pone(p["B(*)->D(*)::chi_3'(1)@HQET"], *this),
                 _etaone(p["B(*)->D(*)::eta(1)@HQET"], *this),
                 _etapone(p["B(*)->D(*)::eta'(1)@HQET"], *this),
-                _delta_a1(p["B(*)->D(*)::delta_a1@HQET"], *this),
-                _delta_fp(p["B(*)->D(*)::delta_f+@HQET"], *this)
+                _l1one(p["B(*)->D(*)::l_1(1)@HQET"], *this),
+                _l2one(p["B(*)->D(*)::l_2(1)@HQET"], *this),
+                _l3one(p["B(*)->D(*)::l_3(1)@HQET"], *this),
+                _l4one(p["B(*)->D(*)::l_4(1)@HQET"], *this),
+                _l5one(p["B(*)->D(*)::l_5(1)@HQET"], *this),
+                _l6one(p["B(*)->D(*)::l_6(1)@HQET"], *this)
             {
             }
 
@@ -297,7 +307,7 @@ namespace eos
                 double result = (1.0 + as * (_CV1(w, z) + (w + 1.0) / 2.0 * (_CV2(w, z) + _CV3(w, z))));
                 result += eps_c * (L1);
                 result += eps_b * (L1);
-                result += eps_c * eps_c * _delta_fp;
+                result += eps_c * eps_c * _l1one;
 
                 return result * xi;
             }
@@ -325,6 +335,7 @@ namespace eos
                 double result = (0.0 + as * (w + 1.0) / 2.0 * (_CV2(w, z) - _CV3(w, z)));
                 result += eps_c * L4;
                 result -= eps_b * L4;
+                result += eps_c * eps_c * _l4one;
 
                 return result * xi;
             }
@@ -534,7 +545,7 @@ namespace eos
                 double result = (1.0 + as * _CA1(w, z));
                 result += eps_c * (L2 - L5 * (w - 1.0) / (w + 1.0));
                 result += eps_b * (L1 - L4 * (w - 1.0) / (w + 1.0));
-                result += eps_c * eps_c * _delta_a1;
+                result += eps_c * eps_c * _l2one;
 
                 return result * xi;
             }
@@ -562,6 +573,7 @@ namespace eos
 
                 double result = (0.0 + as * _CA2(w, z));
                 result += eps_c * (L3 + L6);
+                result += eps_c * eps_c * (_l3one + _l6one);
 
                 return result * xi;
             }
@@ -595,6 +607,7 @@ namespace eos
                 double result = (1.0 + as * (_CA1(w, z) +_CA3(w, z)));
                 result += eps_c * (L2 - L3 + L6 - L5);
                 result += eps_b * (L1 - L4);
+                result += eps_c * eps_c * (_l2one - _l3one + _l6one - _l5one);
 
                 return result * xi;
             }
@@ -632,6 +645,7 @@ namespace eos
                 double result = (1.0 + as * _CV1(w, z));
                 result += eps_c * (L2 - L5);
                 result += eps_b * (L1 - L4);
+                result += eps_c * eps_c * (_l2one - _l5one);
 
                 return result * xi;
             }
@@ -911,6 +925,7 @@ namespace eos
                 double result = (1.0 + as * _CA1(w, z));
                 result += eps_c * (L1 - L4 * (w - 1.0) / (w + 1.0));
                 result += eps_b * (L2 - L5 * (w - 1.0) / (w + 1.0));
+                result += eps_c * eps_c * _l1one;
 
                 return result * xi;
             }
@@ -970,6 +985,7 @@ namespace eos
                 double result = (1.0 + as * (_CA1(w, z) - _CA2(w, z)));
                 result += eps_b * (L2 - L3 + L6 - L5);
                 result += eps_c * (L1 - L4);
+                result += eps_c * eps_c * (_l1one - _l4one);
 
                 return result * xi;
             }
@@ -1001,6 +1017,7 @@ namespace eos
                 double result = (1.0 + as * _CV1(w, z));
                 result += eps_b * (L2 - L5);
                 result += eps_c * (L1 - L4);
+                result += eps_c * eps_c * (_l1one - _l4one);
 
                 return result * xi;
             }
@@ -1190,6 +1207,7 @@ namespace eos
                 double result = 1.0 + as * (_CV1(w, z) + (w + 1.0) / 2.0 * (_CV2(w, z) + _CV3(w, z)));
                 result += eps_c * L2;
                 result += eps_b * L2;
+                result += eps_c * eps_c * _l2one;
 
                 return result * xi;
             }
@@ -1218,6 +1236,7 @@ namespace eos
                 double result = as * (w + 1.0) / 2.0 * (_CV2(w, z) - _CV3(w, z));
                 result += eps_c * L5;
                 result -= eps_b * L5;
+                result += eps_c * eps_c * _l5one;
 
                 return result * xi;
             }
@@ -1251,6 +1270,7 @@ namespace eos
                 double result = (1.0 + as * _CV1(w, z));
                 result += eps_c * (L2 + L5 + (w - 1.0) * L3 - (w + 1.0) * L6);
                 result += eps_b * (L2 - L5);
+                result += eps_c * eps_c * (_l2one + _l5one  - (w + 1.0) * _l6one);
 
                 return result * xi;
             }
@@ -1284,6 +1304,7 @@ namespace eos
                 double result = (1.0 + as * _CV1(w, z));
                 result += eps_b * (L2 + L5 + (w - 1.0) * L3 - (w + 1.0) * L6);
                 result += eps_c * (L2 - L5);
+                result += eps_c * eps_c * (_l2one - _l5one);
 
                 return result * xi;
             }
@@ -1310,6 +1331,7 @@ namespace eos
 
                 double result = (0.0 - as * _CV2(w, z));
                 result += eps_c * (L3 - L6);
+                result += eps_c * eps_c * (_l3one - _l6one);
 
                 return result * xi;
             }
@@ -1365,6 +1387,7 @@ namespace eos
                 double result = 1.0 + as * (_CA1(w, z) + (w - 1.0) / 2.0 * (_CA2(w, z) - _CA3(w, z)));
                 result += eps_b * L2;
                 result += eps_c * L2;
+                result += eps_c * eps_c * _l2one;
 
                 return result * xi;
             }
@@ -1391,8 +1414,9 @@ namespace eos
                 const double L5 = -1.0;
 
                 double result = as * (w + 1.0) / 2.0 * (_CA2(w, z) + _CA3(w, z));
-                result += eps_b * L5;
-                result -= eps_c * L5;
+                result += eps_c * L5;
+                result -= eps_b * L5;
+                result += eps_c * eps_c * _l5one;
 
                 return result * xi;
             }
@@ -1419,6 +1443,7 @@ namespace eos
 
                 double result = (0.0 - as * _CA2(w, z));
                 result += eps_c * (L3 - L6);
+                result += eps_c * eps_c * (_l3one - _l6one);
 
                 return result * xi;
             }
