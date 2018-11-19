@@ -384,6 +384,8 @@ namespace eos
         static const std::map<KeyType, ValueType> form_factors
         {
             // parametrizations
+            // b -> c
+            { KeyType("B^*->D::HQET"),        &HQETFormFactors<BstarToD, VToP>::make          },
         };
 
         auto i = form_factors.find(name);
