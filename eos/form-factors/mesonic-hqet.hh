@@ -171,6 +171,32 @@ namespace eos
 
             /* Wilson Coefficients */
 
+            inline double _CS(const double & w, const double & z) const
+            {
+                const double z2  = z * z;
+                const double wz  = _wz(z);
+                const double lnz = std::log(z);
+
+                double result = 2.0 * z * (w - wz) * _Omega(w, z);
+                result -= (w - 1.0) * (z + 1.0) * (z + 1.0) * _r(w);
+                result += (z2 - 1.0) * lnz;
+
+                return result / (3.0 * z * (w - wz));
+            }
+
+            inline double _CP(const double & w, const double & z) const
+            {
+                const double z2  = z * z;
+                const double wz  = _wz(z);
+                const double lnz = std::log(z);
+
+                double result = 2.0 * z * (w - wz) * _Omega(w, z);
+                result -= (w + 1.0) * (z - 1.0) * (z - 1.0) * _r(w);
+                result += (z2 - 1.0) * lnz;
+
+                return result / (3.0 * z * (w - wz));
+            }
+
             inline double _CV1(const double & w, const double & z) const
             {
                 const double z2  = z * z;
@@ -247,6 +273,39 @@ namespace eos
                 result += 2.0 * z * (z + 1.0) * (wz - w) - ((2.0 * w + 3.0) * z2 - (4.0 * w + 2.0) * z + 1.0) * lnz;
 
                 return +1.0 * result / (6.0 * z * power_of<2>(w - wz));
+            }
+
+            inline double _CT1(const double & w, const double & z) const
+            {
+                const double z2  = z * z;
+                const double wz  = _wz(z);
+                const double lnz = std::log(z);
+
+                double result = (w - 1.0) * ((4.0 * w + 2.0) * z - z2 - 1.0) * _r(w);
+                result += 6.0 * z * (wz - w) - (z2 - 1.0) * lnz;
+                result += 2.0 * z * (w - wz) * _Omega(w, z);
+
+                return +1.0 / (3.0 * z * (w - wz)) * result;
+            }
+
+            inline double _CT2(const double & w, const double & z) const
+            {
+                const double wz  = _wz(z);
+                const double lnz = std::log(z);
+
+                double result = (1.0 - w * z) * _r(w) + z * lnz;
+
+                return +2.0 / (3.0 * z * (w - wz)) * result;
+            }
+
+            inline double _CT3(const double & w, const double & z) const
+            {
+                const double wz  = _wz(z);
+                const double lnz = std::log(z);
+
+                double result = (w - z) * _r(w) + lnz;
+
+                return +2.0 / (3.0 * (w - wz)) * result;
             }
     };
 
@@ -340,6 +399,66 @@ namespace eos
                 return result * xi;
             }
 
+            double _h_S(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+                const double chi3 = _chi3(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L1 = -4.0 * (w - 1.0) * chi2 + 12.0 * chi3;
+                const double L4 = 2.0 * eta - 1.0;
+
+                double result = (1.0 + as * _CS(w, z));
+                result += eps_c * (L1 - (w - 1.0) / (w + 1.0) * L4);
+                result += eps_b * (L1 - (w - 1.0) / (w + 1.0) * L4);
+                result += eps_c * eps_c * (_l1one);
+
+                return result * xi;
+            }
+
+            double _h_T(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+                const double chi3 = _chi3(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L1 = -4.0 * (w - 1.0) * chi2 + 12.0 * chi3;
+                const double L4 = 2.0 * eta - 1.0;
+
+                double result = (1.0 + as * (_CT1(w, z) - _CT2(w, z) + _CT3(w, z)));
+                result += eps_c * (L1 - L4);
+                result += eps_b * (L1 - L4);
+                result += eps_c * eps_c * (_l1one - _l4one);
+
+                return result * xi;
+            }
+
         public:
             HQETFormFactors(const Parameters & p, const Options & o) :
                 HQETFormFactorBase(p, o)
@@ -371,12 +490,18 @@ namespace eos
 
             virtual double f_0(const double & q2) const
             {
-                return -1.0;
+                constexpr double m_P = Process_::m_P, m_B = Process_::m_B;
+
+                // We do not use the relation between f_0 and the (scale-dependent) h_S.
+                return f_p(q2) + q2 / (m_B * m_B - m_P * m_P) * f_m(q2);
             }
 
             virtual double f_t(const double & q2) const
             {
-                return -1.0;
+                constexpr double r = Process_::m_P / Process_::m_B;
+
+                // cf. [BJvD2019], eq. (A7)
+                return (1.0 + r) / (2.0 * sqrt(r)) * _h_T(q2);
             }
 
             Diagnostics diagnostics() const
@@ -457,6 +582,9 @@ namespace eos
                     results.add(Diagnostics::Entry{ _CA1(1.2, 0.20), "C_{A_1}(w = 1.2, z = 0.20)" });
                     results.add(Diagnostics::Entry{ _CA2(1.2, 0.20), "C_{A_2}(w = 1.2, z = 0.20)" });
                     results.add(Diagnostics::Entry{ _CA3(1.2, 0.20), "C_{A_3}(w = 1.2, z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _CT1(1.2, 0.20), "C_{T_1}(w = 1.2, z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _CT2(1.2, 0.20), "C_{T_2}(w = 1.2, z = 0.20)" });
+                    results.add(Diagnostics::Entry{ _CT3(1.2, 0.20), "C_{T_3}(w = 1.2, z = 0.20)" });
                 }
 
                 // WCs at w = 1.0, z = 0.25
@@ -467,18 +595,24 @@ namespace eos
                     results.add(Diagnostics::Entry{ _CA1(1.0, 0.25), "C_{A_1}(w = 1.0, z = 0.25)" });
                     results.add(Diagnostics::Entry{ _CA2(1.0, 0.25), "C_{A_2}(w = 1.0, z = 0.25)" });
                     results.add(Diagnostics::Entry{ _CA3(1.0, 0.25), "C_{A_3}(w = 1.0, z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _CT1(1.0, 0.25), "C_{T_1}(w = 1.0, z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _CT2(1.0, 0.25), "C_{T_2}(w = 1.0, z = 0.25)" });
+                    results.add(Diagnostics::Entry{ _CT3(1.0, 0.25), "C_{T_3}(w = 1.0, z = 0.25)" });
                 }
 
                 // HQET definition of the form factors
                 {
-                    results.add(Diagnostics::Entry{ _h_p(_q2(1.4)), "h_p(w = 1.4)" });
-                    results.add(Diagnostics::Entry{ _h_m(_q2(1.4)), "h_m(w = 1.4)" });
+                    results.add(Diagnostics::Entry{ _h_p(_q2(1.4)), "h_+(w = 1.4)" });
+                    results.add(Diagnostics::Entry{ _h_m(_q2(1.4)), "h_-(w = 1.4)" });
+                    results.add(Diagnostics::Entry{ _h_T(_q2(1.4)), "h_T(w = 1.4)" });
 
-                    results.add(Diagnostics::Entry{ _h_p(_q2(1.2)), "h_p(w = 1.2)" });
-                    results.add(Diagnostics::Entry{ _h_m(_q2(1.2)), "h_m(w = 1.2)" });
+                    results.add(Diagnostics::Entry{ _h_p(_q2(1.2)), "h_+(w = 1.2)" });
+                    results.add(Diagnostics::Entry{ _h_m(_q2(1.2)), "h_-(w = 1.2)" });
+                    results.add(Diagnostics::Entry{ _h_T(_q2(1.2)), "h_T(w = 1.2)" });
 
-                    results.add(Diagnostics::Entry{ _h_p(_q2(1.0)), "h_p(w = 1.0)" });
-                    results.add(Diagnostics::Entry{ _h_m(_q2(1.0)), "h_m(w = 1.0)" });
+                    results.add(Diagnostics::Entry{ _h_p(_q2(1.0)), "h_+(w = 1.0)" });
+                    results.add(Diagnostics::Entry{ _h_m(_q2(1.0)), "h_-(w = 1.0)" });
+                    results.add(Diagnostics::Entry{ _h_T(_q2(1.0)), "h_T(w = 1.0)" });
                 }
 
                 return results;
