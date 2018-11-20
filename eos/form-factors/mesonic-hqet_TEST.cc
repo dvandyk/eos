@@ -228,18 +228,27 @@ class BToDstarHQETFormFactorsTest :
                 std::make_pair(-0.217704, eps), // h_{A_2}
                 std::make_pair(+0.623812, eps), // h_{A_3}
                 std::make_pair(+0.772908, eps), // h_{V}
+                std::make_pair(+0.614276, eps), // h_{T_1}
+                std::make_pair(-0.136754, eps), // h_{T_2}
+                std::make_pair(-0.149709, eps), // h_{T_3}
 
                 /* HQET form factors at w = 1.2 */
                 std::make_pair(+0.719796, eps), // h_{A_1}
                 std::make_pair(-0.282823, eps), // h_{A_2}
                 std::make_pair(+0.741269, eps), // h_{A_3}
                 std::make_pair(+0.940146, eps), // h_{V}
+                std::make_pair(+0.747488, eps), // h_{T_1}
+                std::make_pair(-0.165357, eps), // h_{T_2}
+                std::make_pair(-0.199636, eps), // h_{T_3}
 
                 /* HQET form factors at w = 1.0 */
                 std::make_pair(+0.889539, eps), // h_{A_1}
                 std::make_pair(-0.387433, eps), // h_{A_2}
                 std::make_pair(+0.916438, eps), // h_{A_3}
                 std::make_pair(+1.196276, eps), // h_{V}
+                std::make_pair(+0.951473, eps), // h_{T_1}
+                std::make_pair(-0.209220, eps), // h_{T_2}
+                std::make_pair(-0.280823, eps), // h_{T_3}
             };
 
             TEST_CHECK_DIAGNOSTICS(diag, ref);

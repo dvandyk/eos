@@ -784,6 +784,99 @@ namespace eos
                 return result * xi;
             }
 
+            double _h_t1(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+                const double chi3 = _chi3(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L1 = -4.0 * (w - 1.0) * chi2 + 12.0 * chi3;
+                const double L2 = -4.0 * chi3;
+                const double L4 = 2.0 * eta - 1.0;
+                const double L5 = -1.0;
+
+                double result = (1.0 + as * (_CT1(w, z) + (w - 1.0) / 2.0 * (_CT2(w, z) - _CT3(w, z))));
+                result += eps_c * L2;
+                result += eps_b * L1;
+                result += eps_c * eps_c * _l2one;
+
+                return result * xi;
+            }
+
+            double _h_t2(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+                const double chi3 = _chi3(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L1 = -4.0 * (w - 1.0) * chi2 + 12.0 * chi3;
+                const double L2 = -4.0 * chi3;
+                const double L4 = 2.0 * eta - 1.0;
+                const double L5 = -1.0;
+
+                double result = (0.0 + as * (w + 1.0) / 2.0 * (_CT2(w, z) + _CT3(w, z)));
+                result += eps_c * L5;
+                result -= eps_b * L4;
+                result += eps_c * eps_c * _l5one;
+
+                return result * xi;
+            }
+
+            double _h_t3(const double & q2) const
+            {
+                const double m_b_1S = _m_b_1S();
+                const double m_c_1S = _m_c_1S();
+
+                const double w = this->_w(q2);
+                const double z = m_c_1S / m_b_1S;
+
+                const double as = _alpha_s() / M_PI;
+
+                const double xi  = _xi(q2);
+                const double eta = _eta(q2);
+                const double chi2 = _chi2(q2);
+                const double chi3 = _chi3(q2);
+
+                const double eps_b = _LambdaBar() / (2.0 * m_b_1S);
+                const double eps_c = _LambdaBar() / (2.0 * m_c_1S);
+
+                // chi_1 is absorbed into def. of xi for LP and LV
+                const double L3 = 4.0 * chi2;
+                const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+                double result = (0.0 + as * _CT2(w, z));
+                result += eps_c * (L6 - L3);
+                result += eps_c * eps_c * (_l6one - _l3one);
+
+                return result * xi;
+            }
+
         public:
             HQETFormFactors(const Parameters & p, const Options & o) :
                 HQETFormFactorBase(p, o)
@@ -970,16 +1063,25 @@ namespace eos
                     results.add(Diagnostics::Entry{ _h_a2(_q2(1.4)), "h_A2(w = 1.4)" });
                     results.add(Diagnostics::Entry{ _h_a3(_q2(1.4)), "h_A3(w = 1.4)" });
                     results.add(Diagnostics::Entry{ _h_v (_q2(1.4)), "h_V (w = 1.4)" });
+                    results.add(Diagnostics::Entry{ _h_t1(_q2(1.4)), "h_T1(w = 1.4)" });
+                    results.add(Diagnostics::Entry{ _h_t2(_q2(1.4)), "h_T2(w = 1.4)" });
+                    results.add(Diagnostics::Entry{ _h_t3(_q2(1.4)), "h_T3(w = 1.4)" });
 
                     results.add(Diagnostics::Entry{ _h_a1(_q2(1.2)), "h_A1(w = 1.2)" });
                     results.add(Diagnostics::Entry{ _h_a2(_q2(1.2)), "h_A2(w = 1.2)" });
                     results.add(Diagnostics::Entry{ _h_a3(_q2(1.2)), "h_A3(w = 1.2)" });
                     results.add(Diagnostics::Entry{ _h_v (_q2(1.2)), "h_V (w = 1.2)" });
+                    results.add(Diagnostics::Entry{ _h_t1(_q2(1.2)), "h_T1(w = 1.2)" });
+                    results.add(Diagnostics::Entry{ _h_t2(_q2(1.2)), "h_T2(w = 1.2)" });
+                    results.add(Diagnostics::Entry{ _h_t3(_q2(1.2)), "h_T3(w = 1.2)" });
 
                     results.add(Diagnostics::Entry{ _h_a1(_q2(1.0)), "h_A1(w = 1.0)" });
                     results.add(Diagnostics::Entry{ _h_a2(_q2(1.0)), "h_A2(w = 1.0)" });
                     results.add(Diagnostics::Entry{ _h_a3(_q2(1.0)), "h_A3(w = 1.0)" });
                     results.add(Diagnostics::Entry{ _h_v (_q2(1.0)), "h_V (w = 1.0)" });
+                    results.add(Diagnostics::Entry{ _h_t1(_q2(1.0)), "h_T1(w = 1.0)" });
+                    results.add(Diagnostics::Entry{ _h_t2(_q2(1.0)), "h_T2(w = 1.0)" });
+                    results.add(Diagnostics::Entry{ _h_t3(_q2(1.0)), "h_T3(w = 1.0)" });
                 }
 
                 return results;
