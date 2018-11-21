@@ -39,16 +39,16 @@ namespace eos
             UsedParameter _etaone, _etapone;
 
             // parameters for subsubleading 1/m_c corrections in h_+ (B->D), equal to delta_{h_+}
-            UsedParameter _l1one;
+            UsedParameter _l1one, _l1pone;
 
             // parameters for subsubleading 1/m_c corrections in h_A1 (B->D^*), equal to delta_{A_1}
-            UsedParameter _l2one;
+            UsedParameter _l2one, _l2pone;
 
             // parameters for subsubleading 1/m_c corrections
-            UsedParameter _l3one;
-            UsedParameter _l4one;
-            UsedParameter _l5one;
-            UsedParameter _l6one;
+            UsedParameter _l3one, _l3pone;
+            UsedParameter _l4one, _l4pone;
+            UsedParameter _l5one, _l5pone;
+            UsedParameter _l6one, _l6pone;
 
         public:
             HQETFormFactorBase(const Parameters & p, const Options & o) :
@@ -61,11 +61,17 @@ namespace eos
                 _etaone(p["B(*)->D(*)::eta(1)@HQET"], *this),
                 _etapone(p["B(*)->D(*)::eta'(1)@HQET"], *this),
                 _l1one(p["B(*)->D(*)::l_1(1)@HQET"], *this),
+                _l1pone(p["B(*)->D(*)::l_1'(1)@HQET"], *this),
                 _l2one(p["B(*)->D(*)::l_2(1)@HQET"], *this),
+                _l2pone(p["B(*)->D(*)::l_2'(1)@HQET"], *this),
                 _l3one(p["B(*)->D(*)::l_3(1)@HQET"], *this),
+                _l3pone(p["B(*)->D(*)::l_3'(1)@HQET"], *this),
                 _l4one(p["B(*)->D(*)::l_4(1)@HQET"], *this),
+                _l4pone(p["B(*)->D(*)::l_4'(1)@HQET"], *this),
                 _l5one(p["B(*)->D(*)::l_5(1)@HQET"], *this),
-                _l6one(p["B(*)->D(*)::l_6(1)@HQET"], *this)
+                _l5pone(p["B(*)->D(*)::l_5'(1)@HQET"], *this),
+                _l6one(p["B(*)->D(*)::l_6(1)@HQET"], *this),
+                _l6pone(p["B(*)->D(*)::l_6'(1)@HQET"], *this)
             {
             }
 
@@ -168,6 +174,14 @@ namespace eos
                 return w * real(2.0 * (li2wmz - li2wpz) + li2wp2 - li2wm2) / (2.0 * std::sqrt(w * w - 1.0))
                     - w * _r(w) * lnz + 1.0;
             }
+
+            /* Power corrections */
+            inline double _l1(const double & w) const { return _l1one() + (w - 1.0) * _l1pone(); }
+            inline double _l2(const double & w) const { return _l2one() + (w - 1.0) * _l2pone(); }
+            inline double _l3(const double & w) const { return _l3one() + (w - 1.0) * _l3pone(); }
+            inline double _l4(const double & w) const { return _l4one() + (w - 1.0) * _l4pone(); }
+            inline double _l5(const double & w) const { return _l5one() + (w - 1.0) * _l5pone(); }
+            inline double _l6(const double & w) const { return _l6one() + (w - 1.0) * _l6pone(); }
 
             /* Wilson Coefficients */
 
@@ -366,7 +380,7 @@ namespace eos
                 double result = (1.0 + as * (_CV1(w, z) + (w + 1.0) / 2.0 * (_CV2(w, z) + _CV3(w, z))));
                 result += eps_c * (L1);
                 result += eps_b * (L1);
-                result += eps_c * eps_c * _l1one;
+                result += eps_c * eps_c * _l1(w);
 
                 return result * xi;
             }
@@ -394,7 +408,7 @@ namespace eos
                 double result = (0.0 + as * (w + 1.0) / 2.0 * (_CV2(w, z) - _CV3(w, z)));
                 result += eps_c * L4;
                 result -= eps_b * L4;
-                result += eps_c * eps_c * _l4one;
+                result += eps_c * eps_c * _l4(w);
 
                 return result * xi;
             }
@@ -424,7 +438,7 @@ namespace eos
                 double result = (1.0 + as * _CS(w, z));
                 result += eps_c * (L1 - (w - 1.0) / (w + 1.0) * L4);
                 result += eps_b * (L1 - (w - 1.0) / (w + 1.0) * L4);
-                result += eps_c * eps_c * (_l1one);
+                result += eps_c * eps_c * _l1(w);
 
                 return result * xi;
             }
@@ -454,7 +468,7 @@ namespace eos
                 double result = (1.0 + as * (_CT1(w, z) - _CT2(w, z) + _CT3(w, z)));
                 result += eps_c * (L1 - L4);
                 result += eps_b * (L1 - L4);
-                result += eps_c * eps_c * (_l1one - _l4one);
+                result += eps_c * eps_c * (_l1(w) - _l4(w));
 
                 return result * xi;
             }
@@ -679,7 +693,7 @@ namespace eos
                 double result = (1.0 + as * _CA1(w, z));
                 result += eps_c * (L2 - L5 * (w - 1.0) / (w + 1.0));
                 result += eps_b * (L1 - L4 * (w - 1.0) / (w + 1.0));
-                result += eps_c * eps_c * _l2one;
+                result += eps_c * eps_c * _l2(w);
 
                 return result * xi;
             }
@@ -707,7 +721,7 @@ namespace eos
 
                 double result = (0.0 + as * _CA2(w, z));
                 result += eps_c * (L3 + L6);
-                result += eps_c * eps_c * (_l3one + _l6one);
+                result += eps_c * eps_c * (_l3(w) + _l6(w));
 
                 return result * xi;
             }
@@ -741,7 +755,7 @@ namespace eos
                 double result = (1.0 + as * (_CA1(w, z) +_CA3(w, z)));
                 result += eps_c * (L2 - L3 + L6 - L5);
                 result += eps_b * (L1 - L4);
-                result += eps_c * eps_c * (_l2one - _l3one + _l6one - _l5one);
+                result += eps_c * eps_c * (_l2(w) - _l3(w) + _l6(w) - _l5(w));
 
                 return result * xi;
             }
@@ -779,7 +793,7 @@ namespace eos
                 double result = (1.0 + as * _CV1(w, z));
                 result += eps_c * (L2 - L5);
                 result += eps_b * (L1 - L4);
-                result += eps_c * eps_c * (_l2one - _l5one);
+                result += eps_c * eps_c * (_l2(w) - _l5(w));
 
                 return result * xi;
             }
@@ -811,7 +825,7 @@ namespace eos
                 double result = (1.0 + as * (_CT1(w, z) + (w - 1.0) / 2.0 * (_CT2(w, z) - _CT3(w, z))));
                 result += eps_c * L2;
                 result += eps_b * L1;
-                result += eps_c * eps_c * _l2one;
+                result += eps_c * eps_c * _l2(w);
 
                 return result * xi;
             }
@@ -843,7 +857,7 @@ namespace eos
                 double result = (0.0 + as * (w + 1.0) / 2.0 * (_CT2(w, z) + _CT3(w, z)));
                 result += eps_c * L5;
                 result -= eps_b * L4;
-                result += eps_c * eps_c * _l5one;
+                result += eps_c * eps_c * _l5(w);
 
                 return result * xi;
             }
@@ -872,7 +886,7 @@ namespace eos
 
                 double result = (0.0 + as * _CT2(w, z));
                 result += eps_c * (L6 - L3);
-                result += eps_c * eps_c * (_l6one - _l3one);
+                result += eps_c * eps_c * (_l6(w) - _l3(w));
 
                 return result * xi;
             }
