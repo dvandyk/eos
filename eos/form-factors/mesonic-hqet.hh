@@ -11,12 +11,15 @@
 #include <eos/utils/polylog.hh>
 #include <eos/utils/power_of.hh>
 
+#include <cmath>
 #include <limits>
 
 #include <iostream>
 
 namespace eos
 {
+    using std::sqrt;
+
     /* HQET Form Factors, based on [BLPR2017] and [JS2018] */
     template <typename Process_, typename Transition_> class HQETFormFactors;
 
@@ -27,16 +30,16 @@ namespace eos
             std::shared_ptr<Model> _model;
 
             // parameters for the leading Isgur-Wise function xi
-            UsedParameter _rho2, _c;
+            UsedParameter _rho2, _c, _d;
 
             // parameters for the subleading Isgur-Wise function chi_2
-            UsedParameter _chi2one, _chi2pone;
+            UsedParameter _chi2one, _chi2pone, _chi2ppone;
 
             // parameters for the subleading Isgur-Wise function chi_3
-            UsedParameter _chi3pone;
+            UsedParameter _chi3pone, _chi3ppone;
 
             // parameters for the subleading Isgur-Wise function eta
-            UsedParameter _etaone, _etapone;
+            UsedParameter _etaone, _etapone, _etappone;
 
             // parameters for subsubleading 1/m_c corrections in h_+ (B->D), equal to delta_{h_+}
             UsedParameter _l1one, _l1pone;
@@ -55,11 +58,15 @@ namespace eos
                 _model(Model::make("SM", p, o)),
                 _rho2(p["B(*)->D(*)::rho^2@HQET"], *this),
                 _c(p["B(*)->D(*)::c@HQET"], *this),
+                _d(p["B(*)->D(*)::d@HQET"], *this),
                 _chi2one(p["B(*)->D(*)::chi_2(1)@HQET"], *this),
                 _chi2pone(p["B(*)->D(*)::chi_2'(1)@HQET"], *this),
+                _chi2ppone(p["B(*)->D(*)::chi_2''(1)@HQET"], *this),
                 _chi3pone(p["B(*)->D(*)::chi_3'(1)@HQET"], *this),
+                _chi3ppone(p["B(*)->D(*)::chi_3''(1)@HQET"], *this),
                 _etaone(p["B(*)->D(*)::eta(1)@HQET"], *this),
                 _etapone(p["B(*)->D(*)::eta'(1)@HQET"], *this),
+                _etappone(p["B(*)->D(*)::eta''(1)@HQET"], *this),
                 _l1one(p["B(*)->D(*)::l_1(1)@HQET"], *this),
                 _l1pone(p["B(*)->D(*)::l_1'(1)@HQET"], *this),
                 _l2one(p["B(*)->D(*)::l_2(1)@HQET"], *this),
@@ -103,28 +110,28 @@ namespace eos
             {
                 const double z = _z(q2);
 
-                return 1.0 - 8.0 * _rho2 * z + (64.0 * _c - 16.0 * _rho2) * z * z;
+                return 1.0 - 8.0 * _rho2 * z + (64.0 * _c - 16.0 * _rho2) * z * z + (-24.0 * _rho2 + 256.0 * _c + 512 * _d) * z * z * z;
             }
 
             double _chi2(const double & q2) const
             {
-                const double w = _w(q2);
+                const double z = _z(q2);
 
-                return _chi2one + _chi2pone * (w - 1.0);
+                return _chi2one + 8.0 * _chi2pone * z + (32.0 * _chi2ppone + 16.0 * _chi2pone) * z * z;
             }
 
             double _chi3(const double & q2) const
             {
-                const double w = _w(q2);
+                const double z = _z(q2);
 
-                return 0.0 + _chi3pone * (w - 1.0);
+                return 0.0 + 8.0 * _chi3pone * z + (32.0 * _chi3ppone + 16.0 * _chi3pone) * z * z;
             }
 
             double _eta(const double & q2) const
             {
-                const double w = _w(q2);
+                const double z = _z(q2);
 
-                return _etaone + _etapone * (w - 1.0);
+                return _etaone + 8.0 * _etapone * z + (32.0 * _etappone + 16.0 * _etapone) * z * z;
             }
 
             /*
@@ -909,7 +916,7 @@ namespace eos
                 constexpr double r = Process_::mV / Process_::mB;
 
                 // cf. [FKKM2008], eq. (22)
-                return (1.0 + r) / 2.0 * sqrt(r) * _h_v(q2);
+                return (1.0 + r) / 2.0 / sqrt(r) * _h_v(q2);
             }
 
             virtual double a_0(const double & q2) const
@@ -917,9 +924,10 @@ namespace eos
                 constexpr double r = Process_::mV / Process_::mB;
                 const     double w = _w(q2);
 
+                return 1.0 / (2.0 * sqrt(r)) * ((1.0 + w) * _h_a1(q2) + (r * w - 1.0) * _h_a2(q2) + (r - w) * _h_a3(q2));
                 // cf. [FKKM2008], eq. (22)
-                const double a_30 = (1.0 + r * r - 2.0 * r * w) / (4.0 * r * sqrt(r)) * (r * _h_a2(q2) - _h_a3(q2));
-                return a_3(q2) - a_30;
+                //const double a_30 = (1.0 + r * r - 2.0 * r * w) / (4.0 * r * sqrt(r)) * (r * _h_a2(q2) - _h_a3(q2));
+                //return a_3(q2) - a_30;
             }
 
             virtual double a_1(const double & q2) const
@@ -928,7 +936,7 @@ namespace eos
                 const     double w = _w(q2);
 
                 // cf. [FKKM2008], eq. (22)
-                return sqrt(r) * (1.0 + w) / (1 + r) * _h_a1(q2);
+                return sqrt(r) * (1.0 + w) / (1.0 + r) * _h_a1(q2);
             }
 
             virtual double a_2(const double & q2) const
@@ -959,24 +967,37 @@ namespace eos
                 return result;
             }
 
-            virtual double t_1(const double & s) const
+            virtual double t_1(const double & q2) const
             {
-                return 0.0;
+                constexpr double r = Process_::mV / Process_::mB;
+                const double w = _w(q2);
+
+                return 1.0 / (2.0 * sqrt(r)) * ((w - r) * _h_t2(q2) - (1.0 + r) * _h_t1(q2));
             }
 
-            virtual double t_2(const double & s) const
+            virtual double t_2(const double & q2) const
             {
-                return 0.0;
+                constexpr double r = Process_::mV / Process_::mB;
+                const double w = _w(q2);
+
+                return -1.0 / (2.0 * sqrt(r)) * (2.0 * r * (w + 1.0) / (1.0 + r) * _h_t1(q2) - 2.0 * r * (w - 1.0) / (1.0 - r) * _h_t2(q2));
             }
 
-            virtual double t_3(const double & s) const
+            virtual double t_3(const double & q2) const
             {
-                return 0.0;
+                constexpr double r = Process_::mV / Process_::mB;
+                const double w = _w(q2);
+
+                return -1.0 / (2.0 * sqrt(r)) * ((1.0 - r) * _h_t1(q2) - (1.0 + r) * _h_t2(q2) + (1.0 - r * r) * _h_t3(q2));
             }
 
-            virtual double t_23(const double & s) const
+            virtual double t_23(const double & q2) const
             {
-                return 0.0;
+                const double mB = Process_::mB, mB2 = mB * mB;
+                const double mV = Process_::mV, mV2 = mV * mV;
+                const double lambda = eos::lambda(mB2, mV2, q2);
+
+                return ((mB2 - mV2) * (mB2 + 3.0 * mV2 - q2) * t_2(q2) - lambda * t_3(q2)) / (8.0 * mB * mV2 * (mB - mV));
             }
 
             Diagnostics diagnostics() const
