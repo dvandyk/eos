@@ -588,7 +588,7 @@ B->D::f_+@FKKM2008:
   sigma-sys: {hi: 0, lo: 0}
   dof: 1
 B->D::f_++f_0@FNALMILC2015A:
-    type: MultivariateGaussian(Covariance)
+    type: MultivariateGaussian
     dim: 7
     observables:
         -   B->D::f_+(s)
