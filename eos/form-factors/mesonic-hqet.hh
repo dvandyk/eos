@@ -972,7 +972,7 @@ namespace eos
                 constexpr double r = Process_::mV / Process_::mB;
                 const double w = _w(q2);
 
-                return 1.0 / (2.0 * sqrt(r)) * ((w - r) * _h_t2(q2) - (1.0 + r) * _h_t1(q2));
+                return -1.0 / (2.0 * sqrt(r)) * ((w - r) * _h_t2(q2) - (1.0 + r) * _h_t1(q2));
             }
 
             virtual double t_2(const double & q2) const
@@ -980,7 +980,7 @@ namespace eos
                 constexpr double r = Process_::mV / Process_::mB;
                 const double w = _w(q2);
 
-                return -1.0 / (2.0 * sqrt(r)) * (2.0 * r * (w + 1.0) / (1.0 + r) * _h_t1(q2) - 2.0 * r * (w - 1.0) / (1.0 - r) * _h_t2(q2));
+                return +1.0 / (2.0 * sqrt(r)) * (2.0 * r * (w + 1.0) / (1.0 + r) * _h_t1(q2) - 2.0 * r * (w - 1.0) / (1.0 - r) * _h_t2(q2));
             }
 
             virtual double t_3(const double & q2) const
@@ -988,7 +988,7 @@ namespace eos
                 constexpr double r = Process_::mV / Process_::mB;
                 const double w = _w(q2);
 
-                return -1.0 / (2.0 * sqrt(r)) * ((1.0 - r) * _h_t1(q2) - (1.0 + r) * _h_t2(q2) + (1.0 - r * r) * _h_t3(q2));
+                return +1.0 / (2.0 * sqrt(r)) * ((1.0 - r) * _h_t1(q2) - (1.0 + r) * _h_t2(q2) + (1.0 - r * r) * _h_t3(q2));
             }
 
             virtual double t_23(const double & q2) const
