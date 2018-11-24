@@ -430,15 +430,17 @@ class Plotter:
         if yvariable not in datafile.variable_indices:
             raise ValueError('x variable {} not contained in data file'.format(variable))
 
+        alpha  = item['opacity']   if 'opacity'   in item else 0.3
+        bw     = item['bandwidth'] if 'bandwidth' in item else None
+        color  = item['color']     if 'color'     in item else 'blue'
+        levels = item['levels']    if 'levels'    in item else [68,95,99]
+        stride = item['stride']    if 'stride'    in item else 50
+
         data   = datafile.data()
         xindex = datafile.variable_indices[xvariable]
-        xdata  = data[:, xindex]
+        xdata  = data[::stride, xindex]
         yindex = datafile.variable_indices[yvariable]
-        ydata  = data[:, yindex]
-
-        alpha = item['opacity']   if 'opacity'   in item else 0.3
-        color = item['color']     if 'color'     in item else 'blue'
-        bw    = item['bandwidth'] if 'bandwidth' in item else None
+        ydata  = data[::stride, yindex]
 
         if not np.array(self.xrange).any():
             self.xrange = [np.amin(xdata), np.amax(xdata)]
@@ -461,16 +463,16 @@ class Plotter:
 
         # find the PDF value corresponding to a given cummulative probability
         plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
-        pone_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.68))
-        ptwo_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.95))
-        pthree_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.99))
-        levels = [pone_sigma, ptwo_sigma, pthree_sigma]
-        labels = ['68%', '95%', '99%']
+        plevels = []
+        labels = []
+        for level in levels:
+            plevels.append(scipy.optimize.brentq(plevel, 0., 1., args=(pdf, level / 100.0)))
+            labels.append('{}%'.format(level))
 
         CS = plt.contour(pdf.transpose(),
-                         colors='OrangeRed',
+                         colors=color,
                          extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
-                         levels=levels[::-1])
+                         levels=plevels[::-1])
 
         fmt = {}
         for level, label in zip(CS.levels, labels[::-1]):
