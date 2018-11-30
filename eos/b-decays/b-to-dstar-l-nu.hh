@@ -38,26 +38,26 @@ namespace eos
             ~BToDstarLeptonNeutrino();
 
             // Differential Observables
-            double differential_branching_ratio(const double & s) const;
+            double differential_branching_ratio(const double & q2) const;
 
             // Differential Observables - normalized(|Vcb|=1)
-            double normalized_differential_branching_ratio(const double & s) const;
+            double normalized_differential_branching_ratio(const double & q2) const;
 
             // Integrated Observables
-            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
 
             // Integrated Observables - normalized(|Vcb|=1)
-            double normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
 
             // R_Dstar
-            double differential_r_d(const double & s) const;
-            double integrated_r_d(const double & s_min_mu, const double & s_min_tau, const double & s_max) const;
+            double differential_r_d(const double & q2) const;
+            double integrated_r_d(const double & q2_min_mu, const double & q2_min_tau, const double & q2_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.
              */
             static const std::string description;
-            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_q2;
     };
 }
 

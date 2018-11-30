@@ -232,7 +232,7 @@ namespace eos
 The decay B->D^* l nu, where l=e,mu,tau is a lepton.";
 
     const std::string
-    BToDstarLeptonNeutrino::kinematics_description_s = "\
+    BToDstarLeptonNeutrino::kinematics_description_q2 = "\
 The invariant mass of the l-nubar pair in GeV^2.";
 
 }
