@@ -8,6 +8,7 @@
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/polylog.hh>
 #include <eos/utils/power_of.hh>
 
@@ -28,6 +29,10 @@ namespace eos
     {
         protected:
             std::shared_ptr<Model> _model;
+
+            // option to determine if we use z^3 terms
+            SwitchOption _opt_z3;
+            double _enable_z3;
 
             // parameters for the leading Isgur-Wise function xi
             UsedParameter _rho2, _c, _d;
@@ -56,6 +61,8 @@ namespace eos
         public:
             HQETFormFactorBase(const Parameters & p, const Options & o) :
                 _model(Model::make("SM", p, o)),
+                _opt_z3(o, "z3", { "0", "1" }, "0"),
+                _enable_z3(1.0 ? _opt_z3.value() == "1" : 0.0),
                 _rho2(p["B(*)->D(*)::rho^2@HQET"], *this),
                 _c(p["B(*)->D(*)::c@HQET"], *this),
                 _d(p["B(*)->D(*)::d@HQET"], *this),
@@ -110,7 +117,7 @@ namespace eos
             {
                 const double z = _z(q2);
 
-                return 1.0 - 8.0 * _rho2 * z + (64.0 * _c - 16.0 * _rho2) * z * z + (-24.0 * _rho2 + 256.0 * _c + 512 * _d) * z * z * z;
+                return 1.0 - 8.0 * _rho2 * z + (64.0 * _c - 16.0 * _rho2) * z * z + (-24.0 * _rho2 + 256.0 * _c + 512 * _d) * z * z * z * _enable_z3;
             }
 
             double _chi2(const double & q2) const
