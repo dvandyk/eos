@@ -31,16 +31,16 @@ B^0->(Dpi)^+l^-nu::AngularDistribution@Belle-2017A:
         - B->Dpilnu::P(c_l_min,c_l_max)
         - B->Dpilnu::P(c_l_min,c_l_max)
         - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(phi_min,phi_max)
-        - B->Dpilnu::P(phi_min,phi_max)
-        - B->Dpilnu::P(phi_min,phi_max)
-        - B->Dpilnu::P(phi_min,phi_max)
-        - B->Dpilnu::P(phi_min,phi_max)
-        - B->Dpilnu::P(phi_min,phi_max)
-        - B->Dpilnu::P(phi_min,phi_max)
-        - B->Dpilnu::P(phi_min,phi_max)
-        - B->Dpilnu::P(phi_min,phi_max)
-        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(chi_min,chi_max)
+        - B->Dpilnu::P(chi_min,chi_max)
+        - B->Dpilnu::P(chi_min,chi_max)
+        - B->Dpilnu::P(chi_min,chi_max)
+        - B->Dpilnu::P(chi_min,chi_max)
+        - B->Dpilnu::P(chi_min,chi_max)
+        - B->Dpilnu::P(chi_min,chi_max)
+        - B->Dpilnu::P(chi_min,chi_max)
+        - B->Dpilnu::P(chi_min,chi_max)
+        - B->Dpilnu::P(chi_min,chi_max)
     kinematics:
         - { c_D_min: -1.0, c_D_max: -0.8 }
         - { c_D_min: -0.8, c_D_max: -0.6 }
@@ -62,16 +62,16 @@ B^0->(Dpi)^+l^-nu::AngularDistribution@Belle-2017A:
         - { c_l_min: +0.4, c_l_max: +0.6 }
         - { c_l_min: +0.6, c_l_max: +0.8 }
         - { c_l_min: +0.8, c_l_max: +1.0 }
-        - { phi_min: 0.00000, phi_max: 0.62832}
-        - { phi_min: 0.62832, phi_max: 1.25664}
-        - { phi_min: 1.25664, phi_max: 1.88496}
-        - { phi_min: 1.88496, phi_max: 2.51327}
-        - { phi_min: 2.51327, phi_max: 3.14159}
-        - { phi_min: 3.14159, phi_max: 3.76991}
-        - { phi_min: 3.76991, phi_max: 4.39823}
-        - { phi_min: 4.39823, phi_max: 5.02655}
-        - { phi_min: 5.02655, phi_max: 5.65487}
-        - { phi_min: 5.65487, phi_max: 6.28319}
+        - { chi_min: 0.00000, chi_max: 0.62832}
+        - { chi_min: 0.62832, chi_max: 1.25664}
+        - { chi_min: 1.25664, chi_max: 1.88496}
+        - { chi_min: 1.88496, chi_max: 2.51327}
+        - { chi_min: 2.51327, chi_max: 3.14159}
+        - { chi_min: 3.14159, chi_max: 3.76991}
+        - { chi_min: 3.76991, chi_max: 4.39823}
+        - { chi_min: 4.39823, chi_max: 5.02655}
+        - { chi_min: 5.02655, chi_max: 5.65487}
+        - { chi_min: 5.65487, chi_max: 6.28319}
     options:
         - { }
         - { }
