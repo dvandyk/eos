@@ -1,6 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 #include <eos/b-decays/b-to-d-pi-l-nu.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options-impl.hh>
@@ -9,58 +10,218 @@
 
 namespace eos
 {
+    using std::conj;
+    using std::norm;
+    using std::real;
+    using std::sqrt;
+
     template <>
     struct Implementation<BToDPiLeptonNeutrino>
     {
-        // angular observables of the P-wave D-pi resonance (D*)
-        UsedParameter a_fb, a_t2, a_im, f_l;
+        // model
+        SwitchOption opt_model;
 
-        // angular observables of the S-wave D-pi background, and the
-        // interference with the P-wave resonance
-        UsedParameter a_s, f_s;
+        // meson masses
+        UsedParameter m_B, m_Dstar;
 
-        Implementation(const Parameters & p, const Options &, ParameterUser & u) :
-            a_fb(p["B->Dpilnu::A_FB"], u),
-            a_t2(p["B->Dpilnu::A_T^2"], u),
-            a_im(p["B->Dpilnu::A_im"], u),
-            f_l(p["B->Dpilnu::F_L"], u),
-            a_s(p["B->Dpilnu::A_S"], u),
-            f_s(p["B->Dpilnu::F_S"], u)
+        // lepton mass
+        SwitchOption opt_l;
+        UsedParameter m_l;
+
+        // form factors
+        std::shared_ptr<FormFactors<PToV>> ff;
+
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            opt_model(o, "model", { "SM", "CKMScan" }, "SM"),
+            m_B(p["mass::B_d"], u),
+            m_Dstar(p["mass::D^*_d"], u),
+            opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
+            m_l(p["mass::" + opt_l.value()], u),
+            ff(FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors", "HQET"), p, o))
         {
+            if (! ff.get())
+                throw InternalError("Form factors not found!");
+
+            u.uses(*ff);
+        }
+
+        inline double pdf_normalization(const double & q2) const
+        {
+            // we only require q2-dependent terms of the normalization, since
+            // the constants parts drop out in the PDF.
+
+            const double m_B     = this->m_B(),     m_B2 = m_B * m_B;
+            const double m_Dstar = this->m_Dstar(), m_Dstar2 = m_Dstar * m_Dstar;
+
+            const double pDstar = sqrt(eos::lambda(m_B2, m_Dstar2, q2)) / (2.0 * m_B);
+            const double beta   = 1.0 - m_l() * m_l() / q2;
+
+            return pDstar * q2 * beta * beta;
+        }
+
+        inline double a_long(const double & q2) const
+        {
+            const double m_B     = this->m_B(),     m_B2 = m_B * m_B;
+            const double m_Dstar = this->m_Dstar(), m_Dstar2 = m_Dstar * m_Dstar;
+            const double lambda  = eos::lambda(m_B2, m_Dstar2, q2);
+
+            double result = (m_B + m_Dstar) * (m_B2 - m_Dstar2 - q2) * ff->a_1(q2);
+            result -= lambda / (m_B + m_Dstar) * ff->a_2(q2);
+            result /= (2.0 * m_Dstar * sqrt(q2));
+
+            return result;
+        }
+
+        inline double a_para(const double & q2) const
+        {
+            const double m_B     = this->m_B();
+            const double m_Dstar = this->m_Dstar();
+
+            return sqrt(2.0) * (m_B + m_Dstar) * ff->a_1(q2);
+        }
+
+        inline double a_perp(const double & q2) const
+        {
+            const double m_B     = this->m_B(),     m_B2 = m_B * m_B;
+            const double m_Dstar = this->m_Dstar(), m_Dstar2 = m_Dstar * m_Dstar;
+            const double lambda  = eos::lambda(m_B2, m_Dstar2, q2);
+
+            return -sqrt(2.0) * sqrt(lambda) / (m_B + m_Dstar) * ff->v(q2);
+        }
+
+        inline double a_time(const double & q2) const
+        {
+            const double m_B     = this->m_B(),     m_B2 = m_B * m_B;
+            const double m_Dstar = this->m_Dstar(), m_Dstar2 = m_Dstar * m_Dstar;
+            const double lambda  = eos::lambda(m_B2, m_Dstar2, q2);
+
+            // cf. [DSD2014], eq. (22), p. 17
+            return sqrt(lambda / q2) * ff->a_0(q2);
+        }
+
+        double pdf_q2(const double & q2) const
+        {
+            const double nf = pdf_normalization(q2);
+
+            const double m_l2    = m_l() * m_l();
+            const double a_long2 = norm(a_long(q2));
+            const double a_para2 = norm(a_para(q2));
+            const double a_perp2 = norm(a_perp(q2));
+            const double a_time2 = norm(a_time(q2));
+
+            const double a = (a_long2 + a_para2 + a_perp2) * (1.0 + m_l2 / (2.0 * q2))
+                           + 9.0 / 8.0 * a_time2 * m_l2 / q2;
+
+            return 2.0 * nf * a;
+        }
+
+        double pdf_q2d(const double & q2, const double & c_d) const
+        {
+            const double nf = pdf_normalization(q2);
+
+            const double m_l2    = m_l() * m_l();
+
+            const double a_long2 = norm(a_long(q2));
+            const double a_para2 = norm(a_para(q2));
+            const double a_perp2 = norm(a_perp(q2));
+            const double a_time2 = norm(a_time(q2));
+
+            const double a = (a_para2 + a_perp2) * (1.0 + m_l2 / (2.0 * q2))
+                           + 3.0 / 4.0 * a_time2 * m_l2 / q2;
+            const double b = (2.0 * a_long2 - a_para2 - a_perp2) + (1.0 + m_l2 / (2.0 * q2));
+
+            return 3.0 / 2.0 * nf * (a + b * c_d * c_d);
         }
 
         double pdf_d(const double & c_d) const
         {
-            const double c_d2 = c_d * c_d;
+            const double q2_min = power_of<2>(m_l());
+            const double q2_max = 10.68;
 
-            return f_s / 2.0 + a_s * c_d
-                + (1.0 - f_s) * (
-                    3.0 / 2.0 * c_d2 * f_l
-                    - 3.0 / 4.0 * (c_d2 - 1.0) * (1.0 - f_l)
-                );
+            std::function<double (const double &)> num   = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_q2d, this, std::placeholders::_1, c_d);
+            std::function<double (const double &)> denom = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_q2,  this, std::placeholders::_1);
+
+            return integrate<GSL::QAGS>(num, q2_min, q2_max) / integrate<GSL::QAGS>(denom, q2_min, q2_max);
+        }
+
+        double pdf_q2l(const double & q2, const double & c_l) const
+        {
+            const double nf = pdf_normalization(q2);
+
+            const double m_l2         = m_l() * m_l();
+
+            const double a_long       = this->a_long(q2); 
+            const double a_para       = this->a_para(q2); 
+            const double a_perp       = this->a_perp(q2); 
+            const double a_time       = this->a_time(q2); 
+
+            const double a_long2      = norm(a_long);
+            const double a_para2      = norm(a_para);
+            const double a_perp2      = norm(a_perp);
+            const double a_time2      = norm(a_time);
+
+            const double re_para_perp = real(a_para * conj(a_perp));
+            const double re_time_long = real(a_time * conj(a_long));
+
+            const double a = 2.0 * a_long2 + (a_para2 + a_perp2) * (1.0 + m_l2 / q2)
+                           + 3.0 / 2.0 * a_time2 * m_l2 / q2;
+            const double b = -4.0 * (re_para_perp + re_time_long * m_l2 / q2);
+            const double c = -(2.0 * a_long2 - a_para2 - a_perp2) + (1.0 - m_l2 / q2);
+
+            return 3.0 / 4.0 * nf * (a + b * c_l + c * c_l * c_l);
         }
 
         double pdf_l(const double & c_l) const
         {
-            const double c_l2 = c_l * c_l;
+            const double q2_min = power_of<2>(m_l());
+            const double q2_max = 10.68;
 
-            return -3.0 / 4.0 * (c_l2 - 1.0) * f_s
-                + (1.0 - f_s) * (
-                    a_fb * c_l
-                    - 3.0 / 4.0 * (c_l2 - 1.0) * f_l
-                    + 3.0 / 8.0 * (c_l2 + 1.0) * (1.0 - f_l)
-                );
+            std::function<double (const double &)> num   = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_q2l, this, std::placeholders::_1, c_l);
+            std::function<double (const double &)> denom = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_q2,  this, std::placeholders::_1);
+
+            return integrate<GSL::QAGS>(num, q2_min, q2_max) / integrate<GSL::QAGS>(denom, q2_min, q2_max);
         }
 
-        double pdf_phi(const double & phi) const
+        double pdf_q2chi(const double & q2, const double & c_chi) const
         {
-            const double c2 = std::cos(2.0 * phi), s2 = std::sin(2.0 * phi);
+            const double c_chi2 = c_chi * c_chi;
 
-            double result = f_s;
-            result += (1.0 - f_s) * (a_t2 * (1.0 - f_l) * c2 / 2.0 + 1.0 + a_im * s2);
-            result /= 2.0 * M_PI;
+            const double nf = pdf_normalization(q2);
 
-            return result;
+            const double m_l2         = m_l() * m_l();
+
+            const double a_long       = this->a_long(q2); 
+            const double a_para       = this->a_para(q2); 
+            const double a_perp       = this->a_perp(q2); 
+            const double a_time       = this->a_time(q2); 
+
+            const double a_long2      = norm(a_long);
+            const double a_para2      = norm(a_para);
+            const double a_perp2      = norm(a_perp);
+            const double a_time2      = norm(a_time);
+
+            const double re_para_long = real(a_para * conj(a_long));
+            const double re_para_time = real(a_para * conj(a_time));
+            const double re_perp_long = real(a_perp * conj(a_long));
+
+            const double a = 2.0 * a_long2 + 3.0 * a_para2 + a_perp2
+                           + m_l2 / q2 * (a_long2 + 2.0 * a_perp2 + 9.0 / 4.0 * a_time2);
+            const double b = 3.0 * M_PI / 10.0 * (re_perp_long - re_para_long
+                           + m_l2 / q2 * (re_para_long - re_para_time));
+            const double c = -2.0 * (a_para2 - a_perp2) + (1.0 - m_l2 / q2);
+
+            return nf / (2.0 * M_PI) * (a + b * c_chi + c * c_chi2);
+        }
+
+        double pdf_chi(const double & chi) const
+        {
+            const double q2_min = power_of<2>(m_l());
+            const double q2_max = 10.68;
+
+            std::function<double (const double &)> num   = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_q2chi, this, std::placeholders::_1, cos(chi));
+            std::function<double (const double &)> denom = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_q2,    this, std::placeholders::_1);
+
+            return integrate<GSL::QAGS>(num, q2_min, q2_max) / integrate<GSL::QAGS>(denom, q2_min, q2_max);
         }
     };
 
@@ -86,9 +247,9 @@ namespace eos
     }
 
     double
-    BToDPiLeptonNeutrino::differential_pdf_phi(const double & phi) const
+    BToDPiLeptonNeutrino::differential_pdf_chi(const double & chi) const
     {
-        return _imp->pdf_phi(phi);
+        return _imp->pdf_chi(chi);
     }
 
     double
@@ -108,11 +269,11 @@ namespace eos
     }
 
     double
-    BToDPiLeptonNeutrino::integrated_pdf_phi(const double & phi_min, const double & phi_max) const
+    BToDPiLeptonNeutrino::integrated_pdf_chi(const double & chi_min, const double & chi_max) const
     {
-        std::function<double (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_phi, _imp.get(), std::placeholders::_1);
+        std::function<double (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_chi, _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, phi_min, phi_max);
+        return integrate<GSL::QAGS>(f, chi_min, chi_max);
     }
 
     const std::string
@@ -121,14 +282,14 @@ The decay B->D pi l nu, where l is a massless lepton.";
 
     const std::string
     BToDPiLeptonNeutrino::kinematics_description_c_d = "\
-The cosine of the helicity angles theta_D in the D-pi rest frame.";
+The cosine of the helicity angle theta_D in the D-pi rest frame.";
 
     const std::string
     BToDPiLeptonNeutrino::kinematics_description_c_l = "\
-The cosine of the helicity angles theta_L in the l-nu rest frame.";
+The cosine of the helicity angle theta_L in the l-nu rest frame.";
 
     const std::string
-    BToDPiLeptonNeutrino::kinematics_description_phi = "\
-The azimuthal angles between the decay planes.";
+    BToDPiLeptonNeutrino::kinematics_description_chi = "\
+The azimuthal angle between the decay planes.";
 
 }

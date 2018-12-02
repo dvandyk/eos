@@ -39,14 +39,14 @@ namespace eos
              */
             double differential_pdf_d(const double & c_d) const;
             double differential_pdf_l(const double & c_l) const;
-            double differential_pdf_phi(const double & phi) const;
+            double differential_pdf_chi(const double & chi) const;
 
             /*!
              * Partially-integrated 1-dim. PDFs for cos(theta_D), cost(theta_L), and phi
              */
             double integrated_pdf_d(const double & c_d_min, const double & c_d_max) const;
             double integrated_pdf_l(const double & c_l_min, const double & c_l_max) const;
-            double integrated_pdf_phi(const double & phi_min, const double & phi_max) const;
+            double integrated_pdf_chi(const double & chi_min, const double & chi_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.
@@ -54,7 +54,7 @@ namespace eos
             static const std::string description;
             static const std::string kinematics_description_c_d;
             static const std::string kinematics_description_c_l;
-            static const std::string kinematics_description_phi;
+            static const std::string kinematics_description_chi;
     };
 }
 
