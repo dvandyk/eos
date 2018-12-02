@@ -649,9 +649,9 @@ namespace eos
                             &BToDPiLeptonNeutrino::differential_pdf_l,
                             std::make_tuple("c_l")),
 
-            make_observable("B->Dpilnu::P(phi)",
-                            &BToDPiLeptonNeutrino::differential_pdf_phi,
-                            std::make_tuple("phi")),
+            make_observable("B->Dpilnu::P(chi)",
+                            &BToDPiLeptonNeutrino::differential_pdf_chi,
+                            std::make_tuple("chi")),
 
             make_observable("B->Dpilnu::P(c_D_min,c_D_max)",
                             &BToDPiLeptonNeutrino::integrated_pdf_d,
@@ -661,9 +661,9 @@ namespace eos
                             &BToDPiLeptonNeutrino::integrated_pdf_l,
                             std::make_tuple("c_l_min", "c_l_max")),
 
-            make_observable("B->Dpilnu::P(phi_min,phi_max)",
-                            &BToDPiLeptonNeutrino::integrated_pdf_phi,
-                            std::make_tuple("phi_min", "phi_max")),
+            make_observable("B->Dpilnu::P(chi_min,chi_max)",
+                            &BToDPiLeptonNeutrino::integrated_pdf_chi,
+                            std::make_tuple("chi_min", "chi_max")),
 
             // B_s -> K^* l nubar
             make_observable("B_s->K^*lnu::F_perp(s)",
