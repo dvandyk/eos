@@ -109,10 +109,10 @@ namespace eos
             const double a_perp2 = norm(a_perp(q2));
             const double a_time2 = norm(a_time(q2));
 
-            const double a = (a_long2 + a_para2 + a_perp2) * (1.0 + m_l2 / (2.0 * q2))
-                           + 9.0 / 8.0 * a_time2 * m_l2 / q2;
+            const double a = 2.0 * (a_long2 + a_para2 + a_perp2) * (1.0 + m_l2 / (2.0 * q2))
+                           + 3.0 * a_time2 * m_l2 / q2;
 
-            return 2.0 * nf * a;
+            return nf * a;
         }
 
         double pdf_q2d(const double & q2, const double & c_d) const
@@ -126,9 +126,9 @@ namespace eos
             const double a_perp2 = norm(a_perp(q2));
             const double a_time2 = norm(a_time(q2));
 
-            const double a = (a_para2 + a_perp2) * (1.0 + m_l2 / (2.0 * q2))
-                           + 3.0 / 4.0 * a_time2 * m_l2 / q2;
-            const double b = (2.0 * a_long2 - a_para2 - a_perp2) + (1.0 + m_l2 / (2.0 * q2));
+            const double a = (a_para2 + a_perp2) * (1.0 + m_l2 / (2.0 * q2));
+            const double b = (2.0 * a_long2 - a_para2 - a_perp2) * (1.0 + m_l2 / (2.0 * q2))
+                           + 3.0 * m_l2 / q2 * a_time2;
 
             return 3.0 / 2.0 * nf * (a + b * c_d * c_d);
         }
@@ -164,7 +164,7 @@ namespace eos
             const double re_time_long = real(a_time * conj(a_long));
 
             const double a = 2.0 * a_long2 + (a_para2 + a_perp2) * (1.0 + m_l2 / q2)
-                           + 3.0 / 2.0 * a_time2 * m_l2 / q2;
+                           + 2.0 * a_time2 * m_l2 / q2;
             const double b = -4.0 * (re_para_perp + re_time_long * m_l2 / q2);
             const double c = -(2.0 * a_long2 - a_para2 - a_perp2) + (1.0 - m_l2 / q2);
 
@@ -205,10 +205,9 @@ namespace eos
             const double re_perp_long = real(a_perp * conj(a_long));
 
             const double a = 2.0 * a_long2 + 3.0 * a_para2 + a_perp2
-                           + m_l2 / q2 * (a_long2 + 2.0 * a_perp2 + 9.0 / 4.0 * a_time2);
-            const double b = 3.0 * M_PI / 10.0 * (re_perp_long - re_para_long
-                           + m_l2 / q2 * (re_para_long - re_para_time));
-            const double c = -2.0 * (a_para2 - a_perp2) + (1.0 - m_l2 / q2);
+                           + m_l2 / q2 * (a_long2 + 2.0 * a_perp2 + 3.0 * a_time2);
+            const double b = 3.0 * M_PI / 10.0 * (re_perp_long - m_l2 / q2 * (re_para_time));
+            const double c = -2.0 * (a_para2 - a_perp2) * (1.0 - m_l2 / q2);
 
             return nf / (2.0 * M_PI) * (a + b * c_chi + c * c_chi2);
         }
