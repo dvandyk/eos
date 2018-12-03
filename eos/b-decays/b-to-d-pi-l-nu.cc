@@ -166,7 +166,7 @@ namespace eos
             const double a = 2.0 * a_long2 + (a_para2 + a_perp2) * (1.0 + m_l2 / q2)
                            + 2.0 * a_time2 * m_l2 / q2;
             const double b = -4.0 * (re_para_perp + re_time_long * m_l2 / q2);
-            const double c = -(2.0 * a_long2 - a_para2 - a_perp2) + (1.0 - m_l2 / q2);
+            const double c = -(2.0 * a_long2 - a_para2 - a_perp2) * (1.0 - m_l2 / q2);
 
             return 3.0 / 4.0 * nf * (a + b * c_l + c * c_l * c_l);
         }
