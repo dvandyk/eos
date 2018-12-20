@@ -30,9 +30,13 @@ namespace eos
         protected:
             std::shared_ptr<Model> _model;
 
-            // option to determine if we use z^3 terms
-            SwitchOption _opt_z3;
-            double _enable_z3;
+            // option to determine if we use z^3 terms in the leading-power IW function
+            SwitchOption _opt_lp_zorder;
+            double _enable_lp_z3;
+
+            // option to determine if we use z^2 terms in the subleading-power IW function
+            SwitchOption _opt_slp_zorder;
+            double _enable_slp_z2;
 
             // parameters for the leading Isgur-Wise function xi
             UsedParameter _rho2, _c, _d;
@@ -61,8 +65,10 @@ namespace eos
         public:
             HQETFormFactorBase(const Parameters & p, const Options & o) :
                 _model(Model::make("SM", p, o)),
-                _opt_z3(o, "z3", { "0", "1" }, "0"),
-                _enable_z3(1.0 ? _opt_z3.value() == "1" : 0.0),
+                _opt_lp_zorder(o, "z-order-lp", { "2", "3" }, "3"),
+                _enable_lp_z3(1.0 ? _opt_lp_zorder.value() >= "3" : 0.0),
+                _opt_slp_zorder(o, "z-order-slp", { "1", "2" }, "2"),
+                _enable_slp_z2(1.0 ? _opt_slp_zorder.value() >= "2" : 0.0),
                 _rho2(p["B(*)->D(*)::rho^2@HQET"], *this),
                 _c(p["B(*)->D(*)::c@HQET"], *this),
                 _d(p["B(*)->D(*)::d@HQET"], *this),
@@ -117,28 +123,28 @@ namespace eos
             {
                 const double z = _z(q2);
 
-                return 1.0 - 8.0 * _rho2 * z + (64.0 * _c - 16.0 * _rho2) * z * z + (-24.0 * _rho2 + 256.0 * _c + 512 * _d) * z * z * z * _enable_z3;
+                return 1.0 - 8.0 * _rho2 * z + (64.0 * _c - 16.0 * _rho2) * z * z + (-24.0 * _rho2 + 256.0 * _c + 512 * _d) * z * z * z * _enable_lp_z3;
             }
 
             double _chi2(const double & q2) const
             {
                 const double z = _z(q2);
 
-                return _chi2one + 8.0 * _chi2pone * z + (32.0 * _chi2ppone + 16.0 * _chi2pone) * z * z;
+                return _chi2one + 8.0 * _chi2pone * z + (32.0 * _chi2ppone + 16.0 * _chi2pone) * z * z * _enable_slp_z2;
             }
 
             double _chi3(const double & q2) const
             {
                 const double z = _z(q2);
 
-                return 0.0 + 8.0 * _chi3pone * z + (32.0 * _chi3ppone + 16.0 * _chi3pone) * z * z;
+                return 0.0 + 8.0 * _chi3pone * z + (32.0 * _chi3ppone + 16.0 * _chi3pone) * z * z * _enable_slp_z2;
             }
 
             double _eta(const double & q2) const
             {
                 const double z = _z(q2);
 
-                return _etaone + 8.0 * _etapone * z + (32.0 * _etappone + 16.0 * _etapone) * z * z;
+                return _etaone + 8.0 * _etapone * z + (32.0 * _etappone + 16.0 * _etapone) * z * z * _enable_slp_z2;
             }
 
             /*
