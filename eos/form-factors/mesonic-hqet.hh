@@ -33,13 +33,14 @@ namespace eos
             // option to determine if we use z^3 terms in the leading-power IW function
             SwitchOption _opt_lp_zorder;
             double _enable_lp_z3;
+            double _enable_lp_z4;
 
             // option to determine if we use z^2 terms in the subleading-power IW function
             SwitchOption _opt_slp_zorder;
             double _enable_slp_z2;
 
             // parameters for the leading Isgur-Wise function xi
-            UsedParameter _rho2, _c, _d;
+            UsedParameter _xipone, _xippone, _xipppone, _xippppone;
 
             // parameters for the subleading Isgur-Wise function chi_2
             UsedParameter _chi2one, _chi2pone, _chi2ppone;
@@ -65,13 +66,15 @@ namespace eos
         public:
             HQETFormFactorBase(const Parameters & p, const Options & o) :
                 _model(Model::make("SM", p, o)),
-                _opt_lp_zorder(o, "z-order-lp", { "2", "3" }, "3"),
+                _opt_lp_zorder(o, "z-order-lp", { "2", "3", "4" }, "3"),
                 _enable_lp_z3(1.0 ? _opt_lp_zorder.value() >= "3" : 0.0),
+                _enable_lp_z4(1.0 ? _opt_lp_zorder.value() >= "4" : 0.0),
                 _opt_slp_zorder(o, "z-order-slp", { "1", "2" }, "2"),
                 _enable_slp_z2(1.0 ? _opt_slp_zorder.value() >= "2" : 0.0),
-                _rho2(p["B(*)->D(*)::rho^2@HQET"], *this),
-                _c(p["B(*)->D(*)::c@HQET"], *this),
-                _d(p["B(*)->D(*)::d@HQET"], *this),
+                _xipone(p["B(*)->D(*)::xi'(1)@HQET"], *this),
+                _xippone(p["B(*)->D(*)::xi''(1)@HQET"], *this),
+                _xipppone(p["B(*)->D(*)::xi'''(1)@HQET"], *this),
+                _xippppone(p["B(*)->D(*)::xi''''(1)@HQET"], *this),
                 _chi2one(p["B(*)->D(*)::chi_2(1)@HQET"], *this),
                 _chi2pone(p["B(*)->D(*)::chi_2'(1)@HQET"], *this),
                 _chi2ppone(p["B(*)->D(*)::chi_2''(1)@HQET"], *this),
@@ -121,9 +124,13 @@ namespace eos
              */
             double _xi(const double & q2) const
             {
-                const double z = _z(q2);
+                const double z = _z(q2), z2 = z * z, z3 = z2 * z, z4 = z2 * z2;
 
-                return 1.0 - 8.0 * _rho2 * z + (64.0 * _c - 16.0 * _rho2) * z * z + (-24.0 * _rho2 + 256.0 * _c + 512 * _d) * z * z * z * _enable_lp_z3;
+                return 1.0
+                        + ( 8.0 * _xipone                                                                        ) * z
+                        + (16.0 * _xipone +  32.0 * _xippone                                                     ) * z2
+                        + (24.0 * _xipone + 128.0 * _xippone + 256.0 / 3.0 * _xipppone                           ) * z3 * _enable_lp_z3
+                        + (32.0 * _xipone + 320.0 * _xippone + 512.0       * _xipppone + 512.0 / 3.0 * _xippppone) * z4 * _enable_lp_z4;
             }
 
             double _chi2(const double & q2) const
