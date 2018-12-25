@@ -458,7 +458,7 @@ namespace eos
                 double result = (1.0 + as * _CS(w, z));
                 result += eps_c * (L1 - (w - 1.0) / (w + 1.0) * L4);
                 result += eps_b * (L1 - (w - 1.0) / (w + 1.0) * L4);
-                result += eps_c * eps_c * _l1(w);
+                result += eps_c * eps_c * (_l1(w) - (w - 1.0) / (w + 1.0) * _l4(w));
 
                 return result * xi;
             }
@@ -713,7 +713,7 @@ namespace eos
                 double result = (1.0 + as * _CA1(w, z));
                 result += eps_c * (L2 - L5 * (w - 1.0) / (w + 1.0));
                 result += eps_b * (L1 - L4 * (w - 1.0) / (w + 1.0));
-                result += eps_c * eps_c * _l2(w);
+                result += eps_c * eps_c * (_l2(w) - (w - 1.0) / (w + 1.0) * _l5(w));
 
                 return result * xi;
             }
