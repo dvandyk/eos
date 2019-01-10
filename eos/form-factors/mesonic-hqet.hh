@@ -30,6 +30,9 @@ namespace eos
         protected:
             std::shared_ptr<Model> _model;
 
+            // parameter for modifying the z function
+            UsedParameter _a;
+
             // option to determine if we use z^3 terms in the leading-power IW function
             SwitchOption _opt_lp_zorder;
             double _enable_lp_z3;
@@ -66,6 +69,7 @@ namespace eos
         public:
             HQETFormFactorBase(const Parameters & p, const Options & o) :
                 _model(Model::make("SM", p, o)),
+                _a(p["B(*)->D(*)::a@HQET"], *this),
                 _opt_lp_zorder(o, "z-order-lp", { "2", "3", "4" }, "3"),
                 _enable_lp_z3(1.0 ? _opt_lp_zorder.value() >= "3" : 0.0),
                 _enable_lp_z4(1.0 ? _opt_lp_zorder.value() >= "4" : 0.0),
@@ -117,20 +121,48 @@ namespace eos
              */
             virtual double _w(const double & q2) const = 0;
             virtual double _q2(const double & w) const = 0;
-            virtual double _z(const double & q2) const = 0;
 
             /*
              * Isgur-Wise functions
              */
+            double _z(const double & q2) const
+            {
+                const double w = _w(q2);
+
+                return (std::sqrt(w + 1.0) - std::sqrt(2.0) * _a()) / (std::sqrt(w + 1.0) + std::sqrt(2.0) * _a());
+            }
+
             double _xi(const double & q2) const
             {
-                const double z = _z(q2), z2 = z * z, z3 = z2 * z, z4 = z2 * z2;
+                const double a = _a(), a2 = a * a, a4 = a2 * a2, a6 = a2 * a4;
 
-                return 1.0
-                        + ( 8.0 * _xipone                                                                        ) * z
-                        + (16.0 * _xipone +  32.0 * _xippone                                                     ) * z2
-                        + (24.0 * _xipone + 128.0 * _xippone + 256.0 / 3.0 * _xipppone                           ) * z3 * _enable_lp_z3
-                        + (32.0 * _xipone + 320.0 * _xippone + 512.0       * _xipppone + 512.0 / 3.0 * _xippppone) * z4 * _enable_lp_z4;
+                const double  z = _z(q2);
+                const double z2 =  z *  z;
+                const double z3 = z2 *  z * _enable_lp_z3;
+                const double z4 = z2 * z2 * _enable_lp_z4;
+
+                const double wm11 = 2.0 * (a2 - 1.0)
+                                  + 8.0 * a2 * z
+                                  + 16.0 * a2 * z2
+                                  + 24.0 * a2 * z3
+                                  + 32.0 * a2 * z4;
+                const double wm12 = 4.0 * pow(a2 - 1.0, 2)
+                                  + 32.0 * a2 * (a2 - 1.0) * z
+                                  + 64.0 * a2 * (2.0 * a2 - 1.0) * z2
+                                  + 32.0 * a2 * (11.0 * a2 - 3.0) * z3
+                                  + 128.0 * a2 * (6.0 * a2 - 1.0) * z4;
+                const double wm13 = 8.0 * pow(a2 - 1.0, 3)
+                                  + 96.0 * a2 * pow(a2 - 1.0, 2) * z
+                                  + 192.0 * a2 * (1.0 - 4.0 * a2 + 3.0 * a4) * z2
+                                  + 32.0 * a2 * (9.0 - 66.0 * a2 + 73.0 * a4) * z3
+                                  + 384.0 * a2 * (1.0 - 12.0 * a2 + 19.0 * a4) * z4;
+                const double wm14 = 16.0 * pow(1.0 - a2, 4)
+                                  + 256.0 * a2 * pow(a2 - 1.0, 3) * z
+                                  + 512.0 * a2 * pow(a2 - 1.0, 2) * (4.0 * a2 - 1) * z2
+                                  + 256.0 * a2 * (a2 - 1.0) * (3.0 - 30.0 * a2 + 43.0 * a4) * z3
+                                  + 1024.0 * a2 * (-1.0 + 18.0 * a2 - 57.0 * a4 + 44.0 * a6) * z4;
+
+                return 1.0 + _xipone * wm11 + _xippone / 2.0 * wm12 + _xipppone / 6.0 * wm13 + _xippppone / 24.0 * wm14;
             }
 
             double _chi2(const double & q2) const
@@ -372,13 +404,6 @@ namespace eos
                 static constexpr double mP = Process_::m_P, mP2 = power_of<2>(Process_::m_P);
 
                 return mB2 + mP2 - 2.0 * mB * mP * w;
-            }
-
-            virtual double _z(const double & q2) const override
-            {
-                const double w = _w(q2);
-
-                return (std::sqrt(w + 1.0) - std::sqrt(2.0)) / (std::sqrt(w + 1.0) + std::sqrt(2.0));
             }
 
             /* HQET form factors h_i */
@@ -682,13 +707,6 @@ namespace eos
                 static constexpr double mV = Process_::mV, mV2 = power_of<2>(Process_::mV);
 
                 return mB2 + mV2 - 2.0 * mB * mV * w;
-            }
-
-            virtual double _z(const double & q2) const override
-            {
-                const double w = _w(q2);
-
-                return (std::sqrt(w + 1.0) - std::sqrt(2.0)) / (std::sqrt(w + 1.0) + std::sqrt(2.0));
             }
 
             /* HQET form factors h_i */
@@ -1167,13 +1185,6 @@ namespace eos
                 return mV2 + mP2 - 2.0 * mV * mP * w;
             }
 
-            virtual double _z(const double & q2) const override
-            {
-                const double w = _w(q2);
-
-                return (std::sqrt(w + 1.0) - std::sqrt(2.0)) / (std::sqrt(w + 1.0) + std::sqrt(2.0));
-            }
-
         public:
             HQETFormFactors(const Parameters & p, const Options & o) :
                 HQETFormFactorBase(p, o)
@@ -1449,13 +1460,6 @@ namespace eos
                 static constexpr double mV2 = Process_::mV2, mV22 = power_of<2>(Process_::mV2);
 
                 return mV12 + mV22 - 2.0 * mV1 * mV2 * w;
-            }
-
-            virtual double _z(const double & q2) const override
-            {
-                const double w = _w(q2);
-
-                return (std::sqrt(w + 1.0) - std::sqrt(2.0)) / (std::sqrt(w + 1.0) + std::sqrt(2.0));
             }
 
         public:
