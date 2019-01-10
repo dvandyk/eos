@@ -2086,15 +2086,19 @@
 # Parameters for B*->D* form factors in the Heavy-Quark Expansion (HQE)
 # The implementation is based on [N1993], and inspired by the parametrization
 # in [BLPR2017] and its modification in [JS2018].
-"B(*)->D(*)::rho^2@HQET" :
-    central: 1.306
-    min: 1.247
-    max: 1.365
-"B(*)->D(*)::c@HQET" :
-    central: 1.220
-    min: 1.111
-    max: 1.329
-"B(*)->D(*)::d@HQET" :
+"B(*)->D(*)::xi'(1)@HQET" :
+    central: -1.306
+    min: -1.365
+    max: -1.247
+"B(*)->D(*)::xi''(1)@HQET" :
+    central: 2.440
+    min: 2.222
+    max: 2.658
+"B(*)->D(*)::xi'''(1)@HQET" :
+    central: 0.0
+    min: 0.0
+    max: 0.0
+"B(*)->D(*)::xi''''(1)@HQET" :
     central: 0.0
     min: 0.0
     max: 0.0
