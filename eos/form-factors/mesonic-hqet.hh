@@ -167,23 +167,53 @@ namespace eos
 
             double _chi2(const double & q2) const
             {
-                const double z = _z(q2);
+                const double a = _a(), a2 = a * a;
 
-                return _chi2one + 8.0 * _chi2pone * z + (32.0 * _chi2ppone + 16.0 * _chi2pone) * z * z * _enable_slp_z2;
+                const double  z = _z(q2);
+                const double z2 =  z * z * _enable_slp_z2;
+
+                const double wm11 = 2.0 * (a2 - 1.0)
+                                  + 8.0 * a2 * z
+                                  + 16.0 * a2 * z2;
+                const double wm12 = 4.0 * pow(a2 - 1.0, 2)
+                                  + 32.0 * a2 * (a2 - 1.0) * z
+                                  + 64.0 * a2 * (2.0 * a2 - 1.0) * z2;
+
+                return _chi2one + _chi2pone * wm11 + _chi2ppone / 2.0 * wm12;
             }
 
             double _chi3(const double & q2) const
             {
-                const double z = _z(q2);
+                const double a = _a(), a2 = a * a;
 
-                return 0.0 + 8.0 * _chi3pone * z + (32.0 * _chi3ppone + 16.0 * _chi3pone) * z * z * _enable_slp_z2;
+                const double  z = _z(q2);
+                const double z2 =  z * z * _enable_slp_z2;
+
+                const double wm11 = 2.0 * (a2 - 1.0)
+                                  + 8.0 * a2 * z
+                                  + 16.0 * a2 * z2;
+                const double wm12 = 4.0 * pow(a2 - 1.0, 2)
+                                  + 32.0 * a2 * (a2 - 1.0) * z
+                                  + 64.0 * a2 * (2.0 * a2 - 1.0) * z2;
+
+                return 0.0 + _chi3pone * wm11 + _chi3ppone / 2.0 * wm12;
             }
 
             double _eta(const double & q2) const
             {
-                const double z = _z(q2);
+                const double a = _a(), a2 = a * a;
 
-                return _etaone + 8.0 * _etapone * z + (32.0 * _etappone + 16.0 * _etapone) * z * z * _enable_slp_z2;
+                const double  z = _z(q2);
+                const double z2 =  z * z * _enable_slp_z2;
+
+                const double wm11 = 2.0 * (a2 - 1.0)
+                                  + 8.0 * a2 * z
+                                  + 16.0 * a2 * z2;
+                const double wm12 = 4.0 * pow(a2 - 1.0, 2)
+                                  + 32.0 * a2 * (a2 - 1.0) * z
+                                  + 64.0 * a2 * (2.0 * a2 - 1.0) * z2;
+
+                return _etaone + _etapone * wm11 + _etappone / 2.0 * wm12;
             }
 
             /*
