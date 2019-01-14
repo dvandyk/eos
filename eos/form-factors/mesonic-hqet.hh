@@ -134,33 +134,28 @@ namespace eos
 
             double _xi(const double & q2) const
             {
-                const double a = _a(), a2 = a * a, a4 = a2 * a2, a6 = a2 * a4;
+                const double a = _a(), a2 = a * a, a3 = a * a2, a4 = a2 * a2;
 
-                const double  z = _z(q2);
-                const double z2 =  z *  z;
-                const double z3 = z2 *  z * _enable_lp_z3;
-                const double z4 = z2 * z2 * _enable_lp_z4;
+                // expansion in z around z_0
+                const double  z_0 = (1.0 - a) / (1.0 + a);
+                const double  z   = (_z(q2) - z_0);
+                const double z2   =  z *  z;
+                const double z3   = z2 *  z * _enable_lp_z3;
+                const double z4   = z2 * z2 * _enable_lp_z4;
 
-                const double wm11 = 2.0 * (a2 - 1.0)
-                                  + 8.0 * a2 * z
-                                  + 16.0 * a2 * z2
-                                  + 24.0 * a2 * z3
-                                  + 32.0 * a2 * z4;
-                const double wm12 = 4.0 * pow(a2 - 1.0, 2)
-                                  + 32.0 * a2 * (a2 - 1.0) * z
-                                  + 64.0 * a2 * (2.0 * a2 - 1.0) * z2
-                                  + 32.0 * a2 * (11.0 * a2 - 3.0) * z3
-                                  + 128.0 * a2 * (6.0 * a2 - 1.0) * z4;
-                const double wm13 = 8.0 * pow(a2 - 1.0, 3)
-                                  + 96.0 * a2 * pow(a2 - 1.0, 2) * z
-                                  + 192.0 * a2 * (1.0 - 4.0 * a2 + 3.0 * a4) * z2
-                                  + 32.0 * a2 * (9.0 - 66.0 * a2 + 73.0 * a4) * z3
-                                  + 384.0 * a2 * (1.0 - 12.0 * a2 + 19.0 * a4) * z4;
-                const double wm14 = 16.0 * pow(1.0 - a2, 4)
-                                  + 256.0 * a2 * pow(a2 - 1.0, 3) * z
-                                  + 512.0 * a2 * pow(a2 - 1.0, 2) * (4.0 * a2 - 1) * z2
-                                  + 256.0 * a2 * (a2 - 1.0) * (3.0 - 30.0 * a2 + 43.0 * a4) * z3
-                                  + 1024.0 * a2 * (-1.0 + 18.0 * a2 - 57.0 * a4 + 44.0 * a6) * z4;
+                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
+                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2
+                                  + (2.0 +       a) * pow(1.0 + a, 4) / (2.0 * a3) * z3
+                                  + (4.0 + 3.0 * a) * pow(1.0 + a, 5) / (8.0 * a4) * z4;
+
+                const double wm12 =   4.0                  * pow(1.0 + a, 4) / a2         * z2
+                                  + ( 6.0 +  2.0 * a     ) * pow(1.0 + a, 5) / a3         * z3
+                                  + (25.0 + 14.0 * a + a2) * pow(1.0 + a, 6) / (4.0 * a4) * z4;
+
+                const double wm13 =   8.0                        * pow(1.0 + a, 6) / a3         * z3
+                                  + (18.0 +  6.0 * a           ) * pow(1.0 + a, 7) / a4         * z4;
+
+                const double wm14 = 16.0 * pow(1.0 + a, 8) / a4 * z4;
 
                 return 1.0 + _xipone * wm11 + _xippone / 2.0 * wm12 + _xipppone / 6.0 * wm13 + _xippppone / 24.0 * wm14;
             }
@@ -615,8 +610,17 @@ namespace eos
                     results.add(Diagnostics::Entry{ wz, "w_z"           });
                 }
 
+                // z
+                {
+                    results.add(Diagnostics::Entry{ _z(_q2(1.10)), "z(w = 1.10)" });
+                    results.add(Diagnostics::Entry{ _z(_q2(1.05)), "z(w = 1.05)" });
+                    results.add(Diagnostics::Entry{ _z(_q2(1.00)), "z(w = 1.00)" });
+                }
+
                 // xi
                 {
+                    results.add(Diagnostics::Entry{ _xi(_q2(2.10)), "xi(w = 2.10)" });
+                    results.add(Diagnostics::Entry{ _xi(_q2(1.60)), "xi(w = 1.60)" });
                     results.add(Diagnostics::Entry{ _xi(_q2(1.10)), "xi(w = 1.10)" });
                     results.add(Diagnostics::Entry{ _xi(_q2(1.05)), "xi(w = 1.05)" });
                     results.add(Diagnostics::Entry{ _xi(_q2(1.00)), "xi(w = 1.00)" });
