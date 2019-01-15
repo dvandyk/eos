@@ -146,7 +146,7 @@ namespace eos
                 const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
                                   + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2
                                   + (2.0 +       a) * pow(1.0 + a, 4) / (2.0 * a3) * z3
-                                  + (4.0 + 3.0 * a) * pow(1.0 + a, 5) / (8.0 * a4) * z4;
+                                  + (5.0 + 3.0 * a) * pow(1.0 + a, 5) / (8.0 * a4) * z4;
 
                 const double wm12 =   4.0                  * pow(1.0 + a, 4) / a2         * z2
                                   + ( 6.0 +  2.0 * a     ) * pow(1.0 + a, 5) / a3         * z3
@@ -610,6 +610,13 @@ namespace eos
                     results.add(Diagnostics::Entry{ wz, "w_z"           });
                 }
 
+                // Switches
+                {
+                    results.add(Diagnostics::Entry{ _enable_lp_z3,  "enable LP  z^3 terms" });
+                    results.add(Diagnostics::Entry{ _enable_lp_z4,  "enable LP  z^4 terms" });
+                    results.add(Diagnostics::Entry{ _enable_slp_z2, "enable SLP z^2 terms" });
+                }
+
                 // z
                 {
                     results.add(Diagnostics::Entry{ _z(_q2(1.10)), "z(w = 1.10)" });
@@ -628,6 +635,8 @@ namespace eos
 
                 // chi2
                 {
+                    results.add(Diagnostics::Entry{ _chi2(_q2(2.10)), "chi2(w = 2.10)" });
+                    results.add(Diagnostics::Entry{ _chi2(_q2(1.60)), "chi2(w = 1.60)" });
                     results.add(Diagnostics::Entry{ _chi2(_q2(1.10)), "chi2(w = 1.10)" });
                     results.add(Diagnostics::Entry{ _chi2(_q2(1.05)), "chi2(w = 1.05)" });
                     results.add(Diagnostics::Entry{ _chi2(_q2(1.00)), "chi2(w = 1.00)" });
@@ -635,6 +644,8 @@ namespace eos
 
                 // chi3
                 {
+                    results.add(Diagnostics::Entry{ _chi3(_q2(2.10)), "chi3(w = 2.10)" });
+                    results.add(Diagnostics::Entry{ _chi3(_q2(1.60)), "chi3(w = 1.60)" });
                     results.add(Diagnostics::Entry{ _chi3(_q2(1.10)), "chi3(w = 1.10)" });
                     results.add(Diagnostics::Entry{ _chi3(_q2(1.05)), "chi3(w = 1.05)" });
                     results.add(Diagnostics::Entry{ _chi3(_q2(1.00)), "chi3(w = 1.00)" });
@@ -642,6 +653,8 @@ namespace eos
 
                 // eta
                 {
+                    results.add(Diagnostics::Entry{ _eta(_q2(2.10)), "eta(w = 2.10)" });
+                    results.add(Diagnostics::Entry{ _eta(_q2(1.60)), "eta(w = 1.60)" });
                     results.add(Diagnostics::Entry{ _eta(_q2(1.10)), "eta(w = 1.10)" });
                     results.add(Diagnostics::Entry{ _eta(_q2(1.05)), "eta(w = 1.05)" });
                     results.add(Diagnostics::Entry{ _eta(_q2(1.00)), "eta(w = 1.00)" });
