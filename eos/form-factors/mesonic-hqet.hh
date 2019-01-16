@@ -37,13 +37,14 @@ namespace eos
             SwitchOption _opt_lp_zorder;
             double _enable_lp_z3;
             double _enable_lp_z4;
+            double _enable_lp_z5;
 
             // option to determine if we use z^2 terms in the subleading-power IW function
             SwitchOption _opt_slp_zorder;
             double _enable_slp_z2;
 
             // parameters for the leading Isgur-Wise function xi
-            UsedParameter _xipone, _xippone, _xipppone, _xippppone;
+            UsedParameter _xipone, _xippone, _xipppone, _xippppone, _xipppppone;
 
             // parameters for the subleading Isgur-Wise function chi_2
             UsedParameter _chi2one, _chi2pone, _chi2ppone;
@@ -70,15 +71,17 @@ namespace eos
             HQETFormFactorBase(const Parameters & p, const Options & o) :
                 _model(Model::make("SM", p, o)),
                 _a(p["B(*)->D(*)::a@HQET"], *this),
-                _opt_lp_zorder(o, "z-order-lp", { "2", "3", "4" }, "3"),
+                _opt_lp_zorder(o, "z-order-lp", { "2", "3", "4", "5" }, "3"),
                 _enable_lp_z3(1.0 ? _opt_lp_zorder.value() >= "3" : 0.0),
                 _enable_lp_z4(1.0 ? _opt_lp_zorder.value() >= "4" : 0.0),
+                _enable_lp_z5(1.0 ? _opt_lp_zorder.value() >= "5" : 0.0),
                 _opt_slp_zorder(o, "z-order-slp", { "1", "2" }, "2"),
                 _enable_slp_z2(1.0 ? _opt_slp_zorder.value() >= "2" : 0.0),
                 _xipone(p["B(*)->D(*)::xi'(1)@HQET"], *this),
                 _xippone(p["B(*)->D(*)::xi''(1)@HQET"], *this),
                 _xipppone(p["B(*)->D(*)::xi'''(1)@HQET"], *this),
                 _xippppone(p["B(*)->D(*)::xi''''(1)@HQET"], *this),
+                _xipppppone(p["B(*)->D(*)::xi'''''(1)@HQET"], *this),
                 _chi2one(p["B(*)->D(*)::chi_2(1)@HQET"], *this),
                 _chi2pone(p["B(*)->D(*)::chi_2'(1)@HQET"], *this),
                 _chi2ppone(p["B(*)->D(*)::chi_2''(1)@HQET"], *this),
@@ -134,7 +137,7 @@ namespace eos
 
             double _xi(const double & q2) const
             {
-                const double a = _a(), a2 = a * a, a3 = a * a2, a4 = a2 * a2;
+                const double a = _a(), a2 = a * a, a3 = a * a2, a4 = a2 * a2, a5 = a3 * a2;
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
@@ -142,22 +145,34 @@ namespace eos
                 const double z2   =  z *  z;
                 const double z3   = z2 *  z * _enable_lp_z3;
                 const double z4   = z2 * z2 * _enable_lp_z4;
+                const double z5   = z3 * z2 * _enable_lp_z5;
 
                 const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
                                   + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2
                                   + (2.0 +       a) * pow(1.0 + a, 4) / (2.0 * a3) * z3
-                                  + (5.0 + 3.0 * a) * pow(1.0 + a, 5) / (8.0 * a4) * z4;
+                                  + (5.0 + 3.0 * a) * pow(1.0 + a, 5) / (8.0 * a4) * z4
+                                  + (3.0 + 2.0 * a) * pow(1.0 + a, 6) / (8.0 * a5) * z5;
 
                 const double wm12 =   4.0                  * pow(1.0 + a, 4) / a2         * z2
                                   + ( 6.0 +  2.0 * a     ) * pow(1.0 + a, 5) / a3         * z3
-                                  + (25.0 + 14.0 * a + a2) * pow(1.0 + a, 6) / (4.0 * a4) * z4;
+                                  + (25.0 + 14.0 * a + a2) * pow(1.0 + a, 6) / (4.0 * a4) * z4
+                                  + (11.0 +  8.0 * a + a2) * pow(1.0 + a, 7) / (2.0 * a5) * z5;
 
-                const double wm13 =   8.0                        * pow(1.0 + a, 6) / a3         * z3
-                                  + (18.0 +  6.0 * a           ) * pow(1.0 + a, 7) / a4         * z4;
+                const double wm13 =   8.0                  * pow(1.0 + a, 6) / a3         * z3
+                                  + (18.0 +  6.0 * a     ) * pow(1.0 + a, 7) / a4         * z4
+                                  + (51.0 + 30.0 * a + a2) * pow(1.0 + a, 8) / (2.0 * a5) * z5;
 
-                const double wm14 = 16.0 * pow(1.0 + a, 8) / a4 * z4;
+                const double wm14 =  16.0             * pow(1.0 + a, 8) / a4 * z4
+                                  + (48.0 + 16.0 * a) * pow(1.0 + a, 9) / a5 * z5;
 
-                return 1.0 + _xipone * wm11 + _xippone / 2.0 * wm12 + _xipppone / 6.0 * wm13 + _xippppone / 24.0 * wm14;
+                const double wm15 = 32.0 * pow(1.0 + a, 5) / a5 * z5;
+
+                return 1.0
+                    + _xipone             * wm11
+                    + _xippone    / 2.0   * wm12
+                    + _xipppone   / 6.0   * wm13
+                    + _xippppone  / 24.0  * wm14
+                    + _xipppppone / 120.0 * wm15;
             }
 
             double _chi2(const double & q2) const
@@ -614,6 +629,7 @@ namespace eos
                 {
                     results.add(Diagnostics::Entry{ _enable_lp_z3,  "enable LP  z^3 terms" });
                     results.add(Diagnostics::Entry{ _enable_lp_z4,  "enable LP  z^4 terms" });
+                    results.add(Diagnostics::Entry{ _enable_lp_z5,  "enable LP  z^5 terms" });
                     results.add(Diagnostics::Entry{ _enable_slp_z2, "enable SLP z^2 terms" });
                 }
 

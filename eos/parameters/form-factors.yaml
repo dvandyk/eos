@@ -2106,6 +2106,10 @@
     central: 0.0
     min: 0.0
     max: 0.0
+"B(*)->D(*)::xi'''''(1)@HQET" :
+    central: 0.0
+    min: 0.0
+    max: 0.0
 "B(*)->D(*)::chi_2(1)@HQET" :
     central: -0.058
     min: -0.077
