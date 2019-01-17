@@ -190,11 +190,11 @@ namespace eos
                 const double wm15 = 32.0 * pow(1.0 + a, 5) / a5 * z5;
 
                 return 1.0
-                    + _xipone             * wm11
-                    + _xippone    / 2.0   * wm12
-                    + _xipppone   / 6.0   * wm13
-                    + _xippppone  / 24.0  * wm14
-                    + _xipppppone / 120.0 * wm15;
+                    + _xipone             * z
+                    + _xippone    / 2.0   * z2
+                    + _xipppone   / 6.0   * z3
+                    + _xippppone  / 24.0  * z4
+                    + _xipppppone / 120.0 * z5;
             }
 
             // uses an exponential ansatz and expands in (w-1) first, then in z*
