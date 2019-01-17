@@ -230,12 +230,13 @@ namespace eos
 
                 const double wm15 = 32.0 * pow(1.0 + a, 5) / a5 * z5;
 
-                return 1.0
+                return (1.0
                     + _xipone              * wm11
                     - _xipone              * wm12
                     + _xipone * 2.0 /  3.0 * wm13
                     - _xipone       /  3.0 * wm14
-                    + _xipone * 2.0 / 15.0 * wm15;
+                    + _xipone * 2.0 / 15.0 * wm15)
+                    * (1.0 + _xippone      * wm11);
             }
 
             double _chi2(const double & q2) const
