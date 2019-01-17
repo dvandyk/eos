@@ -33,6 +33,10 @@ namespace eos
             // parameter for modifying the z function
             UsedParameter _a;
 
+            // option to determine the model for the leading-power IW function
+            SwitchOption _opt_lp_model;
+            std::function<double (const double &)> _xi;
+
             // option to determine if we use z^3 terms in the leading-power IW function
             SwitchOption _opt_lp_zorder;
             double _enable_lp_z3;
@@ -71,6 +75,7 @@ namespace eos
             HQETFormFactorBase(const Parameters & p, const Options & o) :
                 _model(Model::make("SM", p, o)),
                 _a(p["B(*)->D(*)::a@HQET"], *this),
+                _opt_lp_model(o, "model", { "power-series", "exponential" }, "power-series"),
                 _opt_lp_zorder(o, "z-order-lp", { "2", "3", "4", "5" }, "3"),
                 _enable_lp_z3(1.0 ? _opt_lp_zorder.value() >= "3" : 0.0),
                 _enable_lp_z4(1.0 ? _opt_lp_zorder.value() >= "4" : 0.0),
@@ -103,6 +108,22 @@ namespace eos
                 _l6one(p["B(*)->D(*)::l_6(1)@HQET"], *this),
                 _l6pone(p["B(*)->D(*)::l_6'(1)@HQET"], *this)
             {
+                using std::placeholders::_1;
+
+                if (_opt_lp_model.value() == "exponential")
+                {
+                    _xi = [=](const double & q2) -> double
+                    {
+                        return _xi_exponential(q2);
+                    };
+                }
+                else
+                {
+                    _xi = [=](const double & q2) -> double
+                    {
+                        return _xi_power_series(q2);
+                    };
+                }
             }
 
             ~HQETFormFactorBase() = default;
@@ -135,7 +156,8 @@ namespace eos
                 return (std::sqrt(w + 1.0) - std::sqrt(2.0) * _a()) / (std::sqrt(w + 1.0) + std::sqrt(2.0) * _a());
             }
 
-            double _xi(const double & q2) const
+            // uses a power series ansatz
+            double _xi_power_series(const double & q2) const
             {
                 const double a = _a(), a2 = a * a, a3 = a * a2, a4 = a2 * a2, a5 = a3 * a2;
 
@@ -173,6 +195,47 @@ namespace eos
                     + _xipppone   / 6.0   * wm13
                     + _xippppone  / 24.0  * wm14
                     + _xipppppone / 120.0 * wm15;
+            }
+
+            // uses an exponential ansatz and expands in (w-1) first, then in z*
+            double _xi_exponential(const double & q2) const
+            {
+                const double a = _a(), a2 = a * a, a3 = a * a2, a4 = a2 * a2, a5 = a3 * a2;
+
+                // expansion in z around z_0
+                const double  z_0 = (1.0 - a) / (1.0 + a);
+                const double  z   = (_z(q2) - z_0);
+                const double z2   =  z *  z;
+                const double z3   = z2 *  z * _enable_lp_z3;
+                const double z4   = z2 * z2 * _enable_lp_z4;
+                const double z5   = z3 * z2 * _enable_lp_z5;
+
+                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
+                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2
+                                  + (2.0 +       a) * pow(1.0 + a, 4) / (2.0 * a3) * z3
+                                  + (5.0 + 3.0 * a) * pow(1.0 + a, 5) / (8.0 * a4) * z4
+                                  + (3.0 + 2.0 * a) * pow(1.0 + a, 6) / (8.0 * a5) * z5;
+
+                const double wm12 =   4.0                  * pow(1.0 + a, 4) / a2         * z2
+                                  + ( 6.0 +  2.0 * a     ) * pow(1.0 + a, 5) / a3         * z3
+                                  + (25.0 + 14.0 * a + a2) * pow(1.0 + a, 6) / (4.0 * a4) * z4
+                                  + (11.0 +  8.0 * a + a2) * pow(1.0 + a, 7) / (2.0 * a5) * z5;
+
+                const double wm13 =   8.0                  * pow(1.0 + a, 6) / a3         * z3
+                                  + (18.0 +  6.0 * a     ) * pow(1.0 + a, 7) / a4         * z4
+                                  + (51.0 + 30.0 * a + a2) * pow(1.0 + a, 8) / (2.0 * a5) * z5;
+
+                const double wm14 =  16.0             * pow(1.0 + a, 8) / a4 * z4
+                                  + (48.0 + 16.0 * a) * pow(1.0 + a, 9) / a5 * z5;
+
+                const double wm15 = 32.0 * pow(1.0 + a, 5) / a5 * z5;
+
+                return 1.0
+                    + _xipone              * wm11
+                    - _xipone              * wm12
+                    + _xipone * 2.0 /  3.0 * wm13
+                    - _xipone       /  3.0 * wm14
+                    + _xipone * 2.0 / 15.0 * wm15;
             }
 
             double _chi2(const double & q2) const
