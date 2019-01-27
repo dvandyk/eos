@@ -1,8 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 #include <eos/b-decays/b-to-d-pi-l-nu.hh>
+#include <eos/b-decays/b-to-v-l-nu.hh>
 #include <eos/form-factors/mesonic.hh>
-#include <eos/utils/integrate.hh>
+#include <eos/utils/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/power_of.hh>
@@ -10,6 +11,7 @@
 
 namespace eos
 {
+    using namespace eos::btovlnu;
     using std::conj;
     using std::norm;
     using std::real;
@@ -45,6 +47,11 @@ namespace eos
             u.uses(*ff);
         }
 
+        inline double beta_l(const double & q2) const
+        {
+            return (1.0 - m_l * m_l / q2);
+        }
+
         inline double pdf_normalization(const double & q2) const
         {
             // we only require q2-dependent terms of the normalization, since
@@ -69,6 +76,7 @@ namespace eos
             result -= lambda / (m_B + m_Dstar) * ff->a_2(q2);
             result /= (2.0 * m_Dstar * sqrt(q2));
 
+            // cf. [DDS2014], eq. (22), p. 17
             return result;
         }
 
@@ -77,6 +85,7 @@ namespace eos
             const double m_B     = this->m_B();
             const double m_Dstar = this->m_Dstar();
 
+            // cf. [DDS2014], eq. (22), p. 17
             return sqrt(2.0) * (m_B + m_Dstar) * ff->a_1(q2);
         }
 
@@ -86,6 +95,7 @@ namespace eos
             const double m_Dstar = this->m_Dstar(), m_Dstar2 = m_Dstar * m_Dstar;
             const double lambda  = eos::lambda(m_B2, m_Dstar2, q2);
 
+            // cf. [DDS2014], eq. (22), p. 17
             return -sqrt(2.0) * sqrt(lambda) / (m_B + m_Dstar) * ff->v(q2);
         }
 
@@ -95,7 +105,7 @@ namespace eos
             const double m_Dstar = this->m_Dstar(), m_Dstar2 = m_Dstar * m_Dstar;
             const double lambda  = eos::lambda(m_B2, m_Dstar2, q2);
 
-            // cf. [DSD2014], eq. (22), p. 17
+            // cf. [DDS2014], eq. (22), p. 17
             return sqrt(lambda / q2) * ff->a_0(q2);
         }
 
@@ -115,7 +125,7 @@ namespace eos
             return nf * a;
         }
 
-        double pdf_q2d(const double & q2, const double & c_d) const
+        std::array<double, 2u> pdf_coefficients_q2d(const double & q2) const
         {
             const double nf = pdf_normalization(q2);
 
@@ -130,7 +140,14 @@ namespace eos
             const double b = (2.0 * a_long2 - a_para2 - a_perp2) * (1.0 + m_l2 / (2.0 * q2))
                            + 3.0 * m_l2 / q2 * a_time2;
 
-            return 3.0 / 2.0 * nf * (a + b * c_d * c_d);
+            return { nf * a, nf * b };
+        }
+
+        double pdf_q2d(const double & q2, const double & c_d) const
+        {
+            auto coeffs = pdf_coefficients_q2d(q2);
+
+            return 3.0 / 2.0 * (coeffs[0] + coeffs[1] * c_d * c_d);
         }
 
         double pdf_d(const double & c_d) const
@@ -138,10 +155,30 @@ namespace eos
             const double q2_min = power_of<2>(m_l());
             const double q2_max = 10.68;
 
-            std::function<double (const double &)> num   = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_q2d, this, std::placeholders::_1, c_d);
-            std::function<double (const double &)> denom = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_q2,  this, std::placeholders::_1);
+            std::function<std::array<double, 2> (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_coefficients_q2d, this, std::placeholders::_1);
+            const auto coeffs = integrate1D(f, 32, q2_min, q2_max);
 
-            return integrate<GSL::QAGS>(num, q2_min, q2_max) / integrate<GSL::QAGS>(denom, q2_min, q2_max);
+            const double num   = 3.0 / 2.0 * (coeffs[0] + coeffs[1] * c_d * c_d);
+            const double denom = 3.0 * coeffs[0] + coeffs[1];
+
+            return num / denom;
+        }
+
+        double pdf_d(const double & c_d_min, const double & c_d_max) const
+        {
+            const double q2_min = power_of<2>(m_l());
+            const double q2_max = 10.68;
+
+            const double c_d_max3 = pow(c_d_max, 3);
+            const double c_d_min3 = pow(c_d_min, 3);
+
+            std::function<std::array<double, 2> (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_coefficients_q2d, this, std::placeholders::_1);
+            const auto coeffs = integrate1D(f, 32, q2_min, q2_max);
+
+            const double num   = 3.0 / 2.0 * (coeffs[0] * (c_d_max - c_d_min) + coeffs[1] * (c_d_max3 - c_d_min3) / 3.0);
+            const double denom = 3.0 * coeffs[0] + coeffs[1];
+
+            return num / denom;
         }
 
         double pdf_q2l(const double & q2, const double & c_l) const
@@ -182,10 +219,8 @@ namespace eos
             return integrate<GSL::QAGS>(num, q2_min, q2_max) / integrate<GSL::QAGS>(denom, q2_min, q2_max);
         }
 
-        double pdf_q2chi(const double & q2, const double & c_chi) const
+        std::array<double, 3u> pdf_coefficients_q2chi(const double & q2) const
         {
-            const double c_chi2 = c_chi * c_chi;
-
             const double nf = pdf_normalization(q2);
 
             const double m_l2         = m_l() * m_l();
@@ -200,7 +235,7 @@ namespace eos
             const double a_perp2      = norm(a_perp);
             const double a_time2      = norm(a_time);
 
-            const double re_para_long = real(a_para * conj(a_long));
+//            const double re_para_long = real(a_para * conj(a_long));
             const double re_para_time = real(a_para * conj(a_time));
             const double re_perp_long = real(a_perp * conj(a_long));
 
@@ -209,7 +244,14 @@ namespace eos
             const double b = 3.0 * M_PI / 10.0 * (re_perp_long - m_l2 / q2 * (re_para_time));
             const double c = -2.0 * (a_para2 - a_perp2) * (1.0 - m_l2 / q2);
 
-            return nf / (2.0 * M_PI) * (a + b * c_chi + c * c_chi2);
+            return { nf * a, nf * b, nf * c };
+        }
+
+        double pdf_q2chi(const double & q2, const double & c_chi) const
+        {
+            auto coeffs = pdf_coefficients_q2chi(q2);
+
+            return (coeffs[0] + coeffs[1] * c_chi + coeffs[2] * c_chi * c_chi) / (2.0 * M_PI);
         }
 
         double pdf_chi(const double & chi) const
@@ -217,10 +259,35 @@ namespace eos
             const double q2_min = power_of<2>(m_l());
             const double q2_max = 10.68;
 
-            std::function<double (const double &)> num   = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_q2chi, this, std::placeholders::_1, cos(chi));
-            std::function<double (const double &)> denom = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_q2,    this, std::placeholders::_1);
+            std::function<std::array<double, 3> (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_coefficients_q2chi, this, std::placeholders::_1);
+            const auto coeffs = integrate1D(f, 32, q2_min, q2_max);
 
-            return integrate<GSL::QAGS>(num, q2_min, q2_max) / integrate<GSL::QAGS>(denom, q2_min, q2_max);
+            const double c_chi = cos(chi);
+
+            const double num   = (coeffs[0] + coeffs[1] * c_chi + coeffs[2] * c_chi * c_chi) / (2.0 * M_PI);
+            const double denom = coeffs[0] + coeffs[2] / 2.0;
+
+            return num / denom;
+        }
+
+        double pdf_chi(const double & chi_min, const double & chi_max) const
+        {
+            const double q2_min = power_of<2>(m_l());
+            const double q2_max = 10.68;
+
+            std::function<std::array<double, 3> (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_coefficients_q2chi, this, std::placeholders::_1);
+            const auto coeffs = integrate1D(f, 32, q2_min, q2_max);
+
+            const double c_chi_min = cos(chi_min), c_chi_max = cos(chi_max);
+            const double s_chi_min = sin(chi_min), s_chi_max = sin(chi_max);
+
+            double num         = coeffs[0] * (chi_max - chi_min);
+            num               += coeffs[1] * (s_chi_max - s_chi_min);
+            num               += coeffs[2] * (chi_max - chi_min + s_chi_max * c_chi_max - s_chi_min * c_chi_min);
+            num               /= 2.0 * M_PI;
+            const double denom = coeffs[0] + coeffs[2] / 2.0;
+
+            return num / denom;
         }
     };
 
@@ -254,9 +321,7 @@ namespace eos
     double
     BToDPiLeptonNeutrino::integrated_pdf_d(const double & c_d_min, const double & c_d_max) const
     {
-        std::function<double (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_d, _imp.get(), std::placeholders::_1);
-
-        return integrate<GSL::QAGS>(f, c_d_min, c_d_max);
+        return _imp->pdf_d(c_d_min, c_d_max);
     }
 
     double
@@ -270,9 +335,7 @@ namespace eos
     double
     BToDPiLeptonNeutrino::integrated_pdf_chi(const double & chi_min, const double & chi_max) const
     {
-        std::function<double (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_chi, _imp.get(), std::placeholders::_1);
-
-        return integrate<GSL::QAGS>(f, chi_min, chi_max);
+        return _imp->pdf_chi(chi_min, chi_max);
     }
 
     const std::string
