@@ -2090,38 +2090,47 @@
     central: 1.0
     min: 1.0
     max: 2.0
+    latex: '$a$'
 "B(*)->D(*)::xi'(1)@HQET" :
     central: -1.306
-    min: -1.365
-    max: -1.247
+    min: -6.0
+    max:  0.0
+    latex: '$\xi^{(1)}(1)$'
 "B(*)->D(*)::xi''(1)@HQET" :
     central: 2.440
-    min: 2.222
-    max: 2.658
+    min: -6.0
+    max: +6.0
+    latex: '$\xi^{(2)}(1)$'
 "B(*)->D(*)::xi'''(1)@HQET" :
     central: 0.0
-    min: 0.0
-    max: 0.0
+    min: -12.0
+    max: +12.0
+    latex: '$\xi^{(3)}(1)$'
 "B(*)->D(*)::xi''''(1)@HQET" :
     central: 0.0
-    min: 0.0
-    max: 0.0
+    min: -72.0
+    max: +72.0
+    latex: '$\xi^{(4)}(1)$'
 "B(*)->D(*)::xi'''''(1)@HQET" :
     central: 0.0
-    min: 0.0
-    max: 0.0
+    min: -144.0
+    max: +144.0
+    latex: '$\xi^{(5)}(1)$'
 "B(*)->D(*)::chi_2(1)@HQET" :
     central: -0.058
     min: -0.077
     max: -0.039
+    latex: '$\chi_2(1)$'
 "B(*)->D(*)::chi_2'(1)@HQET" :
     central: -0.001
     min: -0.021
     max: +0.019
+    latex: '$\chi^{(1)}_2(1)$'
 "B(*)->D(*)::chi_2''(1)@HQET" :
     central: 0
     min: 0
     max: 0
+    latex: '$\chi^{(2)}_2(1)$'
 "B(*)->D(*)::chi_3'(1)@HQET" :
     central: +0.035
     min: +0.054
