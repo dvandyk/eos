@@ -79,6 +79,7 @@ class BToDHQETFormFactorsTest :
                     std::make_pair(+1.0, eps),
                     std::make_pair(+0.0, eps),
                     std::make_pair(+0.0, eps),
+                    std::make_pair(+0.0, eps),
 
                     /* z(w) */
                     std::make_pair(0.01219690, eps), // w = 1.10

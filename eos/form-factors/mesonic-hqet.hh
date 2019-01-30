@@ -75,7 +75,7 @@ namespace eos
             HQETFormFactorBase(const Parameters & p, const Options & o) :
                 _model(Model::make("SM", p, o)),
                 _a(p["B(*)->D(*)::a@HQET"], *this),
-                _opt_lp_model(o, "model", { "power-series", "exponential" }, "power-series"),
+                _opt_lp_model(o, "model-lp", { "power-series", "exponential" }, "power-series"),
                 _opt_lp_zorder(o, "z-order-lp", { "2", "3", "4", "5" }, "3"),
                 _enable_lp_z3(1.0 ? _opt_lp_zorder.value() >= "3" : 0.0),
                 _enable_lp_z4(1.0 ? _opt_lp_zorder.value() >= "4" : 0.0),
@@ -149,13 +149,17 @@ namespace eos
             /*
              * Isgur-Wise functions
              */
+            double _zw(const double & w) const
+            {
+                return (std::sqrt(w + 1.0) - std::sqrt(2.0) * _a()) / (std::sqrt(w + 1.0) + std::sqrt(2.0) * _a());
+            }
+
             double _z(const double & q2) const
             {
                 const double w = _w(q2);
 
-                return (std::sqrt(w + 1.0) - std::sqrt(2.0) * _a()) / (std::sqrt(w + 1.0) + std::sqrt(2.0) * _a());
+                return _zw(w);
             }
-
             // uses a power series ansatz
             double _xi_power_series(const double & q2) const
             {
@@ -339,12 +343,78 @@ namespace eos
             }
 
             /* Power corrections */
-            inline double _l1(const double & w) const { return _l1one() + (w - 1.0) * _l1pone(); }
-            inline double _l2(const double & w) const { return _l2one() + (w - 1.0) * _l2pone(); }
-            inline double _l3(const double & w) const { return _l3one() + (w - 1.0) * _l3pone(); }
-            inline double _l4(const double & w) const { return _l4one() + (w - 1.0) * _l4pone(); }
-            inline double _l5(const double & w) const { return _l5one() + (w - 1.0) * _l5pone(); }
-            inline double _l6(const double & w) const { return _l6one() + (w - 1.0) * _l6pone(); }
+            inline double _l1(const double & w) const
+            {
+                const double a = _a(), a2 = a * a;
+
+                // expansion in z around z_0
+                const double  z_0 = (1.0 - a) / (1.0 + a);
+                const double  z   = (_zw(w) - z_0);
+
+                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+
+                return _l1one + _l1pone * wm11;
+            }
+            inline double _l2(const double & w) const
+            {
+                const double a = _a(), a2 = a * a;
+
+                // expansion in z around z_0
+                const double  z_0 = (1.0 - a) / (1.0 + a);
+                const double  z   = (_zw(w) - z_0);
+
+                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+
+                return _l2one + _l2pone * wm11;
+            }
+            inline double _l3(const double & w) const
+            {
+                const double a = _a(), a2 = a * a;
+
+                // expansion in z around z_0
+                const double  z_0 = (1.0 - a) / (1.0 + a);
+                const double  z   = (_zw(w) - z_0);
+
+                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+
+                return _l3one + _l3pone * wm11;
+            }
+            inline double _l4(const double & w) const
+            {
+                const double a = _a(), a2 = a * a;
+
+                // expansion in z around z_0
+                const double  z_0 = (1.0 - a) / (1.0 + a);
+                const double  z   = (_zw(w) - z_0);
+
+                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+
+                return _l4one + _l4pone * wm11;
+            }
+            inline double _l5(const double & w) const
+            {
+                const double a = _a(), a2 = a * a;
+
+                // expansion in z around z_0
+                const double  z_0 = (1.0 - a) / (1.0 + a);
+                const double  z   = (_zw(w) - z_0);
+
+                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+
+                return _l5one + _l5pone * wm11;
+            }
+            inline double _l6(const double & w) const
+            {
+                const double a = _a(), a2 = a * a;
+
+                // expansion in z around z_0
+                const double  z_0 = (1.0 - a) / (1.0 + a);
+                const double  z   = (_zw(w) - z_0);
+
+                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+
+                return _l6one + _l6pone * wm11;
+            }
 
             /* Wilson Coefficients */
 
