@@ -35,14 +35,15 @@ namespace eos
             ~BToDPiLeptonNeutrino();
 
             /*!
-             * 1-dim. PDFs as functions of cos(theta_D), cost(theta_L), and phi
+             * 1-dim. PDFs as functions of cos(theta_D), cost(theta_L), chi, and q2
              */
             double differential_pdf_d(const double & c_d) const;
             double differential_pdf_l(const double & c_l) const;
             double differential_pdf_chi(const double & chi) const;
+            double differential_pdf_q2(const double & q2) const;
 
             /*!
-             * Partially-integrated 1-dim. PDFs for cos(theta_D), cost(theta_L), and phi
+             * Partially-integrated 1-dim. PDFs for cos(theta_D), cost(theta_L), and chi
              */
             double integrated_pdf_d(const double & c_d_min, const double & c_d_max) const;
             double integrated_pdf_l(const double & c_l_min, const double & c_l_max) const;
@@ -55,6 +56,7 @@ namespace eos
             static const std::string kinematics_description_c_d;
             static const std::string kinematics_description_c_l;
             static const std::string kinematics_description_chi;
+            static const std::string kinematics_description_q2;
     };
 }
 
