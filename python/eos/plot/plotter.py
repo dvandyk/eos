@@ -195,6 +195,78 @@ class Plotter:
         plt.plot(xvalues, ovalues_higher,  color=color, alpha=alpha)
 
 
+    def plot_uncertainty_binned(self, item):
+        if 'hdf5-file' not in item:
+            raise KeyError('no hdf5-file specified')
+            return
+
+        h5fname = item['hdf5-file']
+        info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
+
+        uncfile = eos.data.UncertaintyDataFile(h5fname)
+
+        if 'kinematic' not in item:
+            raise KeyError('kinematic not found; do not know how to map x to a kinematic variable')
+
+        xname = item['kinematic']
+
+        xvalues = []
+        for o in uncfile.parameters:
+            kin = o[1].decode('ascii').split(',')
+            if len(kin) != 2:
+                raise ValueError('expected exactly two kinematic variables, got {}'.format(len(kin)))
+
+            name,value = kin[0].strip().split('=')
+            if name == xname + '_min':
+                xmin = float(value)
+            elif name == xname + '_max':
+                xmax = float(value)
+            else:
+                raise ValueError('unexpected kinematic variable \'{}\''.format(name))
+
+            name,value = kin[1].strip().split('=')
+            if name == xname + '_min':
+                xmin = float(value)
+            elif name == xname + '_max':
+                xmax = float(value)
+            else:
+                raise ValueError('unexpected kinematic variable \'{}\''.format(name))
+
+            xvalues.append([xmin, xmax])
+
+        xvalues = np.array(xvalues)
+        if 'range' in item:
+            xmin,xmax = item['range']
+            xvalues = np.ma.masked_outside(xvalues, float(xmin), float(xmax))
+
+        data = uncfile.data()
+        ovalues_lower   = []
+        ovalues_central = []
+        ovalues_higher  = []
+        for i in range(len(uncfile.parameters)):
+            lower   = np.percentile(data[:, i], q=15.865)
+            central = np.percentile(data[:, i], q=50.000)
+            higher  = np.percentile(data[:, i], q=84.135)
+            ovalues_lower.append(lower)
+            ovalues_central.append(central)
+            ovalues_higher.append(higher)
+
+        alpha   = item['opacity']   if 'opacity'   in item else 0.3
+        color   = item['color']     if 'color'     in item else 'black'
+        label   = item['label']     if 'label'     in item else None
+
+        for [xmin, xmax], olo, ocentral, ohi in zip(xvalues, ovalues_lower, ovalues_central, ovalues_higher):
+            width = (xmax - xmin) if item['rescale-by-width'] else 1
+            olo      /= width
+            ocentral /= width
+            ohi      /= width
+            print("{xmin} ... {xmax} -> {ocentral} with interval {olo} .. {ohi}".format(xmin=xmin, xmax=xmax, olo=olo, ocentral=ocentral, ohi=ohi))
+            plt.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=color, alpha=alpha, label=label)
+            plt.plot([xmin, xmax], [olo,      olo],      color=color, alpha=alpha)
+            plt.plot([xmin, xmax], [ocentral, ocentral], color=color, alpha=alpha)
+            plt.plot([xmin, xmax], [ohi,      ohi],      color=color, alpha=alpha)
+
+
     def plot_constraint(self, item):
         import yaml
 
@@ -599,16 +671,17 @@ class Plotter:
             return
 
         plot_functions = {
-            'constraint':  Plotter.plot_constraint,
-            'contours2D':  Plotter.plot_contours2d,
-            'function':    Plotter.plot_function,
-            'histogram':   Plotter.plot_histogram,
-            'histogram2D': Plotter.plot_histogram2d,
-            'kde':         Plotter.plot_kde,
-            'kde2D':       Plotter.plot_kde2d,
-            'observable':  Plotter.plot_observable,
-            'uncertainty': Plotter.plot_uncertainty,
-            'watermark':   Plotter.plot_eos_watermark,
+            'constraint':         Plotter.plot_constraint,
+            'contours2D':         Plotter.plot_contours2d,
+            'function':           Plotter.plot_function,
+            'histogram':          Plotter.plot_histogram,
+            'histogram2D':        Plotter.plot_histogram2d,
+            'kde':                Plotter.plot_kde,
+            'kde2D':              Plotter.plot_kde2d,
+            'observable':         Plotter.plot_observable,
+            'uncertainty':        Plotter.plot_uncertainty,
+            'uncertainty-binned': Plotter.plot_uncertainty_binned,
+            'watermark':          Plotter.plot_eos_watermark,
         }
 
         anonymous_types = [
