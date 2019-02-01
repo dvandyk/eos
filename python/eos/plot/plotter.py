@@ -129,9 +129,10 @@ class Plotter:
         if 'range' in item:
             xlo, xhi = item['range']
 
-        samples = 100
-        if 'samples' in item:
-            samples = item['samples']
+        alpha   = item['opacity']   if 'opacity'   in item else 1.0
+        color   = item['color']     if 'color'     in item else 'black'
+        label   = item['label']     if 'label'     in item else None
+        samples = item['samples']   if 'samples'   in item else 100
 
         xvalues = np.linspace(xlo, xhi, samples + 1)
         ovalues = np.array([])
@@ -139,11 +140,7 @@ class Plotter:
             kvar.set(xvalue)
             ovalues = np.append(ovalues, observable.evaluate())
 
-        color = 'black'
-        if 'color' in item:
-            color = item['color']
-
-        plt.plot(xvalues, ovalues, color=color)
+        plt.plot(xvalues, ovalues, alpha=alpha, color=color, label=label)
 
 
     def plot_uncertainty(self, item):
@@ -182,15 +179,9 @@ class Plotter:
             _ovalues_central.append(central)
             _ovalues_higher.append(higher)
 
-        color = 'black'
-        if 'color' in item:
-            color = item['color']
-
-        alpha = 1.0
-        if 'opacity' in item:
-            alpha = item['opacity']
-
-        label = item['label'] if 'label' in item else None
+        alpha   = item['opacity']   if 'opacity'   in item else 1.0
+        color   = item['color']     if 'color'     in item else 'black'
+        label   = item['label']     if 'label'     in item else None
 
         # TODO: replace scipy.interpolate.spline
         xvalues = np.linspace(np.min(_xvalues),np.max(_xvalues),100)
