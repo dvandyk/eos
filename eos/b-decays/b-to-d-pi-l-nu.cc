@@ -137,6 +137,22 @@ namespace eos
             return num / denom;
         }
 
+        double pdf_w(const double & w) const
+        {
+            const double m_B     = this->m_B(),     m_B2 = m_B * m_B;
+            const double m_Dstar = this->m_Dstar(), m_Dstar2 = m_Dstar * m_Dstar;
+            const double q2      = m_B2 + m_Dstar2 - 2.0 * m_B * m_Dstar * w;
+
+            return 2.0 * m_B * m_Dstar * pdf_q2(q2);
+        }
+
+        double integrated_pdf_w(const double & w_min, const double & w_max) const
+        {
+            std::function<double (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_w, this, std::placeholders::_1);
+
+            return integrate<GSL::QAGS>(f, w_min, w_max) / (w_max - w_min);
+        }
+
         std::array<double, 2u> pdf_coefficients_q2d(const double & q2) const
         {
             const double nf = pdf_normalization(q2);
@@ -199,10 +215,10 @@ namespace eos
 
             const double m_l2         = m_l() * m_l();
 
-            const double a_long       = this->a_long(q2); 
-            const double a_para       = this->a_para(q2); 
-            const double a_perp       = this->a_perp(q2); 
-            const double a_time       = this->a_time(q2); 
+            const double a_long       = this->a_long(q2);
+            const double a_para       = this->a_para(q2);
+            const double a_perp       = this->a_perp(q2);
+            const double a_time       = this->a_time(q2);
 
             const double a_long2      = norm(a_long);
             const double a_para2      = norm(a_para);
@@ -364,6 +380,12 @@ namespace eos
     }
 
     double
+    BToDPiLeptonNeutrino::differential_pdf_w(const double & w) const
+    {
+        return _imp->pdf_w(w);
+    }
+
+    double
     BToDPiLeptonNeutrino::integrated_pdf_d(const double & c_d_min, const double & c_d_max) const
     {
         return _imp->pdf_d(c_d_min, c_d_max);
@@ -379,6 +401,12 @@ namespace eos
     BToDPiLeptonNeutrino::integrated_pdf_chi(const double & chi_min, const double & chi_max) const
     {
         return _imp->pdf_chi(chi_min, chi_max);
+    }
+
+    double
+    BToDPiLeptonNeutrino::integrated_pdf_w(const double & w_min, const double & w_max) const
+    {
+        return _imp->integrated_pdf_w(w_min, w_max);
     }
 
     const std::string

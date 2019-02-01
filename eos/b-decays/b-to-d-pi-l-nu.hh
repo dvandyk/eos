@@ -35,12 +35,13 @@ namespace eos
             ~BToDPiLeptonNeutrino();
 
             /*!
-             * 1-dim. PDFs as functions of cos(theta_D), cost(theta_L), chi, and q2
+             * 1-dim. PDFs as functions of cos(theta_D), cost(theta_L), chi, q2, and w
              */
+            double differential_pdf_chi(const double & chi) const;
             double differential_pdf_d(const double & c_d) const;
             double differential_pdf_l(const double & c_l) const;
-            double differential_pdf_chi(const double & chi) const;
             double differential_pdf_q2(const double & q2) const;
+            double differential_pdf_w(const double & w) const;
 
             /*!
              * Partially-integrated 1-dim. PDFs for cos(theta_D), cost(theta_L), and chi
@@ -48,6 +49,7 @@ namespace eos
             double integrated_pdf_d(const double & c_d_min, const double & c_d_max) const;
             double integrated_pdf_l(const double & c_l_min, const double & c_l_max) const;
             double integrated_pdf_chi(const double & chi_min, const double & chi_max) const;
+            double integrated_pdf_w(const double & w_min, const double & w_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.
