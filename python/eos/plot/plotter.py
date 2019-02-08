@@ -731,6 +731,7 @@ class Plotter:
         self.plot_contents()
 
         plt.show()
+        plt.tight_layout()
         plt.savefig(self.output)
 
 
