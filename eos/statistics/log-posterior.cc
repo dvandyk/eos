@@ -20,6 +20,7 @@
 #include <config.h>
 
 #include <eos/statistics/log-posterior.hh>
+#include <eos/statistics/test-statistic-impl.hh>
 #include <eos/utils/density-impl.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>
@@ -434,6 +435,8 @@ namespace eos
        }
 
        /* output the test statistics */
+       double chi2 = 0.0;
+
        Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                         << "TestStatistic for each constraint:";
        for (auto c = _log_likelihood.begin(), c_end = _log_likelihood.end() ; c != c_end ; ++c)
@@ -441,12 +444,24 @@ namespace eos
            for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
            {
                std::stringstream ss;
-               ss << *(*b)->primary_test_statistic();
+               TestStatisticPtr t = (*b)->primary_test_statistic();
+               ss << *t;
 
                Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                                 << c->name() << ": " << ss.str();
+
+               if (typeid(*t) == typeid(const eos::test_statistics::ChiSquare))
+                {
+                    auto * tc = dynamic_cast<const eos::test_statistics::ChiSquare *>(t.get());
+                    chi2 += tc->value;
+                }
+
            }
+
        }
+        Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
+            << "total chi^2 = " << chi2;
+
 
        // store significances and chi^2
        if (f)

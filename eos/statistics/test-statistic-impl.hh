@@ -37,7 +37,7 @@ namespace eos
 
                 virtual void output(std::ostream & stream) const
                 {
-                    stream << "No test statistic available" << std::endl;
+                    stream << "No test statistic available";
                 }
         };
 
@@ -58,7 +58,7 @@ namespace eos
 
                 virtual void output(std::ostream & stream) const
                 {
-                    stream << "chi^2 = " << value << std::endl;
+                    stream << "chi^2 = " << value;
                 }
         };
     }

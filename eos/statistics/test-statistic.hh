@@ -20,6 +20,8 @@
 #ifndef EOS_GUARD_EOS_STATISTICS_TEST_STATISTIC_HH
 #define EOS_GUARD_EOS_STATISTICS_TEST_STATISTIC_HH 1
 
+#include <eos/utils/private_implementation_pattern.hh>
+
 #include <memory>
 #include <ostream>
 
