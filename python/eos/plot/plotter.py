@@ -111,61 +111,61 @@ class Plotter:
 
 
     """ Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter. """
-    def plot_observable(self, item):
-        oname = item['observable']
-        info('   plotting EOS observable "{}"'.format(oname))
+    class ObservablePlot:
+        def __init__(self, plotter, item):
+            self.oname = item['observable']
+            info('   plotting EOS observable "{}"'.format(oname))
 
-        # create parameters
-        parameters = eos.Parameters.Defaults()
-        if 'parameters' in item and 'parameters-from-file' in item:
-            warn('    overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
+            # create parameters
+            self.parameters = eos.Parameters.Defaults()
+            if 'parameters' in item and 'parameters-from-file' in item:
+                warn('    overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
 
-        if 'parameters-from-file' in item and type(item['parameters-from-file']) is str:
-            parameters.override_from_file(item['parameters-from-file'])
+            if 'parameters-from-file' in item and type(item['parameters-from-file']) is str:
+                self.parameters.override_from_file(item['parameters-from-file'])
 
-        if 'parameters' in item and type(item['parameters']) is dict:
-            for key, value in item['parameters'].items():
-                parameters.set(key, value)
+            if 'parameters' in item and type(item['parameters']) is dict:
+                for key, value in item['parameters'].items():
+                    self.parameters.set(key, value)
 
-        # create kinematics
-        kinematics = eos.Kinematics()
-        if not 'kinematic' in item and not 'parameter' in item:
-            raise KeyError('neither kinematic nor parameter found; do not know how to map x to a variable')
-        if 'kinematic' in item and 'parameter' in item:
-            raise KeyError('both kinematic and parameter found; do not know how to map x to a variable')
-        if 'kinematic' in item:
-            var = kinematics.declare(item['kinematic'], np.nan)
-        else:
-            var = parameters.declare(item['parameter'], np.nan)
-            if 'kinematics' in item:
-                for k, v in item['kinematics'].items():
-                    kinematics.declare(k, v)
+            # create kinematics
+            self.kinematics = eos.Kinematics()
+            if not 'kinematic' in item and not 'parameter' in item:
+                raise KeyError('neither kinematic nor parameter found; do not know how to map x to a variable')
+            if 'kinematic' in item and 'parameter' in item:
+                raise KeyError('both kinematic and parameter found; do not know how to map x to a variable')
+            if 'kinematic' in item:
+                self.var = self.kinematics.declare(item['kinematic'], np.nan)
+            else:
+                self.var = self.parameters.declare(item['parameter'], np.nan)
+                if 'kinematics' in item:
+                    for k, v in item['kinematics'].items():
+                        self.kinematics.declare(k, v)
 
-        # create (empty) options
-        options = eos.Options()
+            # create (empty) options
+            self.options = eos.Options()
 
-        # create observable
-        observable = eos.Observable.make(oname, parameters, kinematics, options)
+            # create observable
+            observable = eos.Observable.make(self.oname, self.parameters, self.kinematics, self.options)
 
-        xlo, xhi = self.xrange
-        if 'range' in item:
-            xlo, xhi = item['range']
+            # determine plot settings
+            self.color         = item['color']   if 'color'   in item else 'black'
+            self.samples       = item['samples'] if 'samples' in item else 100
+            self.xlo, self.xhi = item['range']   if 'range'   in item else self.xrange
 
-        samples = 100
-        if 'samples' in item:
-            samples = item['samples']
 
-        xvalues = np.linspace(xlo, xhi, samples + 1)
-        ovalues = np.array([])
-        for xvalue in xvalues:
-            var.set(xvalue)
-            ovalues = np.append(ovalues, observable.evaluate())
+        def plot(self):
+            xvalues = np.linspace(self.xlo, self.xhi, self.samples + 1)
+            ovalues = np.array([])
+            for xvalue in xvalues:
+                self.var.set(xvalue)
+                ovalues = np.append(ovalues, self.observable.evaluate())
 
-        color = 'black'
-        if 'color' in item:
-            color = item['color']
+            plt.plot(xvalues, ovalues, color=self.color)
 
-        plt.plot(xvalues, ovalues, color=color)
+        @staticmethod
+        def make(plot, item):
+            return(PlotObservable(plotter, item))
 
     """ Plots an uncertainty band as a function of one kinematic variable.
 
@@ -519,40 +519,48 @@ class Plotter:
 
 
     """ Inserts an EOS watermark into the plots. """
-    def plot_eos_watermark(self, item):
-        xdelta, ydelta = (0.04, 0.04)
+    class WatermarkPlot:
+        def __init__(self, plotter, item):
+            xdelta, ydelta = (0.04, 0.04)
 
-        hpos, vpos = item['position'] if 'position' in item else ['right', 'top']
+            hpos, vpos = item['position'] if 'position' in item else ['right', 'top']
 
-        if hpos == 'right':
-            x = 1 - xdelta
-        elif hpos == 'left':
-            x = xdelta
-        elif hpos == 'center':
-            x = 0.5
-        else:
-            raise ValueError('invalid horizontal position \'{}\''.format(hpos))
+            if hpos == 'right':
+                self.x = 1 - xdelta
+            elif hpos == 'left':
+                self.x = xdelta
+            elif hpos == 'center':
+                self.x = 0.5
+            else:
+                raise ValueError('invalid horizontal position \'{}\''.format(hpos))
 
-        if vpos == 'bottom':
-            y = 0 + ydelta
-        elif vpos == 'top':
-            y = 1 - ydelta
-        elif vpos == 'center':
-            y = 0.5
-        else:
-            raise ValueError('invalid vertical position \'{}\''.format(hpos))
+            if vpos == 'bottom':
+                self.y = 0 + ydelta
+            elif vpos == 'top':
+                self.y = 1 - ydelta
+            elif vpos == 'center':
+                self.y = 0.5
+            else:
+                raise ValueError('invalid vertical position \'{}\''.format(hpos))
 
-        logofont = matplotlib.font_manager.FontProperties(family='sans-serif', size='15')
-        ax = plt.gca()
-        color = 'OrangeRed'
-        prelim = 'v{version}'.format(version=eos.version())
-        if 'preliminary' in item and item['preliminary']:
-            color = 'red'
-            prelim = 'Preliminary'
-        ax.text(x, y, r'\textsf{{\textbf{{EOS {prelim}}}}}'.format(prelim=prelim),
-                transform=ax.transAxes, fontproperties=logofont,
-                color=color, alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
-                horizontalalignment=hpos, verticalalignment=vpos, zorder=+5)
+            if 'preliminary' in item and item['preliminary']:
+                self.color = 'red'
+                self.version = 'Preliminary'
+            else:
+                self.color = 'OrangeRed'
+                self.version = 'v{version}'.format(version=eos.version())
+
+        def plot(self):
+            logofont = matplotlib.font_manager.FontProperties(family='sans-serif', size='15')
+            ax = plt.gca()
+            ax.text(self.x, self.y, r'\textsf{{\textbf{{EOS {version}}}}}'.format(version=self.version),
+                    transform=ax.transAxes, fontproperties=logofont,
+                    color=color, alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
+                    horizontalalignment=hpos, verticalalignment=vpos, zorder=+5)
+
+        @staticmethod
+        def make(plotter, item):
+            return(WatermarkPlot(plotter, item))
 
 
     """ Plots the contents specified in the instructions provided to Plotter. """
@@ -560,15 +568,15 @@ class Plotter:
         if not 'contents' in self.instructions:
             return
 
-        plot_functions = {
-            'constraint':  Plotter.plot_constraint,
-            'contours2D':  Plotter.plot_contours2d,
-            'function':    Plotter.plot_function,
-            'histogram':   Plotter.plot_histogram,
-            'histogram2D': Plotter.plot_histogram2d,
-            'kde':         Plotter.plot_kde,
+        plot_handlers = {
+            #'constraint':  Plotter.plot_constraint,
+            #'contours2D':  Plotter.plot_contours2d,
+            #'function':    Plotter.plot_function,
+            #'histogram':   Plotter.plot_histogram,
+            #'histogram2D': Plotter.plot_histogram2d,
+            #'kde':         Plotter.plot_kde,
             'observable':  Plotter.plot_observable,
-            'uncertainty': Plotter.plot_uncertainty,
+            #'uncertainty': Plotter.plot_uncertainty,
             'watermark':   Plotter.plot_eos_watermark,
         }
 
