@@ -257,6 +257,14 @@ namespace eos
             // evaluate density at proposal point
             evaluate_proposal();
 
+//            // always accept if the current (initial) point has a non-finite log(density)
+//            if (! std::isfinite(current.log_density))
+//                return true;
+//
+//            // always rejects if the proposed points has a non-finite log(density)
+//            if (! std::isfinite(proposal.log_density))
+//                return false;
+//
             // compute the Metropolis-Hastings factor
             double log_u = std::log(uniform_random_number());
             double log_r_post = proposal.log_density - current.log_density;

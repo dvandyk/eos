@@ -42,8 +42,8 @@ def main():
     elif basename.startswith('unc'):
         datafile = UncertaintyDataFile(args.input)
 
-    data = datafile.data()
     parameters = datafile.parameters
+    data = datafile.data()[:, 0:len(parameters)]
 
     for i in range(0, len(parameters)):
         print('# %s (%s)' % (parameters[i][0],parameters[i][1]))

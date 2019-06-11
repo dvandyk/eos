@@ -48,5 +48,4 @@ namespace eos
 
     using TestStatisticPtr = std::shared_ptr<TestStatistic>;
 }
-
 #endif

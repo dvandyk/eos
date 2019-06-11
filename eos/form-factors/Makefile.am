@@ -19,6 +19,7 @@ libeosformfactors_la_SOURCES = \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
 	mesonic-hqet.hh \
 	pi-lcdas.cc pi-lcdas.hh \
+	unitarity-bounds.cc unitarity-bounds.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
 libeosformfactors_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosformfactors_la_LDFLAGS = $(GSL_LDFLAGS)

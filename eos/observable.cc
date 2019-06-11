@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2018 Danny van Dyk
+ * Copyright (c) 2010-2019 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Nico Gubernari
@@ -29,6 +29,7 @@
 #include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
+#include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
@@ -547,6 +548,7 @@ namespace eos
                                      &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t5, std::make_tuple("s")),
             make_form_factor_adapter("Lambda_b->Lambda_c::f_perp^T5(s)", "Lambda_b->Lambda_c",
                                      &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t5, std::make_tuple("s")),
+
             // Zero-Recoil Sum Rule for the Lambda_b -> Lambda_c Form Factors
             make_observable("Lambda_b->Lambda_c::F(1)",
                     &ZeroRecoilSumRule<LambdaBToC>::vector_current),
@@ -559,6 +561,13 @@ namespace eos
 
             make_observable("Lambda_b->Lambda_c::G_inel(1)",
                     &ZeroRecoilSumRule<LambdaBToC>::axialvector_current_inel),
+
+            // Unitarity bounds for exclusive b->c form factors
+            make_observable("b->c::Bound[0^+]@CLN",
+                    &HQETUnitarityBounds::bound_0p),
+
+            make_observable("b->c::Bound[0^-]@CLN",
+                    &HQETUnitarityBounds::bound_0m),
 
             /* Exclusive Decays */
 

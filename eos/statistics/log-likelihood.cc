@@ -1134,6 +1134,65 @@ namespace eos
                 return TestStatisticPtr(result);
             }
         };
+
+        struct UniformBoundBlock :
+            public LogLikelihoodBlock
+        {
+            ObservableCache cache;
+
+            ObservableCache::Id id;
+
+            UniformBoundBlock(const ObservableCache & cache, ObservableCache::Id id) :
+                cache(cache),
+                id(id)
+            {
+            }
+
+            virtual ~UniformBoundBlock()
+            {
+            }
+
+            virtual std::string as_string() const
+            {
+                std::string result = "UniformBound: current value = " + stringify(cache[id]);
+
+                return result;
+            }
+
+            virtual double evaluate() const
+            {
+                return cache[id];
+            }
+
+            virtual unsigned number_of_observations() const
+            {
+                return 0.0;
+            }
+
+            virtual double sample(gsl_rng * /*rng*/) const
+            {
+                return 0.0;
+            }
+
+            virtual double significance() const
+            {
+                return 0.0;
+            }
+
+            virtual TestStatisticPtr primary_test_statistic() const
+            {
+                auto result = new test_statistics::Empty();
+
+                return TestStatisticPtr(result);
+            }
+
+            virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
+            {
+                ObservablePtr observable = this->cache.observable(id)->clone(cache.parameters());
+
+                return LogLikelihoodBlockPtr(new UniformBoundBlock(cache, cache.add(observable)));
+            }
+        };
     }
 
     LogLikelihoodBlock::~LogLikelihoodBlock()
@@ -1278,6 +1337,12 @@ namespace eos
         }
 
         return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock(cache, std::move(indices), mean, covariance, number_of_observations));
+    }
+
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::UniformBound(ObservableCache cache, const ObservablePtr & observable)
+    {
+        return LogLikelihoodBlockPtr(new implementation::UniformBoundBlock(cache, cache.add(observable)));
     }
 
     template <>
