@@ -24,6 +24,7 @@
 #include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/b-decays/b-to-vec-l-nu.hh>
 #include <eos/b-decays/b-to-vec-l-nu-impl.hh>
+#include <eos/b-decays/b-to-xc-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2595-l-nu.hh>
@@ -1813,15 +1814,20 @@ namespace eos
 
     // }}}
 
-    // Misc.
+    // Inclusive semileptonic decays
     // {{{
     ObservableGroup
-    make_b_to_xu_semileptonic_group()
+    make_b_to_x_semileptonic_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Miscellaneous matrix elements)",
+            R"(Observables in inclusive semileptonic decays)",
             R"()",
             {
+                /* B -> X_c l nu */
+                make_observable("B->X_clnu::BR",
+                        &BToXcLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("E_l_min", "E_l_max", "q_0_min", "q_0_max", "M_X_min", "M_X_max")),
+
                 /* B Meson Properties */
                 make_observable("B::M_B^*-M_B",
                         Unit::GeV(),
@@ -1862,8 +1868,8 @@ namespace eos
                 // Lambda_b
                 make_lambdab_to_lambdac_l_nu_group(),
 
-                // B -> X_u l^- nubar
-                make_b_to_xu_semileptonic_group(),
+                // B -> X l^- nubar
+                make_b_to_x_semileptonic_group(),
             }
         );
 

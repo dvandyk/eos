@@ -728,6 +728,13 @@ FFKMvD:2013A:
     id: oai:arXiv.org:1310.6660
   inspire-id: Faller:2013dwa
   title: Disentangling the Decay Observables in $B^- \to \pi^+\pi^-\ell^-\bar\nu_\ell$
+FMV:2018A:
+  authors: Fael, Matteo and Mannel, Thomas and Vos, K. Keri
+  title: '$V_{cb}$ determination from inclusive $b \to c$ decays: an alternative method'
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1812.07472
+  inspire-id: Fael:2018vsp
 FLAG:2013A:
   authors: Aoki, Sinya et al.
   eprint:
