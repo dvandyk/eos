@@ -569,6 +569,9 @@ namespace eos
             make_observable("b->c::Bound[0^-]@CLN",
                     &HQETUnitarityBounds::bound_0m),
 
+            make_observable("b->c::Bound[1^-]@CLN",
+                    &HQETUnitarityBounds::bound_1m),
+
             /* Exclusive Decays */
 
             /* Exclusive B Decays */

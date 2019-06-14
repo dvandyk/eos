@@ -37,5 +37,7 @@ namespace eos
             double bound_0p() const;
 
             double bound_0m() const;
+
+            double bound_1m() const;
     };
 }
