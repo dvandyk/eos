@@ -40,16 +40,16 @@ namespace eos
         std::function<double ()> bound_1m;
 
         // parameters for the leading Isgur-Wise function xi
-        UsedParameter xipone, xippone, xipppone, xippppone, xipppppone;
+        UsedParameter xipone, xippone, xipppone;
 
         // parameters for the subleading Isgur-Wise function chi2
-        UsedParameter chi2one, chi2pone, chi2ppone, chi2pppone;
+        UsedParameter chi2one, chi2pone, chi2ppone;
 
         // parameters for the subleading Isgur-Wise function chi3
-        UsedParameter chi3pone, chi3ppone, chi3pppone;
+        UsedParameter chi3pone, chi3ppone;
 
         // parameters for the subleading Isgur-Wise function eta
-        UsedParameter etaone, etapone, etappone, etapppone;
+        UsedParameter etaone, etapone, etappone;
 
         // parameters for subsubleading 1/mc corrections in h+ (B->D), equal to delta{h+}
         UsedParameter l1one, l1pone, l1ppone;
@@ -68,19 +68,14 @@ namespace eos
             xipone(p["B(*)->D(*)::xi'(1)@HQET"], u),
             xippone(p["B(*)->D(*)::xi''(1)@HQET"], u),
             xipppone(p["B(*)->D(*)::xi'''(1)@HQET"], u),
-            xippppone(p["B(*)->D(*)::xi''''(1)@HQET"], u),
-            xipppppone(p["B(*)->D(*)::xi'''''(1)@HQET"], u),
             chi2one(p["B(*)->D(*)::chi_2(1)@HQET"], u),
             chi2pone(p["B(*)->D(*)::chi_2'(1)@HQET"], u),
             chi2ppone(p["B(*)->D(*)::chi_2''(1)@HQET"], u),
-            chi2pppone(p["B(*)->D(*)::chi_2'''(1)@HQET"], u),
             chi3pone(p["B(*)->D(*)::chi_3'(1)@HQET"], u),
             chi3ppone(p["B(*)->D(*)::chi_3''(1)@HQET"], u),
-            chi3pppone(p["B(*)->D(*)::chi_3'''(1)@HQET"], u),
             etaone(p["B(*)->D(*)::eta(1)@HQET"], u),
             etapone(p["B(*)->D(*)::eta'(1)@HQET"], u),
             etappone(p["B(*)->D(*)::eta''(1)@HQET"], u),
-            etapppone(p["B(*)->D(*)::eta'''(1)@HQET"], u),
             l1one(p["B(*)->D(*)::l_1(1)@HQET"], u),
             l1pone(p["B(*)->D(*)::l_1'(1)@HQET"], u),
             l1ppone(p["B(*)->D(*)::l_1''(1)@HQET"], u),
@@ -211,7 +206,7 @@ namespace eos
             }
             else
             {
-                static const double sigma2 = 0.06 / 1.46; // cf. [CLN1997], eq. (10), p.6
+                static const double sigma2 = 0.34 / 3.63; // cf. [CLN1997], eq. (10), p.6
                 return -pow((result - 1.0), 2) / sigma2 / 2.0;
             }
         }
@@ -245,7 +240,7 @@ namespace eos
             }
             else
             {
-                static const double sigma2 = 0.06 / 1.46; // cf. [CLN1997], eq. (10), p.6
+                static const double sigma2 = 0.51 / 3.73; // cf. [CLN1997], eq. (10), p.6
                 return -pow((result - 1.0), 2) / sigma2 / 2.0;
             }
         }
