@@ -996,7 +996,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Unitarity Bounds)",
-            R"(Pseudo observables representing the various unitarity bounds for $b\to c$ semileptonic form factors.)",
+            R"(Pseudo observables arising in the various unitarity bounds for $b\to c$ semileptonic form factors.)",
             {
                 make_observable("b->c::Bound[0^+]@CLN", R"(B^{b\toc}_{0^+})",
                         &HQETUnitarityBounds::bound_0p),
@@ -1009,6 +1009,61 @@ namespace eos
 
                 make_observable("b->c::Bound[1^-]@CLN", R"(B^{b\toc}_{1^-})",
                         &HQETUnitarityBounds::bound_1m),
+
+                make_observable("b->c::a_0[A_1]@BGL", R"(a_0^{A_1})",
+                        &BGLCoefficients::A1_a0),
+
+                make_observable("b->c::a_1[A_1]@BGL", R"(a_1^{A_1})",
+                        &BGLCoefficients::A1_a1),
+
+                make_observable("b->c::a_2[A_1]@BGL", R"(a_2^{A_1})",
+                        &BGLCoefficients::A1_a2),
+
+                make_observable("b->c::a_0[A_5]@BGL", R"(a_0^{A_5})",
+                        &BGLCoefficients::A5_a0),
+
+                make_observable("b->c::a_1[A_5]@BGL", R"(a_1^{A_5})",
+                        &BGLCoefficients::A5_a1),
+
+                make_observable("b->c::a_2[A_5]@BGL", R"(a_2^{A_5})",
+                        &BGLCoefficients::A5_a2),
+
+                make_observable("b->c::a_0[P_1]@BGL", R"(a_0^{P_1})",
+                        &BGLCoefficients::P1_a0),
+
+                make_observable("b->c::a_1[P_1]@BGL", R"(a_1^{P_1})",
+                        &BGLCoefficients::P1_a1),
+
+                make_observable("b->c::a_2[P_1]@BGL", R"(a_2^{P_1})",
+                        &BGLCoefficients::P1_a2),
+
+                make_observable("b->c::a_0[S_1]@BGL", R"(a_0^{S_1})",
+                        &BGLCoefficients::S1_a0),
+
+                make_observable("b->c::a_1[S_1]@BGL", R"(a_1^{S_1})",
+                        &BGLCoefficients::S1_a1),
+
+                make_observable("b->c::a_2[S_1]@BGL", R"(a_2^{S_1})",
+                        &BGLCoefficients::S1_a2),
+
+                make_observable("b->c::a_0[V_1]@BGL", R"(a_0^{V_1})",
+                        &BGLCoefficients::V1_a0),
+
+                make_observable("b->c::a_1[V_1]@BGL", R"(a_1^{V_1})",
+                        &BGLCoefficients::V1_a1),
+
+                make_observable("b->c::a_2[V_1]@BGL", R"(a_2^{V_1})",
+                        &BGLCoefficients::V1_a2),
+
+                make_observable("b->c::a_0[V_4]@BGL", R"(a_0^{V_4})",
+                        &BGLCoefficients::V4_a0),
+
+                make_observable("b->c::a_1[V_4]@BGL", R"(a_1^{V_4})",
+                        &BGLCoefficients::V4_a1),
+
+                make_observable("b->c::a_2[V_4]@BGL", R"(a_2^{V_4})",
+                        &BGLCoefficients::V4_a2),
+
             }
         );
 

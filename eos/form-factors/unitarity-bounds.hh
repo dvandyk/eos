@@ -25,6 +25,45 @@
 
 namespace eos
 {
+    class BGLCoefficients :
+        public virtual ParameterUser,
+        public PrivateImplementationPattern<BGLCoefficients>
+    {
+        public:
+            BGLCoefficients(const Parameters &, const Options &);
+            ~BGLCoefficients();
+
+            // B -> D form factors
+            // {{{
+            double V1_a0() const;
+            double V1_a1() const;
+            double V1_a2() const;
+
+            double S1_a0() const;
+            double S1_a1() const;
+            double S1_a2() const;
+            // }}}
+
+            // B -> D^* form factor
+            // {{{
+            double A1_a0() const;
+            double A1_a1() const;
+            double A1_a2() const;
+
+            double A5_a0() const;
+            double A5_a1() const;
+            double A5_a2() const;
+
+            double V4_a0() const;
+            double V4_a1() const;
+            double V4_a2() const;
+
+            double P1_a0() const;
+            double P1_a1() const;
+            double P1_a2() const;
+            // }}}
+    };
+
     /* Unitarity bound implemented as discussed in [BJvD2019] */
     class HQETUnitarityBounds :
         public virtual ParameterUser,
