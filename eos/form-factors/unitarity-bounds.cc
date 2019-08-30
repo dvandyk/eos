@@ -22,6 +22,7 @@
 #include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 #include <cmath>
@@ -30,6 +31,381 @@
 
 namespace eos
 {
+    template <> struct Implementation<BGLCoefficients>
+    {
+        // parameters for the leading Isgur-Wise function xi
+        UsedParameter xipone, xippone, xipppone;
+
+        // parameters for the subleading Isgur-Wise function chi2
+        UsedParameter chi2one, chi2pone, chi2ppone;
+
+        // parameters for the subleading Isgur-Wise function chi3
+        UsedParameter chi3pone, chi3ppone;
+
+        // parameters for the subleading Isgur-Wise function eta
+        UsedParameter etaone, etapone, etappone;
+
+        // parameters for subsubleading 1/mc corrections in h+ (B->D), equal to delta{h+}
+        UsedParameter l1one, l1pone, l1ppone;
+
+        // parameters for subsubleading 1/mc corrections in hA1 (B->D^*), equal to delta{A1}
+        UsedParameter l2one, l2pone, l2ppone;
+
+        // parameters for subsubleading 1/m_c corrections
+        UsedParameter l3one, l3pone, l3ppone;
+        UsedParameter l4one, l4pone, l4ppone;
+        UsedParameter l5one, l5pone, l5ppone;
+        UsedParameter l6one, l6pone, l6ppone;
+
+        Implementation(const Parameters & p, const Options & /*o*/, ParameterUser & u) :
+            xipone(p["B(*)->D(*)::xi'(1)@HQET"], u),
+            xippone(p["B(*)->D(*)::xi''(1)@HQET"], u),
+            xipppone(p["B(*)->D(*)::xi'''(1)@HQET"], u),
+            chi2one(p["B(*)->D(*)::chi_2(1)@HQET"], u),
+            chi2pone(p["B(*)->D(*)::chi_2'(1)@HQET"], u),
+            chi2ppone(p["B(*)->D(*)::chi_2''(1)@HQET"], u),
+            chi3pone(p["B(*)->D(*)::chi_3'(1)@HQET"], u),
+            chi3ppone(p["B(*)->D(*)::chi_3''(1)@HQET"], u),
+            etaone(p["B(*)->D(*)::eta(1)@HQET"], u),
+            etapone(p["B(*)->D(*)::eta'(1)@HQET"], u),
+            etappone(p["B(*)->D(*)::eta''(1)@HQET"], u),
+            l1one(p["B(*)->D(*)::l_1(1)@HQET"], u),
+            l1pone(p["B(*)->D(*)::l_1'(1)@HQET"], u),
+            l1ppone(p["B(*)->D(*)::l_1''(1)@HQET"], u),
+            l2one(p["B(*)->D(*)::l_2(1)@HQET"], u),
+            l2pone(p["B(*)->D(*)::l_2'(1)@HQET"], u),
+            l2ppone(p["B(*)->D(*)::l_2''(1)@HQET"], u),
+            l3one(p["B(*)->D(*)::l_3(1)@HQET"], u),
+            l3pone(p["B(*)->D(*)::l_3'(1)@HQET"], u),
+            l3ppone(p["B(*)->D(*)::l_3''(1)@HQET"], u),
+            l4one(p["B(*)->D(*)::l_4(1)@HQET"], u),
+            l4pone(p["B(*)->D(*)::l_4'(1)@HQET"], u),
+            l4ppone(p["B(*)->D(*)::l_4''(1)@HQET"], u),
+            l5one(p["B(*)->D(*)::l_5(1)@HQET"], u),
+            l5pone(p["B(*)->D(*)::l_5'(1)@HQET"], u),
+            l5ppone(p["B(*)->D(*)::l_5''(1)@HQET"], u),
+            l6one(p["B(*)->D(*)::l_6(1)@HQET"], u),
+            l6pone(p["B(*)->D(*)::l_6'(1)@HQET"], u),
+            l6ppone(p["B(*)->D(*)::l_6''(1)@HQET"], u)
+        {
+        }
+
+        ~Implementation() = default;
+
+        /*
+         * HQET parameters following [BLPR2017]
+         */
+        inline double _mu() const { return 2.31; } // mu^2 = m_b * m_c
+        inline double _alpha_s() const { return 0.26; }
+        inline double _m_b_1S() const { return 4.71; }
+        inline double _m_b_pole() const { return _m_b_1S() * (1 + 2.0 / 9.0 * power_of<2>(_alpha_s())); }
+        inline double _m_c_pole() const { return _m_b_pole() - 3.40; }
+        inline double _lambda_1() const { return -0.30; }
+        inline double _LambdaBar() const { return 5.313 - _m_b_pole() + _lambda_1() / (2.0 * _m_b_1S()); }
+        inline double _eps_b() const { return _LambdaBar() / (2.0 * _m_b_pole()); }
+        inline double _eps_c() const { return _LambdaBar() / (2.0 * _m_c_pole()); }
+
+        // B -> D form factors
+        // {{{
+        double V1_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return 0.008703312831206976 + 0.003212569766727432*as + -0.004155423451479522*epsb + 0.004155423451479522*epsc +
+            0.008310846902959045*epsb*etaone + -0.008310846902959045*epsc*etaone + 0.008703312831206976*l1one*pow(epsc,2) +
+            -0.004155423451479522*l4one*pow(epsc,2);
+        }
+
+        double V1_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return 0.060227992698537264 + 0.029238681829861973*as + -0.02875604015951836*epsb + -0.27850601059862323*chi2one*epsb +
+            0.8355180317958697*chi3pone*epsb + 0.02875604015951836*epsc + -0.27850601059862323*chi2one*epsc +
+            0.8355180317958697*chi3pone*epsc + 0.05751208031903672*epsb*etaone + -0.05751208031903672*epsc*etaone +
+            0.06648677522367237*epsb*etapone + -0.06648677522367237*epsc*etapone + 0.06962650264965581*xipone +
+            0.025700558133819457*as*xipone + -0.033243387611836185*epsb*xipone + 0.033243387611836185*epsc*xipone +
+            0.06648677522367237*epsb*etaone*xipone + -0.06648677522367237*epsc*etaone*xipone + 0.060227992698537264*l1one*pow(epsc,2) +
+            0.06962650264965581*l1pone*pow(epsc,2) + -0.02875604015951836*l4one*pow(epsc,2) + -0.033243387611836185*l4pone*pow(epsc,2) +
+            0.06962650264965581*l1one*xipone*pow(epsc,2) + -0.033243387611836185*l4one*xipone*pow(epsc,2);
+        }
+
+        double V1_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+
+            return 0.1306576264897831 + 0.015976186987051347*as + -0.062382885202461706*epsb + -2.4843077875504394*chi2one*epsb +
+            -2.2280480847889863*chi2pone*epsb + 7.452923362651318*chi3pone*epsb + 3.3420721271834792*chi3ppone*epsb +
+            0.062382885202461706*epsc + -2.4843077875504394*chi2one*epsc + -2.2280480847889863*chi2pone*epsc +
+            7.452923362651318*chi3pone*epsc + 3.3420721271834792*chi3ppone*epsc + 0.12476577040492341*epsb*etaone +
+            -0.12476577040492341*epsc*etaone + 0.5930701929996385*epsb*etapone + -0.5930701929996385*epsc*etapone +
+            0.2659471008946895*epsb*etappone + -0.2659471008946895*epsc*etappone + 0.6210769468876098*xipone + 0.2853105709065347*as*xipone
+            + -0.29653509649981924*epsb*xipone + -2.2280480847889863*chi2one*epsb*xipone + 6.6841442543669585*chi3pone*epsb*xipone +
+            0.29653509649981924*epsc*xipone + -2.2280480847889863*chi2one*epsc*xipone + 6.6841442543669585*chi3pone*epsc*xipone +
+            0.5930701929996385*epsb*etaone*xipone + -0.5930701929996385*epsc*etaone*xipone + 0.531894201789379*epsb*etapone*xipone +
+            -0.531894201789379*epsc*etapone*xipone + 0.2785060105986233*xippone + 0.10280223253527784*as*xippone +
+            -0.13297355044734474*epsb*xippone + 0.13297355044734474*epsc*xippone + 0.2659471008946895*epsb*etaone*xippone +
+            -0.2659471008946895*epsc*etaone*xippone + 0.1306576264897831*l1one*pow(epsc,2) + 0.48182394158829817*l1pone*pow(epsc,2) +
+            -0.062382885202461706*l4one*pow(epsc,2) + -0.23004832127614688*l4pone*pow(epsc,2) + 0.6210769468876098*l1one*xipone*pow(epsc,2)
+            + 0.5570120211972466*l1pone*xipone*pow(epsc,2) + -0.29653509649981924*l4one*xipone*pow(epsc,2) +
+            -0.2659471008946895*l4pone*xipone*pow(epsc,2) + 0.2785060105986233*l1one*xippone*pow(epsc,2) +
+            -0.13297355044734474*l4one*xippone*pow(epsc,2);
+        }
+
+        double S1_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c();
+
+            return 0.04733475740152116 + 0.011600723452028892*as + 0.04733475740152116*l1one*pow(epsc,2);
+        }
+
+        double S1_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+
+            return 0.2843488842022793 + 0.21589749983616183*as + -0.39656050100795237*epsb + -1.5147122368486774*chi2one*epsb +
+            4.544136710546032*chi3pone*epsb + 0.39656050100795237*epsc + -1.5147122368486774*chi2one*epsc + 4.544136710546032*chi3pone*epsc
+            + 0.7931210020159047*epsb*etaone + -0.7931210020159047*epsc*etaone + 0.37867805921216935*xipone + 0.09280578761623114*as*xipone
+            + 0.2843488842022793*l1one*pow(epsc,2) + 0.37867805921216935*l1pone*pow(epsc,2) + -0.39656050100795237*l4one*pow(epsc,2) +
+            0.37867805921216935*l1one*xipone*pow(epsc,2);
+        }
+
+        double S1_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+
+            return 0.6559703043190044 + 0.3219759165015938*as + -1.5890932982243737*epsb + -12.128588768170292*chi2one*epsb +
+            -12.117697894789417*chi2pone*epsb + 36.385766304510874*chi3pone*epsb + 18.176546842184127*chi3ppone*epsb +
+            1.5890932982243737*epsc + -12.128588768170292*chi2one*epsc + -12.117697894789417*chi2pone*epsc +
+            36.385766304510874*chi3pone*epsc + 18.176546842184127*chi3ppone*epsc + 3.1781865964487475*epsb*etaone +
+            -3.1781865964487475*epsc*etaone + 6.344968016127237*epsb*etapone + -6.344968016127237*epsc*etapone + 3.032147192042573*xipone +
+            1.9127915739217567*as*xipone + -3.1724840080636185*epsb*xipone + -12.117697894789417*chi2one*epsb*xipone +
+            36.353093684368254*chi3pone*epsb*xipone + 3.1724840080636185*epsc*xipone + -12.117697894789417*chi2one*epsc*xipone +
+            36.353093684368254*chi3pone*epsc*xipone + 6.344968016127237*epsb*etaone*xipone + -6.344968016127237*epsc*etaone*xipone +
+            1.5147122368486772*xippone + 0.37122315046492455*as*xippone + 0.6559703043190044*l1one*pow(epsc,2) +
+            2.274791073618234*l1pone*pow(epsc,2) + -1.5890932982243737*l4one*pow(epsc,2) + -3.1724840080636185*l4pone*pow(epsc,2) +
+            3.032147192042573*l1one*xipone*pow(epsc,2) + 3.0294244736973543*l1pone*xipone*pow(epsc,2) +
+            -3.1724840080636185*l4one*xipone*pow(epsc,2) + 1.5147122368486772*l1one*xippone*pow(epsc,2);
+        }
+        // }}}
+
+        // B -> D^* form factors
+        // {{{
+        double A1_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c();
+
+            return 0.008363045281441904 + -0.003525762321913306*as + 0.008363045281441904*l2one*pow(epsc,2);
+        }
+
+        double A1_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return 0.0812300174749896 + 0.033452181125767616*epsb + -0.26761744900614093*chi2one*epsb + 0.8028523470184228*chi3pone*epsb +
+            0.033452181125767616*epsc + -0.26761744900614093*chi3pone*epsc + -0.06690436225153523*epsb*etaone + as*(0.00850018218230231 -
+            0.028206098575306444*xipone) + 0.06690436225153523*xipone + (0.06690436225153523*l2pone - 0.033452181125767616*l5one +
+            l2one*(0.0812300174749896 + 0.06690436225153523*xipone))*pow(epsc,2);
+        }
+
+        double A1_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return 0.31721556277653973 + 0.25801570764842313*epsb + -3.134595457211949*chi2one*epsb + -2.1409395920491274*chi2pone*epsb +
+            9.403786371635848*chi3pone*epsb + 3.211409388073691*chi3ppone*epsb + 0.25801570764842313*epsc + -3.134595457211949*chi3pone*epsc
+            + -1.0704697960245637*chi3ppone*epsc + -0.5160314152968463*epsb*etaone + -0.5352348980122819*epsb*etapone +
+            0.7836488643029873*xipone + 0.26761744900614093*epsb*xipone + -2.1409395920491274*chi2one*epsb*xipone +
+            6.422818776147382*chi3pone*epsb*xipone + 0.26761744900614093*epsc*xipone + -2.1409395920491274*chi3pone*epsc*xipone +
+            -0.5352348980122819*epsb*etaone*xipone + as*(0.17093446696648967 + 0.011589260307805627*xipone - 0.11282439430122577*xippone) +
+            0.26761744900614093*xippone + (0.6498401397999168*l2pone - 0.25801570764842313*l5one - 0.26761744900614093*l5pone +
+            0.5352348980122819*l2pone*xipone - 0.26761744900614093*l5one*xipone + l2one*(0.31721556277653973 + 0.7836488643029873*xipone +
+            0.26761744900614093*xippone))*pow(epsc,2);
+        }
+
+        double A5_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c();
+
+            return 0.005602202787090022 + -0.0023618233360843633*as + 0.005602202787090022*l2one*pow(epsc,2);
+        }
+
+        double A5_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return 0.043523865623533844 + -0.0499621450168773*epsb + -0.17927048918688068*chi2one*epsb + 0.537811467560642*chi3pone*epsb +
+            0.04996214501687729*epsc + 0.17927048918688068*chi2one*epsc + -0.17927048918688068*chi3pone*epsc +
+            0.0999242900337546*epsb*etaone + 0.0999242900337546*epsc*etaone + as*(0.012992295758625651 - 0.018894586688674903*xipone) +
+            0.04481762229672017*xipone + (0.04481762229672017*l2pone + 0.04481762229672017*l3one + 0.0499621450168773*l5one -
+            0.0999242900337546*l6one + l2one*(0.043523865623533844 + 0.04481762229672017*xipone))*pow(epsc,2);
+        }
+
+        double A5_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return 0.11731273819106425 + -0.28823475536695886*epsb + -1.7513046783268447*chi2one*epsb + -1.4341639134950457*chi2pone*epsb +
+            5.253914034980533*chi3pone*epsb + 2.1512458702425685*chi3ppone*epsb + 0.28823475536695875*epsc + 1.7513046783268447*chi2one*epsc
+            + 1.4341639134950457*chi2pone*epsc + -1.7513046783268447*chi3pone*epsc + -0.7170819567475228*chi3ppone*epsc +
+            0.5764695107339177*epsb*etaone + 0.5764695107339177*epsc*etaone + 0.7993943202700368*epsb*etapone +
+            0.7993943202700368*epsc*etapone + 0.43782616958171117*xipone + -0.3996971601350184*epsb*xipone +
+            -1.4341639134950457*chi2one*epsb*xipone + 4.302491740485137*chi3pone*epsb*xipone + 0.3996971601350183*epsc*xipone +
+            1.4341639134950457*chi2one*epsc*xipone + -1.4341639134950457*chi3pone*epsc*xipone + 0.7993943202700368*epsb*etaone*xipone +
+            0.7993943202700368*epsc*etaone*xipone + as*(0.11394596757274658 + 0.06614919269165541*xipone - 0.07557834675469961*xippone) +
+            0.1792704891868807*xippone + (0.34819092498827076*l2pone + 0.43782616958171117*l3one + 0.3585409783737614*l3pone +
+            0.28823475536695886*l5one + 0.3996971601350184*l5pone - 0.976166670868936*l6one - 0.7993943202700368*l6pone +
+            0.3585409783737614*l2pone*xipone + 0.3585409783737614*l3one*xipone + 0.3996971601350184*l5one*xipone -
+            0.7993943202700368*l6one*xipone + l2one*(0.11731273819106425 + 0.43782616958171117*xipone +
+            0.1792704891868807*xippone))*pow(epsc,2);
+        }
+
+        double V4_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return 0.007502586789045188*1 + 0.9117449999857681*as + epsb + epsc - 2*epsb*etaone + (l2one - l5one)*pow(epsc,2);
+        }
+
+        double V4_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return 0.011671907229776847*as + -0.24008277724944604*chi2one*epsb + 0.720248331748338*chi3pone*epsb +
+            -0.24008277724944604*chi3pone*epsc + -0.12004138862472302*epsb*etapone + (0.06002069431236151*l2pone -
+            0.06002069431236151*l5pone)*pow(epsc,2) + 0.10292114090453137*(0.5793766430333188 + 0.5831716767309848*xipone)*(1 +
+            0.9117449999857681*as + epsb + epsc - 2*epsb*etaone + (l2one - l5one)*pow(epsc,2));
+        }
+
+        double V4_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return -0.06713773492653477*as + -0.48016555449889203*chi2one*epsb + -1.9206622179955681*chi2pone*epsb +
+            1.440496663496676*chi3pone*epsb + 2.880993326993352*chi3ppone*epsb + -0.48016555449889203*chi3pone*epsc +
+            -0.9603311089977841*chi3ppone*epsc + -0.24008277724944602*epsb*etapone + -0.48016555449889203*epsb*etappone +
+            0.10292114090453137*(1.4999940008253256 + 5.80135649772852*xipone + 2.332686706923939*xippone)*(1 + 0.9117449999857681*as + epsb
+            + epsc - 2*epsb*etaone + (l2one - l5one)*pow(epsc,2)) + 0.09337525783821478*(0.9934924245310758 + 1.*xipone)*(1.*as -
+            20.569284224343182*chi2one*epsb + 61.70785267302954*chi3pone*epsb - 20.569284224343182*chi3pone*epsc -
+            10.284642112171591*epsb*etapone + (5.1423210560857955*l2pone - 5.1423210560857955*l5pone)*pow(epsc,2));
+        }
+
+        double P1_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return 0.031488567512709106 + -0.0022676800849227453*as + -0.014123119863775365*epsb + 0.014123119863775365*epsc +
+            0.02824623972755073*epsb*etaone + 0.02824623972755073*epsc*etaone + (0.031488567512709106*l2one + 0.014123119863775365*l5one -
+            0.02824623972755073*l6one)*pow(epsc,2);
+        }
+
+        double P1_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return 0.26142777033909864 + -0.11725448401958674*epsb + -1.0076341604066916*chi2one*epsb + 3.022902481220075*chi3pone*epsb +
+            0.11725448401958674*epsc + 1.0076341604066916*chi2one*epsc + -1.0076341604066916*chi3pone*epsc + 0.23450896803917348*epsb*etaone
+            + 0.23450896803917348*epsc*etaone + 0.22596991782040587*epsb*etapone + 0.22596991782040587*epsc*etapone +
+            as*(-0.045688099445631854 - 0.018141440679381966*xipone) + 0.2519085401016729*xipone + -0.11298495891020294*epsb*xipone +
+            0.11298495891020294*epsc*xipone + 0.22596991782040587*epsb*etaone*xipone + 0.22596991782040587*epsc*etaone*xipone +
+            (0.2519085401016729*l2pone + 0.2519085401016729*l3one + 0.11725448401958674*l5one + 0.11298495891020294*l5pone -
+            0.3474939269493764*l6one - 0.22596991782040587*l6pone + l2one*(0.26142777033909864 + 0.2519085401016729*xipone) +
+            0.11298495891020294*l5one*xipone - 0.22596991782040587*l6one*xipone)*pow(epsc,2);
+        }
+
+        double P1_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+
+            return 0.7662176967652994 + -0.34366073873619646*epsb + -10.38095697166454*chi2one*epsb + -8.061073283253533*chi2pone*epsb +
+            31.142870914993626*chi3pone*epsb + 12.091609924880299*chi3ppone*epsb + 0.34366073873619657*epsc + 10.38095697166454*chi2one*epsc
+            + 8.061073283253533*chi2pone*epsc + -10.38095697166454*chi3pone*epsc + -4.0305366416267665*chi3ppone*epsc +
+            0.6873214774723929*epsb*etaone + 0.687321477472393*epsc*etaone + 2.3280115799542*epsb*etapone + 2.3280115799542*epsc*etapone +
+            0.9038796712816234*epsb*etappone + 0.9038796712816234*epsc*etappone + 2.595239242916135*xipone + -1.1640057899771*epsb*xipone +
+            -8.061073283253533*chi2one*epsb*xipone + 24.183219849760597*chi3pone*epsb*xipone + 1.1640057899771*epsc*xipone +
+            8.061073283253533*chi2one*epsc*xipone + -8.061073283253533*chi3pone*epsc*xipone + 2.3280115799542*epsb*etaone*xipone +
+            2.3280115799542*epsc*etaone*xipone + 1.8077593425632468*epsb*etapone*xipone + 1.8077593425632468*epsc*etapone*xipone +
+            as*(-0.5977425693276348 - 0.401787676923819*xipone - 0.07256576271752786*xippone) + 1.0076341604066916*xippone +
+            -0.4519398356408117*epsb*xippone + 0.4519398356408117*epsc*xippone + 0.9038796712816234*epsb*etaone*xippone +
+            0.9038796712816234*epsc*etaone*xippone + (2.091422162712789*l2pone + 2.595239242916135*l3one + 2.0152683208133833*l3pone +
+            0.34366073873619646*l5one + 0.9380358721566939*l5pone - 1.8513272674494927*l6one - 2.779951415595011*l6pone +
+            2.0152683208133833*l2pone*xipone + 2.0152683208133833*l3one*xipone + 1.1640057899771*l5one*xipone +
+            0.9038796712816234*l5pone*xipone - 3.2318912512358233*l6one*xipone - 1.8077593425632468*l6pone*xipone +
+            0.4519398356408117*l5one*xippone - 0.9038796712816234*l6one*xippone + l2one*(0.7662176967652994 + 2.595239242916135*xipone +
+            1.0076341604066916*xippone))*pow(epsc,2);
+        }
+        // }}}
+    };
+
+    BGLCoefficients::BGLCoefficients(const Parameters & p, const Options & o) :
+        PrivateImplementationPattern<BGLCoefficients>(new Implementation<BGLCoefficients>(p, o, *this))
+    {
+    }
+
+    BGLCoefficients::~BGLCoefficients() = default;
+
+    // B -> D form factors
+    // {{{
+    double BGLCoefficients::V1_a0() const { return _imp->V1_a0(); }
+    double BGLCoefficients::V1_a1() const { return _imp->V1_a1(); }
+    double BGLCoefficients::V1_a2() const { return _imp->V1_a2(); }
+    double BGLCoefficients::S1_a0() const { return _imp->S1_a0(); }
+    double BGLCoefficients::S1_a1() const { return _imp->S1_a1(); }
+    double BGLCoefficients::S1_a2() const { return _imp->S1_a2(); }
+    // }}}
+
+    // B -> D^* form factors
+    // {{{
+    double BGLCoefficients::A1_a0() const { return _imp->A1_a0(); }
+    double BGLCoefficients::A1_a1() const { return _imp->A1_a1(); }
+    double BGLCoefficients::A1_a2() const { return _imp->A1_a2(); }
+    double BGLCoefficients::A5_a0() const { return _imp->A5_a0(); }
+    double BGLCoefficients::A5_a1() const { return _imp->A5_a1(); }
+    double BGLCoefficients::A5_a2() const { return _imp->A5_a2(); }
+    double BGLCoefficients::V4_a0() const { return _imp->V4_a0(); }
+    double BGLCoefficients::V4_a1() const { return _imp->V4_a1(); }
+    double BGLCoefficients::V4_a2() const { return _imp->V4_a2(); }
+    double BGLCoefficients::P1_a0() const { return _imp->P1_a0(); }
+    double BGLCoefficients::P1_a1() const { return _imp->P1_a1(); }
+    double BGLCoefficients::P1_a2() const { return _imp->P1_a2(); }
+    // }}}
+
     template <> struct Implementation<HQETUnitarityBounds>
     {
         // option to determine if we use z^3 terms in the leading-power IW function
