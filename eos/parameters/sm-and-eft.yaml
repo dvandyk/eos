@@ -25,11 +25,18 @@ groups:
           max:     +0.23128
           comments: 'cf. [PDG2012]:  p. 4'
       # QED inputs
+      'QED::alpha_e(0)' :
+          central: +0.007297352566354976
+          min:     +0.007297352566354976
+          max:     +0.007297352566354976
+          comments: 'alpha_e(0) = 1/137.035999139'
+          latex:    '\alpha_e(\mu = 0)'
       'QED::alpha_e(m_b)' :
           central: +0.00751879699248120
           min:     +0.00751879699248120
           max:     +0.00781250000000000
           comments: 'alpha_e(m_b) = 1/133 .. alpha_e(m_W) = 1/128'
+          latex:    '\alpha_e(\mu = m_b)'
       # G_Fermi
       'G_Fermi' :
           central: +1.1663787e-5
