@@ -5,7 +5,8 @@ AM_CXXFLAGS = @AM_CXXFLAGS@
 
 lib_LTLIBRARIES = libeoskdecays.la
 libeoskdecays_la_SOURCES = \
-	k-to-l-nu.cc k-to-l-nu.hh
+	k-to-l-nu.cc k-to-l-nu.hh \
+	observables.cc observables.hh
 libeoskdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeoskdecays_la_LDFLAGS = $(GSL_LDFLAGS)
 libeoskdecays_la_LIBADD = \

@@ -2946,3 +2946,16 @@ groups:
           max:     +1.57079632679490
           comments: ''
   # }}}
+
+  # Parameters in B -> P Form Factor Parametrizations
+  # {{{
+  - title: 'Parameters in $K$ Decay Matrix Elements'
+    description: ''
+    parameters:
+      'K->lnu::mu@ChPT' :
+          central: +0.775
+          min:     +0.775
+          max:     +0.775
+          latex:    '$\mu_{K^-\to \ell\bar\nu}$'
+          comments: 'Set to mass::rho'
+  # }}}

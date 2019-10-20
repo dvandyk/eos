@@ -286,7 +286,7 @@ groups:
   - title: 'Mean Meson Lifetimes'
     description: ''
     parameters:
-      # Mean life times
+      # Mean life times of $b$ mesons
       'life_time::B_d' :
           central: +1.519e-12
           min:     +1.512e-12
@@ -307,6 +307,13 @@ groups:
           min:     +1.573e-12
           max:     +1.589e-12
           comments: 'based on 50:50 admixture of B^+B^- and B^0Bbar^0 @ Y(4S)'
+      # Mean life times of $s$ mesons
+      'life_time::K_u' :
+          central: +1.2379e-8
+          min:     +1.2358e-8
+          max:     +1.2400e-8
+          comment: 'cf. [PDG2019] average'
+          latex:   '$\tau_{K^-}$'
       # Decay width differences in neutral meson systems
       'life_time::Delta_B_d' :
           central: +0.0
