@@ -27,6 +27,7 @@
 #include <eos/utils/qualified-name.hh>
 
 #include <algorithm>
+#include <memory>
 
 namespace eos
 {
