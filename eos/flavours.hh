@@ -38,7 +38,7 @@ namespace eos
         strange,
         top,
         bottom
-    }
+    };
 }
 
 #endif
