@@ -331,3 +331,82 @@ class SwitchOptionTest :
             }
         }
 } switch_option_test;
+
+class MapOptionTest :
+    public TestCase
+{
+    public:
+        MapOptionTest() :
+            TestCase("map_option_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // Creation with non-empty map
+            {
+                MapOption<int> so
+                {
+                    Options{ { "key", "value1" }, { "unused", "foo" } },
+                    "key",
+                    {
+                        { "value1", 1 },
+                        { "value2", 2 },
+                        { "value4", 4 }
+                    }
+                };
+                TEST_CHECK_EQUAL(so.value(), 1);
+            }
+
+            // Creation with unspecified value, non-empty list
+            {
+                auto test = [] ()
+                {
+                    MapOption<int> so
+                    {
+                        Options{ { "unused", "foo" } },
+                        "key",
+                        {
+                            { "value1", 1 },
+                            { "value2", 2 },
+                            { "value4", 4 }
+                        }
+                    };
+                };
+                TEST_CHECK_THROWS(UnspecifiedOptionError, test());
+            }
+
+            // Creation with value not in list of allowed values
+            {
+                auto test = [] ()
+                {
+                    MapOption<int> so
+                    {
+                        Options{ { "key", "value3"}, { "unused", "foo" } },
+                        "key",
+                        {
+                            { "value1", 1 },
+                            { "value2", 2 },
+                            { "value4", 4 }
+                        }
+                    };
+                };
+                TEST_CHECK_THROWS(InvalidOptionValueError, test());
+            }
+
+            // Creating with empty list
+            {
+                auto test = [] ()
+                {
+                    MapOption<int> so
+                    {
+                        Options{ { "key", "value3"}, { "unused", "foo" } },
+                        "key",
+                        {
+                        }
+                    };
+                };
+                TEST_CHECK_THROWS(InternalError, test());
+            }
+        }
+} map_option_test;

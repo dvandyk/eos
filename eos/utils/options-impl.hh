@@ -27,6 +27,7 @@
 #include <eos/utils/qualified-name.hh>
 
 #include <algorithm>
+#include <map>
 
 namespace eos
 {
@@ -124,6 +125,50 @@ namespace eos
             ~SwitchOption() = default;
 
             const std::string & value() const { return _value; };
+    };
+
+    template <typename T_>
+    class MapOption
+    {
+        public:
+            T_ _value;
+
+        public:
+            MapOption(const Options & options, const std::string & key,
+                    const std::initializer_list<typename std::map<std::string, T_>::value_type> & _map)
+            {
+                std::map<std::string, T_> map{_map};
+
+                if (map.begin() == map.end())
+                {
+                    throw InternalError("MappedOption: The map is empty");
+                }
+
+                if (! options.has(key))
+                {
+                    throw UnspecifiedOptionError(key);
+                }
+
+                std::string option_value = options[key];
+
+                const auto entry = map.find(option_value);
+                if (entry ==  map.end())
+                {
+                    std::vector<std::string> allowed_values;
+                    for (const auto & e : map)
+                    {
+                        allowed_values.push_back(e.first);
+                    }
+
+                    throw InvalidOptionValueError(key, option_value, join(allowed_values.begin(), allowed_values.end()));
+                }
+
+                _value = entry->second;
+            }
+
+            ~MapOption() = default;
+
+            const T_ & value() const { return _value; };
     };
 }
 
