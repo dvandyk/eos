@@ -24,6 +24,14 @@ jobs:
               with:
                 path: _src/
 
+            - name: Indicate 'pending' status
+              uses: ./.github/actions/create-status-check
+              with:
+                name: ubuntu-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}
+                status: 'in_progress'
+                state: 'pending'
+                output-title: 'Pending build on Ubuntu ${{ matrix.cfg.os }} with ${{ matrix.cfg.cxx }}'
+
             - name: Fetch tags
               shell: bash
               run: |
@@ -67,6 +75,24 @@ jobs:
               with:
                 name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
                 path: _build
+
+            - name: Indicate 'success' status
+              if: success()
+              uses: ./.github/actions/create-status-check
+              with:
+                name: ubuntu-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}
+                status: 'completed'
+                state: 'success'
+                output-title: 'Successful build on Ubuntu ${{ matrix.cfg.os }} with ${{ matrix.cfg.cxx }}'
+
+            - name: Indicate 'failure' status
+              if: failure()
+              uses: ./.github/actions/create-status-check
+              with:
+                name: ubuntu-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}
+                status: 'completed'
+                state: 'failure'
+                output-title: 'Failed to build on Ubuntu ${{ matrix.cfg.os }} with ${{ matrix.cfg.cxx }}'
 
     ubuntu-build-doc:
         needs: ubuntu-build

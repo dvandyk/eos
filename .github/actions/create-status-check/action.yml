@@ -1,0 +1,29 @@
+name: "Create Status Check"
+description: "Create a status check with the API"
+inputs:
+  github-token:
+    description: "Token provided by GitHub"
+    required: true
+  name:
+    description: "Name of the check"
+    required:  true
+  status:
+    description: "Status of the check. One of 'in_progress', 'completed'."
+    required: true
+  state:
+    description: "State of the check. one of 'error', 'failure', 'pending', or 'success'"
+    required: true
+  output-title:
+    description: "Title of the check to be displayed"
+    default: ''
+    required: false
+  output-summary:
+    description: "Summary of the check to be displayed"
+    default: ''
+    required: false
+outputs:
+  time: # id of output
+    description: "A time"
+runs:
+  using: "node12"
+  main: "index.js"
