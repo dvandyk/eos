@@ -1,0 +1,157 @@
+on:
+    push:
+        branches: [ master, testing ]
+
+    pull_request:
+
+name: Build/Check/Deploy for PyPI
+
+jobs:
+    pypi-build:
+        name: Build on manylinux2014
+        runs-on: ubuntu-18.04
+        container:
+            image: eoshep/build-essentials:manylinux2014
+        steps:
+            - name: Checkout git repository
+              uses: actions/checkout@v2
+              with:
+                path: _src/
+
+            - name: Fetch tags
+              shell: bash
+              run: |
+                pushd _src
+                git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+                popd
+
+            - name: Create build directory
+              shell: bash
+              run: mkdir -p _build
+
+            - name: Configure
+              shell: bash
+              env:
+                CXXFLAGS: "-O2 -g -march=x86-64 -I/usr/include/boost169"
+                LDFLAGS:  "-L/usr/lib64/boost169"
+                BOOST_PYTHON_CXXFLAGS: "-I/usr/include/boost169"
+                BOOST_PYTHON_LDFLAGS:  "-L/usr/lib64/boost169"
+              run: |
+                pushd _src
+                ./autogen.bash
+                popd
+                pushd _build
+                ../_src/configure --disable-cli --disable-pmc --enable-python --with-boost-python-suffix=36
+                popd
+
+            - name: Build
+              shell: bash
+              run: |
+                pushd _build
+                make -j2 all
+                popd
+
+            - name: Upload configured source as artifact
+              uses: actions/upload-artifact@v1
+              with:
+                name: eos-source-manylinux2014-g++-${{ github.sha }}
+                path: _src
+
+            - name: Upload build as artifact
+              uses: actions/upload-artifact@v1
+              with:
+                name: eos-build-manylinux2014-g++-${{ github.sha }}
+                path: _build
+
+    pypi-check:
+        needs: pypi-build
+        name: Check on manylinux2014
+        runs-on: ubuntu-18.04
+        container:
+            image: eoshep/build-essentials:manylinux2014
+        steps:
+            - name: Download configured source as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-source-manylinux2014-g++-${{ github.sha }}
+                path: _src
+
+            - name: Download build as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-build-manylinux2014-g++-${{ github.sha }}
+                path: _build
+
+            - name: Check
+              shell: bash
+              env:
+                CXXFLAGS: "-O2 -g -march=x86-64 -I/usr/include/boost169"
+                LDFLAGS:  "-L/usr/lib64/boost169"
+                BOOST_PYTHON_CXXFLAGS: "-I/usr/include/boost169"
+                BOOST_PYTHON_LDFLAGS:  "-L/usr/lib64/boost169"
+              run: |
+                pushd _build
+                make -j2 check VERBOSE=1
+                popd
+
+    pypi-deploy:
+        needs: [ pypi-build, pypi-check ]
+        name: Deploy on PyPI
+        runs-on: ubuntu-18.04
+        container:
+            image: eoshep/build-essentials:manylinux2014
+        steps:
+            - name: Download configured source as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-source-manylinux2014-g++-${{ github.sha }}
+                path: _src
+
+            - name: Download build as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-build-manylinux2014-g++-${{ github.sha }}
+                path: _build
+
+            - name: Prepare the Python extension
+              shell: bash
+              run: |
+                mkdir _pypi
+                pushd _pypi
+                cp ../_build/python/.libs/_eos.so ./
+                for f in $(ldd _eos.so | grep '=>' | grep -E 'libaec|libboost|libeos|libhdf5|libgsl|libsz|libyaml|libz' | awk '{print $3}') ; do
+                    cp $f ./
+                done
+                cp ../_build/python/setup.py ./
+                chrpath -r '$ORIGIN/_eos_libs' _eos.so
+                for f in libeos*.so* ; do
+                    chrpath -l $f || continue
+                    chrpath -r '$ORIGIN' $f
+                done
+                cp -r ../_src/python/eos ./
+                mkdir _eos_data
+                for d in ../_src/eos/constraints ../_src/eos/parameters ; do
+                    cp -r $d _eos_data/
+                done
+                python3 setup.py build
+                cp _eos.so $(find build/ -name "_eos.*.so")
+                python3 setup.py bdist_wheel
+                popd
+#            - name: Deploy to Packagecloud.io
+#              shell: bash
+#              env:
+#                PACKAGECLOUD_TOKEN: "${{ secrets.PACKAGECLOUD_TOKEN }}"
+#              run: |
+#                pushd _src
+#                # check if this is not a tagged commit, and exit immediatly if true.
+#                if ! git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then exit 0 ; fi
+#                export EOS_VERSION=$(git describe --abbrev=0 --tags)
+#                export EOS_VERSION=${EOS_VERSION#v}
+#                popd
+#                pushd _build
+#                echo Building debian package for ${{ matrix.cfg.os }}
+#                export DESTDIR=/tmp/eos-${EOS_VERSION}
+#                make deb DESTDIR=${DESTDIR} OS=${{ matrix.cfg.os }}
+#                dpkg -i /tmp/eos-${EOS_VERSION}.deb
+#                package_cloud push eos/eos/ubuntu/${{ matrix.cfg.os }} /tmp/eos-${EOS_VERSION}.deb
+#                popd
