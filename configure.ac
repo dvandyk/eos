@@ -473,5 +473,6 @@ AC_OUTPUT(
 	src/scripts/Makefile
 	test/Makefile
 	python/Makefile
+	python/setup.py
 	)
 dnl }}}
