@@ -19,9 +19,9 @@ bin_SCRIPTS = \
 AM_TESTS_ENVIRONMENT = \
 			 export EOS_TESTS_CONSTRAINTS="$(top_srcdir)/eos/constraints"; \
 			 export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters"; \
-			 export PYTHONPATH="$(top_builddir)/python/.libs/:$(top_builddir)/python"; \
+			 export PYTHONPATH="$(top_builddir)/python/.libs/:$(top_srcdir)/python"; \
 			 export PYTHON="$(PYTHON)"; \
-			 export SOURCE_DIR="$(abs_srcdir)"
+			 export SOURCE_DIR="$(abs_srcdir)";
 
 TESTS = \
 	eos-analysis_TEST
