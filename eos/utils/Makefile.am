@@ -40,6 +40,7 @@ libeosutils_la_SOURCES = \
 	mutable.cc mutable.hh mutable-fwd.hh \
 	mutex.cc mutex.hh \
 	named-value.hh named-value-fwd.hh \
+	observable-arithmetic.hh observable-arithmetic.cc \
 	observable_cache.cc observable_cache.hh \
 	observable_set.cc observable_set.hh \
 	observable_stub.cc observable_stub.hh \
@@ -159,6 +160,7 @@ TESTS = \
 	matrix_TEST \
 	memoise_TEST \
 	mutable_TEST \
+	observable-arithmetic_TEST \
 	observable_set_TEST \
 	observable_stub_TEST \
 	options_TEST \
@@ -221,6 +223,8 @@ matrix_TEST_SOURCES = matrix_TEST.cc
 memoise_TEST_SOURCES = memoise_TEST.cc
 
 mutable_TEST_SOURCES = mutable_TEST.cc
+
+observable_arithmetic_TEST_SOURCES = observable-arithmetic_TEST.cc
 
 observable_set_TEST_SOURCES = observable_set_TEST.cc
 
