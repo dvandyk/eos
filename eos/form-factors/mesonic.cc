@@ -468,4 +468,32 @@ namespace eos
 
         return result;
     }
+
+    /* Vacuum -> P gamma Processes */
+
+    FormFactors<VacuumToPGamma>::~FormFactors()
+    {
+    }
+
+    std::shared_ptr<FormFactors<VacuumToPGamma>>
+    FormFactorFactory<VacuumToPGamma>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
+    {
+        std::shared_ptr<FormFactors<VacuumToPGamma>> result;
+
+        typedef QualifiedName KeyType;
+        typedef std::function<FormFactors<VacuumToPGamma> * (const Parameters &, const Options &)> ValueType;
+        static const std::map<KeyType, ValueType> form_factors
+        {
+            // d ubar
+            //{ KeyType("0->pigamma::dispersive"),      &VaccumToPiGammaFormFactor::make      },
+        };
+
+        auto i = form_factors.find(name);
+        if (form_factors.end() != i)
+        {
+            result.reset(i->second(parameters, name.options() + options));
+        }
+
+        return result;
+    }
 }
