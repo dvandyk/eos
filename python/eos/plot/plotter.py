@@ -46,6 +46,9 @@ class Plotter:
             'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'
         ]
 
+        if 'manual_constraints' in self.instructions:
+            self.manual_constraints = self.instructions['manual_constraints']
+
 
     """ Returns the next available z-order value, incremented for each plot w/o pre-defined z-order value. """
     @property
@@ -644,6 +647,78 @@ class Plotter:
                     color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
                 # disable the label for subsequent plots
                 self.label = None
+
+
+    """ Plots contours of two observables for constraints from the EOS library of experimental and theoretical likelihoods. """
+    class ConstraintContours(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
+
+            if 'constraint' not in item:
+                raise KeyError('no constraint specified')
+
+            if 'observables' not in item:
+                raise KeyError('no observables specified')
+
+            if 'x' not in item['observables']
+                raise KeyError('no mapping from x to observable specified')
+
+            if 'y' not in item['observables']
+                raise KeyError('no mapping from y to observable specified')
+
+            # extract information
+            self.name        = item['constraint']
+            self.xobservable = item['observable']['x']
+            self.yobservable = item['observable']['y']
+            self.levels      = item['levels']          if 'levels' in item else [1]
+
+
+        def plot(self):
+            import yaml
+            from matplotlib.patches import Ellipse
+
+            constraints = eos.Constraints()
+            entry       = constraints[self.name]
+            if entry:
+                constraint  = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
+            else:
+                if self.name in self.plotter.manual_constraints:
+                    constraint = self.plotter.manual_constraints[self.name]
+                else:
+                    raise ValueError('unknown constraint {}'.format(name))
+
+            if constraint['type'] not in ['MultivariateGaussian', 'MultivariateGaussian(Covariance)']:
+                raise ValueError('constraint {} is not a multivariate gaussian constraint'.format(name))
+
+            xidx  = constraint['observables'].index(self.xobservable)
+            xmean = constraint['means'][xidx]
+            yidx  = constraint['observables'].index(self.yobservable)
+            ymean = constraint['means'][yidx]
+
+            if constraint['type'] == 'MultivariateGaussian':
+                xsigmastat    = np.max(constraint['sigma-stat-hi'][xidx], constraint['sigma-stat-lo'][xidx])
+                xsigmasys     = constraint['sigma-sys'][xidx]
+                xstd          = np.sqrt(xsigmasys**2 + xsigmastat**2)
+
+                ysigmastat    = np.max(constraint['sigma-stat-hi'][yidx], constraint['sigma-stat-lo'][yidx])
+                ysigmasys     = constraint['sigma-sys'][yidx]
+                ystd          = np.sqrt(ysigmasys**2 + ysigmastat**2)
+
+                rho = constraint['correlations'][xidx][yidx]
+            elif constraints['type'] == 'MultivariateGaussian(Covariance)':
+                xstd          = np.sqrt(constraint['covariance'][xidx][xidx])
+
+                ystd          = np.sqrt(constraint['covariance'][yidx][yidx])
+
+                rho           = constraint['covariance'][xidx][yidx] / xstd / ystd
+
+            for n in self.levels:
+                e = Ellipse(xy = (xmean, ymean),
+                    width = xstd  * 2 * np.sqrt(1 + rho) * n,
+                    height = ystd * 2 * np.sqrt(1 - rho) * n,
+                    angle = 45
+                )
+                plt.gca().add_patch(e)
 
 
     """ Plots overview of several constraints from the EOS library of experimental and theoretical likelihoods. """
