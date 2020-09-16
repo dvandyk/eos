@@ -51,6 +51,11 @@ namespace eos
 
     struct VToV { };
 
+    /*
+     * vacuum -> P P transitions
+     */
+    struct VacuumToPP { };
+
     template <>
     class FormFactors<PToV> :
         public virtual ParameterUser
@@ -183,6 +188,25 @@ namespace eos
             static std::shared_ptr<FormFactors<VToV>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
     };
 
+    template <>
+    class FormFactors<VacuumToPP> :
+        public virtual ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            // vector current
+            virtual complex<double> f_p(const double & q2) const = 0;
+            virtual complex<double> f_0(const double & q2) const = 0;
+            virtual complex<double> f_t(const double & q2) const = 0;
+    };
+
+    template <>
+    class FormFactorFactory<VacuumToPP>
+    {
+        public:
+            static std::shared_ptr<FormFactors<VacuumToPP>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
+    };
 }
 
 

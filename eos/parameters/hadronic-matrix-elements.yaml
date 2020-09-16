@@ -3173,3 +3173,65 @@ groups:
           max:     +1.57079632679490
           comments: ''
   # }}}
+  # Parameters in 0 -> PP Form Factor Parametrizations
+  # {{{
+  - title: 'Parameters in $0\to PP$ Form Factor Parametrizations'
+    description: ''
+    parameters:
+      # form factor parameters for 0->pipi in [EGJvD2020] parametrization, with
+      # with f_+ fitted from data
+      '0->pipi::a_+^0@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^0$'
+          comments: ''
+      '0->pipi::a_+^1@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^1$'
+          comments: ''
+      '0->pipi::a_+^2@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^2$'
+          comments: ''
+      '0->pipi::a_+^3@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^3$'
+          comments: ''
+      '0->pipi::a_T^0@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^0$'
+          comments: ''
+      '0->pipi::a_T^1@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^1$'
+          comments: ''
+      '0->pipi::a_T^2@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^2$'
+          comments: ''
+      '0->pipi::a_T^3@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^3$'
+          comments: ''
+      '0->pipi::t_0@EGJvD2020' :
+          central: +0.0
+          min:     -2.0
+          max:     +0.07
+          latex:    '$t_0$'
+          comments: ''
+  # }}}
