@@ -197,7 +197,11 @@ namespace eos
 
             // vector current
             virtual complex<double> f_p(const double & q2) const = 0;
+            virtual double abs_f_p(const double & q2) const;
+
             virtual complex<double> f_0(const double & q2) const = 0;
+
+            // tensor current
             virtual complex<double> f_t(const double & q2) const = 0;
     };
 

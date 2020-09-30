@@ -1268,6 +1268,30 @@ namespace eos
     }
     // }}}
 
+    // 0 -> PP
+    // {{{
+
+    // 0 -> pi pi
+    // {{{
+    ObservableGroup
+    make_vacuum_to_pipi_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>{
+            R"(Form factors for $0 \to \pi \pi$ transitions)",
+            R"(Pseudo observables representing the full basis of $0 \to \pi \pi$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("0->pipi::Abs{f_+}(q2)", R"(\text{Abs}\,f_+^{0\to \pi\pi}(q^2))",
+                        &FormFactors<VacuumToPP>::abs_f_p, std::make_tuple("q2")),
+            }
+        };
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // }}}
+
     ObservableSection
     make_form_factors_section()
     {
@@ -1306,6 +1330,9 @@ namespace eos
 
                 // heavy-quark expansion
                 make_hqe_group(),
+
+                // 0 -> PP
+                make_vacuum_to_pipi_form_factors_group(),
             }
         );
 

@@ -476,6 +476,12 @@ namespace eos
     {
     }
 
+    double
+    FormFactors<VacuumToPP>::abs_f_p(const double & q2) const
+    {
+        return std::abs(this->f_p(q2));
+    }
+
     std::shared_ptr<FormFactors<VacuumToPP>>
     FormFactorFactory<VacuumToPP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
