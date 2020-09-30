@@ -27,6 +27,7 @@
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/mesonic-impl.hh>
+#include <eos/form-factors/parametric-kkvd2021.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -172,6 +173,33 @@ namespace eos
             { KeyType("B_s->K^*::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::make  },
             { KeyType("B_s->phi::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::make    },
             { KeyType("B_s->D_s^*::B-LCSR"),   &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::make }
+        };
+
+        auto i = form_factors.find(name);
+        if (form_factors.end() != i)
+        {
+            result.reset(i->second(parameters, name.options() + options));
+        }
+
+        return result;
+    }
+
+    /* P -> gamma^* Processes */
+
+    FormFactors<PToGammaOffShell>::~FormFactors()
+    {
+    }
+
+    std::shared_ptr<FormFactors<PToGammaOffShell>>
+    FormFactorFactory<PToGammaOffShell>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
+    {
+        std::shared_ptr<FormFactors<PToGammaOffShell>> result;
+
+        typedef QualifiedName KeyType;
+        typedef std::function<FormFactors<PToGammaOffShell> * (const Parameters &, const Options &)> ValueType;
+        static const std::map<KeyType, ValueType> form_factors
+        {
+            { KeyType("B->gamma^*::KKvD2021"), &KKvD2021FormFactors::make          },
         };
 
         auto i = form_factors.find(name);
