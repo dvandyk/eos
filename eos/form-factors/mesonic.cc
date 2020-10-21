@@ -477,9 +477,9 @@ namespace eos
     }
 
     double
-    FormFactors<VacuumToPP>::abs_f_p(const double & q2) const
+    FormFactors<VacuumToPP>::abs2_f_p(const double & q2) const
     {
-        return std::abs(this->f_p(q2));
+        return std::norm(this->f_p(q2));
     }
 
     std::shared_ptr<FormFactors<VacuumToPP>>

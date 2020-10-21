@@ -1281,8 +1281,8 @@ namespace eos
             R"(Pseudo observables representing the full basis of $0 \to \pi \pi$ form factors. )"
             R"(The specific parametrization can be chosen via the "form-factors" option.)",
             {
-                make_form_factor_adapter("0->pipi::Abs{f_+}(q2)", R"(\text{Abs}\,f_+^{0\to \pi\pi}(q^2))",
-                        &FormFactors<VacuumToPP>::abs_f_p, std::make_tuple("q2")),
+                make_form_factor_adapter("0->pipi::Abs{f_+}^2(q2)", R"(|f_+^{0\to \pi\pi}(q^2)|^2)",
+                        &FormFactors<VacuumToPP>::abs2_f_p, std::make_tuple("q2")),
             }
         };
 
