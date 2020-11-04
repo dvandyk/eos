@@ -118,10 +118,18 @@ namespace eos
                 complex<double> result = 0.0;
 
                 // TODO(->EE): implement truncated series. How are the coefficients supposed to be fitted.
-                result += _a_fp[0]() * (1.0);
-                result += _a_fp[1]() * (- 3.0 / 7.0 + 1.0 * z);
-                result += _a_fp[2]() * (5.0 / 9.0 - 2.0 / 3.0 * z + 1.0 * z * z);
-                result += _a_fp[3]() * (- 3.0 / 11.0 + 73.0 / 99.0 * z - 9.0 / 11.0 * z * z + 1.0 * z * z * z);
+                static const std::array<double, 4u> norm
+                {{
+                    1.0,
+                    std::sqrt((1.0 - (3.0 / 7.0) * (3.0 / 7.0))),
+                    std::sqrt((1.0 - (3.0 / 7.0) * (3.0 / 7.0)) * (1.0 - (5.0 / 9.0) * (5.0 / 9.0))),
+                    std::sqrt((1.0 - (3.0 / 7.0) * (3.0 / 7.0)) * (1.0 - (5.0 / 9.0) * (5.0 / 9.0)) * (1.0 - (3.0 / 11.0) * (3.0 / 11.0)))
+                }}; 
+
+                result += _a_fp[0]() * (1.0) / norm[0];
+                result += _a_fp[1]() * (- 3.0 / 7.0 + 1.0 * z) / norm[1];
+                result += _a_fp[2]() * (5.0 / 9.0 - 2.0 / 3.0 * z + 1.0 * z * z) / norm[2];
+                result += _a_fp[3]() * (- 3.0 / 11.0 + 73.0 / 99.0 * z - 9.0 / 11.0 * z * z + 1.0 * z * z * z) / norm[3];
 
                 return result;
             }
