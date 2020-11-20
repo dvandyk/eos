@@ -186,15 +186,14 @@ namespace eos
                 return stringify(Process_::label) + "::" + "a_" + ff + "^" + index + "@EGJvD2020";
             }
 
-            complex<double> _z(const double & q2) const
+            double _z(const double & q2) const
             {   
                 const double t_p = Process_::t_p;
                 const double t_0 = this->_t_0;
                 const double a = sqrt(t_p - t_0);
-                const double re = (sqrt(t_p - q2) - a) / (sqrt(t_p - q2) + a);
-                const double im = 0.0;
+                const double z = (sqrt(t_p - q2) - a) / (sqrt(t_p - q2) + a);
 
-                return complex<double>{ re, im };
+                return z
             }
 
         public:
@@ -217,11 +216,8 @@ namespace eos
 
             /* f_+ */
 
-            complex<double> phi_p(const complex<double> & z) const
+            double phi_p(const double & z) const
             {
-                // TODO (->EE): implement phi_+
-                // TODO implement proper pi and chi(Q2)
-                // TODO Is q2 implemented properly here? apperantly not, but how to fix this
                 const double t_p = Process_::t_p;
                 const double t_0 = this->_t_0;
                 const double tfactor = 1.0 - t_0 / t_p;
@@ -229,23 +225,22 @@ namespace eos
                 const double Q2 = Process_::Q2;
 
                 const double part0 = 1.0 / sqrt(12.0 * M_PI * t_p * chi);
-                const complex<double> part1 = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z) * pow(tfactor, 1.25);
-                const complex<double> part2 = pow(sqrt(tfactor) * (1.0 + z) + (1.0 - z), -0.5);
-                const complex<double> part3 = pow(sqrt(1.0 + Q2 / t_p) * (1.0 - z) + sqrt(tfactor) * (1.0 + z), -3.0);
+                const double part1 = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z) * pow(tfactor, 1.25);
+                const double part2 = pow(sqrt(tfactor) * (1.0 + z) + (1.0 - z), -0.5);
+                const double part3 = pow(sqrt(1.0 + Q2 / t_p) * (1.0 - z) + sqrt(tfactor) * (1.0 + z), -3.0);
 
                 return part0 * part1 * part2 * part3;
             }
 
-            complex<double> blaschke_p(const complex<double> & /*z*/) const
+            double blaschke_p(const double & /*z*/) const
             {
                 return 1.0;
             }
 
-            complex<double> series_p(const complex<double> & z) const
+            double series_p(const double & z) const
             {
-                complex<double> result = 0.0;
+                double result = 0.0;
 
-                // TODO(->EE): implement truncated series. How are the coefficients supposed to be fitted.
                 static const std::array<double, 4u> norm
                 {{
                     1.0,
@@ -262,7 +257,7 @@ namespace eos
                 return result;
             }
 
-            virtual complex<double> f_p(const double & q2) const
+            virtual double f_p(const double & q2) const
             {
                 const auto z = _z(q2);
 
@@ -275,13 +270,13 @@ namespace eos
             }
 
             /* f_T */
-            virtual complex<double> f_t(const double & q2) const
+            virtual double f_t(const double & q2) const
             {
                 return 1.0;
             }
 
             /* f_0 */
-            virtual complex<double> f_0(const double & /*q2*/) const
+            virtual double f_0(const double & /*q2*/) const
             {
                 return 0.0; // vanishes exactly
             }
