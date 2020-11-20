@@ -1,0 +1,45 @@
+# vim: set fdm=marker :
+
+########
+# Twisted Mass: Numerical data; EM form factor of pion from twisted-mass lattice QCD#
+# Using suggested pole fit with a * M_pole = 0.37 GeV * [a] #
+########
+#
+# Data: 21 Mar 2009
+# Project: parametric-egjvd2020
+#
+# {{{
+pi->pi::Abs{f_+}^2[q2]@TwistedMassLatticeQCD:2009: 
+  type: MultivariateGaussian
+  dim: 5
+  observables:
+    - pi->pi::Abs{f_+}^2(q2)
+    - pi->pi::Abs{f_+}^2(q2)
+    - pi->pi::Abs{f_+}^2(q2)
+    - pi->pi::Abs{f_+}^2(q2)
+    - pi->pi::Abs{f_+}^2(q2)
+  kinematice:
+    #Units: GeV
+    #Scaling by constant "a^2" absorbed by redefiniton
+    - {q2: -0.16}
+    - {q2: -0.10}
+    - {q2: -0.06}
+    - {q2: -0.03}
+    - {q2: -0.01}
+  options:
+    - {form-factors: EGJvD2020}
+    - {form-factors: EGJvD2020}
+    - {form-factors: EGJvD2020}
+    - {form-factors: EGJvD2020}
+    - {form-factors: EGJvD2020}
+  means:
+    #from-factor SQUARED!
+    [0.2126, 0.3339, 0.4834, 0.6728, 0.8685]
+  correlations:
+    - [ 1.0, 0.0, 0.0, 0.0, 0.0]
+    - [ 0.0, 1.0, 0.0, 0.0, 0.0]
+    - [ 0.0, 0.0, 1.0, 0.0, 0.0]
+    - [ 0.0, 0.0, 0.0, 1.0, 0.0]
+    - [ 0.0, 0.0, 0.0, 0.0, 1.0]
+  dof: 5
+# }}}
