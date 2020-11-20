@@ -43,7 +43,7 @@ namespace eos
 
     struct PiToPi {
         typedef PToP Transition;
-        static constexpr const char * label = "pi->pi"; //Is this label a good choice?
+        static constexpr const char * label = "0->pipi"; // TODO
         static constexpr const double m_1 = 0.000137;
         static constexpr const double m_2 = 0.000137;
         static constexpr const double t_p = (m_1 + m_2) * (m_1 + m_2);
@@ -187,13 +187,13 @@ namespace eos
             }
 
             double _z(const double & q2) const
-            {   
+            {
                 const double t_p = Process_::t_p;
                 const double t_0 = this->_t_0;
                 const double a = sqrt(t_p - t_0);
                 const double z = (sqrt(t_p - q2) - a) / (sqrt(t_p - q2) + a);
 
-                return z
+                return z;
             }
 
         public:
@@ -293,12 +293,7 @@ namespace eos
 
             ~EGJvD2020FormFactors() = default;
 
-            static FormFactors<VacuumToPP> * make(const Parameters & parameters, const Options & options)
-            {
-                return new EGJvD2020FormFactors(parameters, options);
-            }
-            //TODO: Check This
-            static FormFactors<PToP> * make(const Parameters & parameters, const Options & options)
+            static FormFactors<typename Process_::Transition> * make(const Parameters & parameters, const Options & options)
             {
                 return new EGJvD2020FormFactors(parameters, options);
             }

@@ -331,6 +331,8 @@ namespace eos
         static const std::map<KeyType, ValueType> form_factors
         {
             // parametrizations
+            // u,d -> u,d
+            { KeyType("pi->pi::EGJvD2020"),   &EGJvD2020FormFactors<PiToPi>::make              },
             // b -> s
             { KeyType("B->K::BCL2008"),       &BCL2008FormFactors<BToK>::make                  },
             { KeyType("B->K::BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make             },
