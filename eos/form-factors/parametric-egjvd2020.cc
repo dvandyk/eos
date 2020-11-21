@@ -21,6 +21,10 @@
 
 namespace eos
 {
-    template class EGJvD2020FormFactors<VacuumToPiPi>;
+    constexpr const char * PiToPi::label;
+
+    constexpr const char * VacuumToPiPi::label;
+
     template class EGJvD2020FormFactors<PiToPi>;
+    template class EGJvD2020FormFactors<VacuumToPiPi>;
 }
