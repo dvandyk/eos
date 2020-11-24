@@ -33,8 +33,8 @@ namespace eos
     struct VacuumToPiPi {
         typedef VacuumToPP Transition;
         static constexpr const char * label = "0->pipi";
-        static constexpr const double m_1 = 0.137;
-        static constexpr const double m_2 = 0.137;
+        static constexpr const double m_1 = 0.137; //GeV
+        static constexpr const double m_2 = 0.137; //GeV
         static constexpr const double t_p = (m_1 + m_2) * (m_1 + m_2);
         static constexpr const double t_m = (m_1 - m_2) * (m_1 - m_2);
         static constexpr const double Q2  = 2.0;
