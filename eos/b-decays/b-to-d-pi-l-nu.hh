@@ -27,6 +27,22 @@
 
 namespace eos
 {
+    class BToDPiLeptonNeutrinoParametric :
+        public ParameterUser,
+        public PrivateImplementationPattern<BToDPiLeptonNeutrinoParametric>
+    {
+        public:
+            BToDPiLeptonNeutrinoParametric(const Parameters & parameters, const Options & options);
+            ~BToDPiLeptonNeutrinoParametric();
+
+            /*!
+             * Partially-integrated 1-dim. PDFs for cos(theta_D), cost(theta_L), and chi
+             */
+            double integrated_pdf_d(const double & c_d_min, const double & c_d_max) const;
+            double integrated_pdf_l(const double & c_l_min, const double & c_l_max) const;
+            double integrated_pdf_chi(const double & chi_min, const double & chi_max) const;
+    };
+
     class BToDPiLeptonNeutrino :
         public ParameterUser,
         public PrivateImplementationPattern<BToDPiLeptonNeutrino>

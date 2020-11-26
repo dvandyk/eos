@@ -11,6 +11,101 @@
 
 namespace eos
 {
+    template <>
+    struct Implementation<BToDPiLeptonNeutrinoParametric>
+    {
+        SwitchOption opt_l;
+        const double eta_l;
+
+        // normalizations
+        UsedParameter Gamma_l, Gamma_D, Gamma_chi;
+
+        // lepton-flavour averages
+        UsedParameter A_FB, Ftilde_L, F_L, S_3;
+
+        // lepton-flavour-violating terms
+        UsedParameter DeltaA_FB, DeltaFtilde_L, DeltaF_L, DeltaS_3;
+
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            opt_l(o, "l", { "e", "mu" }),
+            eta_l(opt_l.value() == "mu" ? +1.0 : -1.0),
+            Gamma_l(p["B->Dpilnu::Gamma_l^" + opt_l.value()], u),
+            Gamma_D(p["B->Dpilnu::Gamma_D^" + opt_l.value()], u),
+            Gamma_chi(p["B->Dpilnu::Gamma_chi^" + opt_l.value()], u),
+            A_FB(p["B->Dpilnu::A_FB"], u),
+            Ftilde_L(p["B->Dpilnu::Ftilde_L"], u),
+            F_L(p["B->Dpilnu::F_L"], u),
+            S_3(p["B->Dpilnu::S_3"], u),
+            DeltaA_FB(p["B->Dpilnu::DeltaA_FB"], u),
+            DeltaFtilde_L(p["B->Dpilnu::DeltaFtilde_L"], u),
+            DeltaF_L(p["B->Dpilnu::DeltaF_L"], u),
+            DeltaS_3(p["B->Dpilnu::DeltaS_3"], u)
+        {
+        }
+
+        double integrated_pdf_d(const double & c_d_min, const double & c_d_max) const
+        {
+            const double F_L = this->F_L + eta_l * this->DeltaF_L / 2.0;
+
+            const double c_d_1 = (c_d_max - c_d_min);
+            const double c_d_3 = (pow(c_d_max, 3) - pow(c_d_min, 3)) / 3.0;
+
+            return (-3.0 / 4.0 * (F_L - 1.0) * c_d_1
+                + 3.0 / 4.0 * (3.0 * F_L - 1.0) * c_d_3) * Gamma_D;
+        }
+
+        double integrated_pdf_l(const double & c_l_min, const double & c_l_max) const
+        {
+            const double A_FB = this->A_FB + eta_l * this->DeltaA_FB / 2.0;
+            const double Ftilde_L = this->Ftilde_L + eta_l * this->DeltaFtilde_L / 2.0;
+
+            const double c_l_1 = (c_l_max - c_l_min);
+            const double c_l_2 = (pow(c_l_max, 2) - pow(c_l_min, 2)) / 2.0;
+            const double c_l_3 = (pow(c_l_max, 3) - pow(c_l_min, 3)) / 3.0;
+
+            return (3.0 / 8.0 * (Ftilde_L + 1.0) * c_l_1
+                + A_FB * c_l_2
+                + 3.0 / 8.0 * (1.0 - 3.0 * Ftilde_L) * c_l_3) * Gamma_l;
+        }
+
+        double integrated_pdf_chi(const double & chi_min, const double & chi_max) const
+        {
+            const double S_3 = this->S_3 + eta_l * this->DeltaS_3 / 2.0;
+
+            const double chi_1 = (chi_max - chi_min) / (2.0 * M_PI);
+            const double chi_s = (sin(2.0 * chi_max) - sin(2.0 * chi_min)) / (3.0 * M_PI);
+
+            return (chi_1 + S_3 * chi_s) * Gamma_chi;
+        }
+    };
+
+    BToDPiLeptonNeutrinoParametric::BToDPiLeptonNeutrinoParametric(const Parameters & parameters, const Options & options) :
+        PrivateImplementationPattern<BToDPiLeptonNeutrinoParametric>(new Implementation<BToDPiLeptonNeutrinoParametric>(parameters, options, *this))
+    {
+    }
+
+    BToDPiLeptonNeutrinoParametric::~BToDPiLeptonNeutrinoParametric()
+    {
+    }
+
+    double
+    BToDPiLeptonNeutrinoParametric::integrated_pdf_d(const double & c_d_min, const double & c_d_max) const
+    {
+        return _imp->integrated_pdf_d(c_d_min, c_d_max);
+    }
+
+    double
+    BToDPiLeptonNeutrinoParametric::integrated_pdf_l(const double & c_l_min, const double & c_l_max) const
+    {
+        return _imp->integrated_pdf_l(c_l_min, c_l_max);
+    }
+
+    double
+    BToDPiLeptonNeutrinoParametric::integrated_pdf_chi(const double & chi_min, const double & chi_max) const
+    {
+        return _imp->integrated_pdf_chi(chi_min, chi_max);
+    }
+
     using namespace eos::btovlnu;
     using std::conj;
     using std::norm;

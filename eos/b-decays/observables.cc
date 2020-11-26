@@ -463,6 +463,18 @@ namespace eos
                                 Options{ { "U", "c" }, {"q", "d"} }),
 
                 // B -> D pi l nu
+                make_observable("B->Dpilnu::Gamma(c_D_min,c_D_max)@Parametric",
+                                &BToDPiLeptonNeutrinoParametric::integrated_pdf_d,
+                                std::make_tuple("c_D_min", "c_D_max")),
+
+                make_observable("B->Dpilnu::Gamma(c_l_min,c_l_max)@Parametric",
+                                &BToDPiLeptonNeutrinoParametric::integrated_pdf_l,
+                                std::make_tuple("c_l_min", "c_l_max")),
+
+                make_observable("B->Dpilnu::Gamma(chi_min,chi_max)@Parametric",
+                                &BToDPiLeptonNeutrinoParametric::integrated_pdf_chi,
+                                std::make_tuple("chi_min", "chi_max")),
+
                 make_observable("B->Dpilnu::P(c_D)",
                                 &BToDPiLeptonNeutrino::differential_pdf_d,
                                 std::make_tuple("c_D")),
