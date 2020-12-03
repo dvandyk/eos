@@ -90,8 +90,8 @@ class Analysis:
         # create the priors
         for prior in priors:
             parameter = prior['parameter']
-            minv = prior['min']
-            maxv = prior['max']
+            minv = float(prior['min'])
+            maxv = float(prior['max'])
             prior_type = prior['type'] if 'type' in prior else 'uniform'
             if 'uniform' == prior_type or 'flat' == prior_type:
                 self.log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, eos.ParameterRange(minv, maxv)), False)
@@ -117,6 +117,8 @@ class Analysis:
             p = self.parameters[parameter]
             p.set_min(minv)
             p.set_max(maxv)
+            if 'central' in prior:
+                p.set(float(prior['central']))
             self.varied_parameters.append(p)
 
         # create the likelihood
@@ -146,6 +148,8 @@ class Analysis:
             eos.debug('used, but not included in any prior: \'{}\''.format(n))
         for n in varied_parameter_names - used_parameter_names:
             eos.warn('likelihood does not depend on parameter \'{}\'; remove from prior or check options!'.format(n))
+
+        self.log_pdf_shift = self.log_posterior.evaluate()
 
     def clone(self):
         """Returns an independent instance of eos.Analysis."""
@@ -202,7 +206,7 @@ class Analysis:
             p.set(v)
 
         try:
-            return(self.log_posterior.evaluate())
+            return(self.log_posterior.evaluate() - self.log_pdf_shift)
         except RuntimeError as e:
             error('encountered run time error ({e}) when evaluating log(posterior) in parameter point:'.format(e=e))
             for p in self.varied_parameters:
@@ -353,12 +357,20 @@ class Analysis:
 
         eps = np.finfo(float).eps
 
+        origins = sampler.run(step_N, trace_sort=True)
+        generating_components.append(origins)
+        samples = sampler.samples[:]
+
         # carry out adaptions
-        for step in progressbar(range(steps)):
+        for step in progressbar(range(steps + 1)):
             origins = sampler.run(step_N, trace_sort=True)
             generating_components.append(origins)
             samples = sampler.samples[:]
+            weights = sampler.weights[:][:, 0]
+
+            # compute perplexity
             last_weights = np.copy(sampler.weights[-1][:, 0])
+            eos.info('Max weight = {}, min weight = {}'.format(np.max(last_weights), np.min(last_weights)))
             for i, w in enumerate(last_weights):
                 if w <= 0 or np.isnan(w):
                     last_weights[i] = eps
@@ -366,23 +378,42 @@ class Analysis:
             last_entropy = -1.0 * np.dot(np.log(normalized_last_weights), normalized_last_weights)
             last_perplexity = np.exp(last_entropy) / len(normalized_last_weights)
             eos.info('Perplexity of the last samples after sampling in step {}: {}'.format(step, last_perplexity))
-            weights = sampler.weights[:][:, 0]
+
+            # adapt mixture density
             adjusted_weights = np.copy(weights)
             for i, w in enumerate(adjusted_weights):
                 if w <= 0 or np.isnan(w):
                     adjusted_weights[i] = eps
-            normalized_weights = adjusted_weights / np.sum(adjusted_weights)
-            entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
-            perplexity = np.exp(entropy) / len(normalized_weights)
-            eos.info('Perplexity of all previous samples after sampling in step {}: {}'.format(step, perplexity))
-            pypmc.mix_adapt.pmc.gaussian_pmc(samples, sampler.proposal, adjusted_weights, mincount=0, rb=True, copy=False)
-            sampler.proposal.normalize()
+            pmc = pypmc.mix_adapt.pmc.PMC(samples, sampler.proposal, adjusted_weights, rb=True, mincount=0)
+            if not pmc.run(2, verbose=True):
+                eos.info('PMC adaptation failed in step {}'.format(step))
+            sampler.proposal = _cp.copy(pmc.density)
+
+            #last_weights = np.copy(sampler.weights[-1][:, 0])
+            #for i, w in enumerate(last_weights):
+            #    if w <= 0 or np.isnan(w):
+            #        last_weights[i] = eps
+            #normalized_last_weights = last_weights / np.sum(last_weights)
+            #last_entropy = -1.0 * np.dot(np.log(normalized_last_weights), normalized_last_weights)
+            #last_perplexity = np.exp(last_entropy) / len(normalized_last_weights)
+            #eos.info('Perplexity of the last samples after sampling in step {}: {}'.format(step, last_perplexity))
+            #weights = sampler.weights[:][:, 0]
+            #adjusted_weights = np.copy(weights)
+            #for i, w in enumerate(adjusted_weights):
+            #    if w <= 0 or np.isnan(w):
+            #        adjusted_weights[i] = eps
+            #normalized_weights = adjusted_weights / np.sum(adjusted_weights)
+            #entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
+            #perplexity = np.exp(entropy) / len(normalized_weights)
+            #eos.info('Perplexity of all previous samples after sampling in step {}: {}'.format(step, perplexity))
+            #pypmc.mix_adapt.pmc.gaussian_pmc(samples, sampler.proposal, adjusted_weights, mincount=0, rb=True, copy=False)
+            #sampler.proposal.normalize()
 
         # draw final samples
         origins = sampler.run(final_N, trace_sort=True)
         generating_components.append(origins)
-        samples = sampler.samples[:]
-        weights = sampler.weights[:][:, 0]
+        samples = sampler.samples[-1]
+        weights = sampler.weights[-1][:, 0]
         adjusted_weights = np.copy(weights)
         for i, w in enumerate(adjusted_weights):
             if w <= 0 or np.isnan(w):
@@ -390,6 +421,6 @@ class Analysis:
         normalized_weights = adjusted_weights / np.sum(adjusted_weights)
         entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
         perplexity = np.exp(entropy) / len(normalized_weights)
-        eos.info('Perplexity after final samples: {}'.format(perplexity))
+        eos.info('Perplexity of final samples: {}'.format(perplexity))
 
         return samples, weights, sampler.proposal
