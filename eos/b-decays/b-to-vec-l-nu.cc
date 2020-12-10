@@ -376,7 +376,7 @@ namespace eos
             const double q2_max = m_B2 + m_V2 - 2.0 * m_B * m_V * w_min;
             const double q2_min = m_B2 + m_V2 - 2.0 * m_B * m_V * w_max;
 
-            return integrated_pdf_q2(q2_min, q2_max) * (q2_max - q2_min) / (w_max - w_min);
+            return integrated_pdf_q2(q2_min, q2_max) * (q2_max - q2_min);// / (w_max - w_min);
         }
     };
 
@@ -501,6 +501,12 @@ namespace eos
     BToVectorLeptonNeutrino::normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
         return _imp->integrated_angular_observables(q2_min, q2_max).normalized_decay_width() * _imp->tau_B / _imp->hbar;
+    }
+
+    double
+    BToVectorLeptonNeutrino::integrated_decay_width(const double & q2_min, const double & q2_max) const
+    {
+        return _imp->integrated_angular_observables(q2_min, q2_max).normalized_decay_width() * std::norm(_imp->model->ckm_cb()) / (1.0e-15);
     }
 
     double

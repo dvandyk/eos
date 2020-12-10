@@ -745,31 +745,56 @@ class Plotter:
 
         def plot(self):
             item = self.item
-            if 'hdf5-file' not in item:
-                raise KeyError('no hdf5-file specified')
+            if 'data' not in item and 'data-file' not in item and 'hdf5-file' not in item:
+                raise KeyError('neither data, data-file nor hdf5-file specified')
 
-            h5fname = item['hdf5-file']
-            eos.info('   plotting 2D contours from file "{}"'.format(h5fname))
-            datafile = eos.data.load_data_file(h5fname)
+            if 'data' in item and ('data-file' in item or 'hdf5-file' in item):
+                eos.warn('   both data and one of data-file or hdf5-file specified; assuming interactive use is intended')
 
-            if 'variables' not in item:
-                raise KeyError('no variables specificed')
 
-            xvariable, yvariable = item['variables']
+            xdata = None
+            ydata = None
+            if 'data-file' in item:
+                dfname = item['data-file']
+                eos.info('   plotting 2D KDE from file "{}"'.format(dfname))
+                df = eos.data.PMCSampler(dfname)
 
-            data   = datafile.data()
-            xindex = datafile.variable_indices[xvariable]
-            xdata  = data[:, xindex]
-            yindex = datafile.variable_indices[yvariable]
-            ydata  = data[:, yindex]
+                if 'variables' not in item:
+                    raise KeyError('no variables specificed')
 
-            if not np.array(self.plotter.xrange).any():
-                self.plotter.xrange = [np.amin(xdata), np.amax(xdata)]
-                self.plotter.ax.set_xlim(tuple(self.plotter.xrange))
-            if not np.array(self.plotter.yrange).any():
-                self.plotter.yrange = [np.amin(ydata), np.amax(ydata)]
-                self.plotter.ax.set_ylim(tuple(self.plotter.yrange))
-            plt.show()
+                xvariable, yvariable = item['variables']
+                xindex = [p['name'] for p in df.varied_parameters].index(xvariable)
+                yindex = [p['name'] for p in df.varied_parameters].index(yvariable)
+
+                stride = item['stride'] if 'stride' in item else 1
+                begin  = item['begin']  if 'begin'  in item else 0
+
+                # plot() expects samples in columns, x samples in row 1, y samples in row 2
+                xdata = df.samples[begin::stride, xindex]
+                ydata = df.samples[begin::stride, yindex]
+            else:
+                h5fname = item['hdf5-file']
+                eos.info('   plotting 2D contours from file "{}"'.format(h5fname))
+                datafile = eos.data.load_data_file(h5fname)
+
+                if 'variables' not in item:
+                    raise KeyError('no variables specificed')
+
+                xvariable, yvariable = item['variables']
+
+                data   = datafile.data()
+                xindex = datafile.variable_indices[xvariable]
+                xdata  = data[:, xindex]
+                yindex = datafile.variable_indices[yvariable]
+                ydata  = data[:, yindex]
+
+                if not np.array(self.plotter.xrange).any():
+                    self.plotter.xrange = [np.amin(xdata), np.amax(xdata)]
+                    self.plotter.ax.set_xlim(tuple(self.plotter.xrange))
+                if not np.array(self.plotter.yrange).any():
+                    self.plotter.yrange = [np.amin(ydata), np.amax(ydata)]
+                    self.plotter.ax.set_ylim(tuple(self.plotter.yrange))
+                plt.show()
 
             xbins = 100
             ybins = 100
@@ -784,8 +809,8 @@ class Plotter:
             pone_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.68))
             ptwo_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.95))
             pthree_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.99))
-            levels = [pone_sigma, ptwo_sigma, pthree_sigma]
-            labels = ['68%', '95%', '99%']
+            levels = [pone_sigma]#, ptwo_sigma, pthree_sigma]
+            labels = ['68%']#, '95%', '99%']
 
             CS = plt.contour(pdf.transpose(),
                              colors='OrangeRed',
@@ -860,17 +885,42 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
-            if 'data' not in item and 'hdf5-file' not in item:
-                raise KeyError('neither data nor hdf5-file specified')
+            if 'data' not in item and 'data-file' not in item and 'hdf5-file' not in item:
+                raise KeyError('neither data, data-file nor hdf5-file specified')
 
-            if 'data' in item and 'hdf5-file' in item:
-                eos.warn('   both data and hdf5-file specified; assuming interactive use is intended')
+            if 'data' in item and ('data-file' in item or 'hdf5-file' in item):
+                eos.warn('   both data and one of data-file or hdf5-file specified; assuming interactive use is intended')
 
             self.samples = None
             self.weights = None
             if 'data' in item:
                 self.samples = item['data']['samples'].T
                 self.weights = np.exp(item['data']['log_weights']) if 'log_weights' in item['data'] else None
+            elif 'data-file' in item:
+                dfname = item['data-file']
+                eos.info('   plotting 2D KDE from file "{}"'.format(dfname))
+                df = eos.data.PMCSampler(dfname)
+
+                if 'variables' not in item:
+                    raise KeyError('no variables specificed')
+
+                xvariable, yvariable = item['variables']
+                xindex = [p['name'] for p in df.varied_parameters].index(xvariable)
+                yindex = [p['name'] for p in df.varied_parameters].index(yvariable)
+
+                stride = item['stride'] if 'stride' in item else 1
+                begin  = item['begin']  if 'begin'  in item else 0
+
+                # plot() expects samples in columns, x samples in row 1, y samples in row 2
+                self.samples = df.samples[begin::stride, [xindex, yindex]].T
+                self.weights = df.weights[begin::stride]
+                self.weights /= self.weights.sum()
+                #threshold_weight = np.percentile(self.weights, 90.0)
+                #print('threshold weight is {}, min weight is {}, max weight is {}'.format(threshold_weight, np.min(self.weights), np.max(self.weights)))
+                #mask = self.weights > threshold_weight
+                #self.samples = np.ma.masked_array(self.samples, mask=np.column_stack((mask, mask)))
+                #self.weights = np.ma.masked_array(self.weights, mask=mask)
+                #print('using {} out of {} samples'.format(self.weights.count(), len(self.weights)))
             else:
                 h5fname = item['hdf5-file']
                 eos.info('   plotting 2D KDE from file "{}"'.format(h5fname))
@@ -911,8 +961,10 @@ class Plotter:
         def plot(self):
             kde = gaussian_kde(self.samples, weights=self.weights)
             kde.set_bandwidth(bw_method='silverman')
+            print('KDE factor = {}'.format(kde.factor))
             if self.bw:
                 kde.set_bandwidth(bw_method=kde.factor * self.bw)
+            print('KDE factor = {}'.format(kde.factor))
 
             xx, yy = np.mgrid[self.plotter.xrange[0]:self.plotter.xrange[1]:100j, self.plotter.yrange[0]:self.plotter.yrange[1]:100j]
             positions = np.vstack([xx.ravel(), yy.ravel()])

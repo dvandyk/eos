@@ -25,8 +25,8 @@ except NameError as e:
 
 # set some default values for plotting
 matplotlib.rcParams['font.family'] = 'serif'
-matplotlib.rcParams['font.serif'] = 'Computer Modern Sans serif'
-matplotlib.rcParams['font.size'] = 14
+matplotlib.rcParams['font.serif'] = []
+matplotlib.rcParams['font.size'] = 10
 matplotlib.rcParams['font.weight'] = 'normal'
 
 matplotlib.rcParams['axes.labelsize'] = 16
@@ -41,10 +41,10 @@ matplotlib.rcParams['ytick.direction'] = 'out'
 
 matplotlib.rcParams['text.usetex'] = True
 
-matplotlib.rcParams['pgf.preamble'] = [
-    r'\usepackage[hidelinks]{hyperref}',
-    r'\usepackage{amsmath}',
-    r'\usepackage{xcolor}'
-]
+matplotlib.rcParams['pgf.rcfonts'] = False
+matplotlib.rcParams['pgf.preamble'] = r'''
+    \usepackage{amsmath}
+    \usepackage{xcolor}
+'''
 
 matplotlib.rcParams['errorbar.capsize'] = 5

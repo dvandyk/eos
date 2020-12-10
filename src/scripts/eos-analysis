@@ -146,6 +146,10 @@ def main():
         help = 'number of bins in the histogram',
         dest = 'bins', action = 'store', type = int, default = 50
     )
+    parser_plot_samples.add_argument('-B', '--begin',
+        help = 'index of the first sample to plot',
+        dest = 'begin', action = 'store', type = int, default = 0
+    )
     parser_plot_samples.set_defaults(cmd = cmd_plot_samples)
 
     # find-mode
@@ -352,6 +356,7 @@ def cmd_plot_samples(args):
         else:
             label = r'\verb+{}+'.format(p['name'])
 
+        begin = args.begin if 'begin' in args else 0
         description = {
             'plot': {
                 'x': { 'label': label, 'format':  '${x:.5f}$', 'range': [p['min'], p['max']] },
@@ -361,7 +366,7 @@ def cmd_plot_samples(args):
                 {
                     'type': 'histogram', 'bins': args.bins,
                     'data': {
-                        'samples': data.samples[:, idx],
+                        'samples': data.samples[begin:, idx],
                     }
                 }
             ]

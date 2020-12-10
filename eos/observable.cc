@@ -73,14 +73,14 @@ namespace eos
         }
 
         // check if 'name' matches a parameter
-        if (name.options().empty())
-        {
+        //if (name.options().empty())
+        //{
             auto i = std::find_if(parameters.begin(), parameters.end(), [&] (const Parameter & p) { return p.name() == name.str(); });
             if (parameters.end() != i)
             {
                 return ObservablePtr(new ObservableStub(parameters, name));
             }
-        }
+        //}
 
         return ObservablePtr();
     }

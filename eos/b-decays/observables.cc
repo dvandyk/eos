@@ -341,6 +341,10 @@ namespace eos
                                 &BToVectorLeptonNeutrino::differential_J9_normalized,
                                 std::make_tuple("q2")),
 
+                make_observable("B->D^*lnu::Gamma",
+                                &BToVectorLeptonNeutrino::integrated_decay_width,
+                                std::make_tuple("q2_min", "q2_max")),
+
                 make_observable("B->D^*lnu::BR", R"(\mathcal{B}(B\to \bar{D}^*\ell^-\bar\nu))",
                                 &BToVectorLeptonNeutrino::integrated_branching_ratio,
                                 std::make_tuple("q2_min", "q2_max")),
