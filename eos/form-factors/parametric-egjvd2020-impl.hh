@@ -44,9 +44,9 @@ namespace eos
     struct PiToPi {
         typedef PToP Transition;
         static constexpr const char * label = "0->pipi"; // TODO
-        static constexpr const double m_1 = 0.000137;
-        static constexpr const double m_2 = 0.000137;
-        static constexpr const double t_p = (m_1 + m_2) * (m_1 + m_2);
+        static constexpr const double m_1 = 0.137; //GeV
+        static constexpr const double m_2 = 0.137; //GeV
+        static constexpr const double t_p = (m_1 + m_2) * (m_1 + m_2); // = 1.87e-8
         static constexpr const double t_m = (m_1 - m_2) * (m_1 - m_2);
         static constexpr const double Q2  = 2.0;
         static constexpr const bool has_scalar_form_factor = false;
@@ -155,7 +155,7 @@ namespace eos
                 const auto series   = this->series_p(z);
                 const auto asymptotics = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z);
 
-                return phi * blaschke * series * asymptotics;
+                return 1.0 / (phi * blaschke) * series * asymptotics;
             }
 
             /* f_T */
