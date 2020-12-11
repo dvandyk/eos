@@ -44,32 +44,6 @@ class ParametricEGJvD2020Test :
             static const double eps = 1e-5;
 
             Parameters p = Parameters::Defaults();
-            p["0->pipi::a_+^0@EGJvD2020"] = 0.5; // enter four agreed upon parameters of a test formfactor
-            p["0->pipi::a_+^1@EGJvD2020"] = 0.25;
-            p["0->pipi::a_+^2@EGJvD2020"] = 0.125;
-            p["0->pipi::a_+^3@EGJvD2020"] = 0.0625;
-
-            /* f_+ */
-            {
-                std::shared_ptr<FormFactors<VacuumToPP>> ff = FormFactorFactory<VacuumToPP>::create("0->pipi::EGJvD2020", p, Options{ });
-
-                
-                //TEST_CHECK_NEARLY_EQUAL( 0.17,      real(ff->f_p(0.2)),   eps); //TODO: enter proper values
-                //TEST_CHECK_NEARLY_EQUAL( 0.17,      imag(ff->f_p(0.2)),   eps); //TODO: enter proper values
-                
-                TEST_CHECK_NEARLY_EQUAL( -0.13104714470397733,      real(ff->f_p(0.5)),   eps); //TODO: enter proper values
-                TEST_CHECK_NEARLY_EQUAL( +0.7154340963332151,      imag(ff->f_p(0.5)),   eps); //TODO: enter proper values
-                
-                //TEST_CHECK_NEARLY_EQUAL( 0.17,      real(ff->f_p(0.7)),   eps); //TODO: enter proper values
-                //TEST_CHECK_NEARLY_EQUAL( 0.17,      imag(ff->f_p(0.7)),   eps); //TODO: enter proper values
-                
-            }
-        }
-        virtual void run() const
-        {
-            static const double eps = 1e-5;
-
-            Parameters p = Parameters::Defaults();
             p["0->pipi::a_+^0@EGJvD2020"] = 1.0;
             p["0->pipi::a_+^1@EGJvD2020"] = 0.0;
             p["0->pipi::a_+^2@EGJvD2020"] = 0.0;
