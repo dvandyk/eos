@@ -106,14 +106,14 @@ namespace eos
                 // TODO (->EE): implement phi_+
                 // TODO implement proper pi and chi(Q2)
                 // TODO Is q2 implemented properly here? apperantly not, but how to fix this
-                const double t_p = Process_::t_p;
-                const double t_0 = this->_t_0;
-                const double tfactor = 1.0 - t_0 / t_p;
-                const double chi = 0.00405; //GeV^-2 as a makeshift value
-                const double Q2 = Process_::Q2;
+                const double t_p = Process_::t_p;           // = 1.87e-8
+                const double t_0 = this->_t_0;              // = -2.0
+                const double tfactor = 1.0 - t_0 / t_p;     // = 1.0 for t_0 = 0
+                const double chi = 0.00405;                 //GeV^-2 as a makeshift value
+                const double Q2 = Process_::Q2;             // = 2.0
 
-                const double part0 = 1.0 / sqrt(12.0 * M_PI * t_p * chi);
-                const complex<double> part1 = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z) * pow(tfactor, 1.25);
+                const double part0 = 1.0 / sqrt(12.0 * M_PI * t_p * chi);                                               // = 18714.84031
+                const complex<double> part1 = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z) * pow(tfactor, 1.25);               // -> 0 (z->1)
                 const complex<double> part2 = pow(sqrt(tfactor) * (1.0 + z) + (1.0 - z), -0.5);
                 const complex<double> part3 = pow(sqrt(1.0 + Q2 / t_p) * (1.0 - z) + sqrt(tfactor) * (1.0 + z), -3.0);
 
@@ -224,7 +224,7 @@ namespace eos
                 const double chi = 0.00405; //GeV^-2 as a makeshift value
                 const double Q2 = Process_::Q2;
 
-                const double part0 = 1.0 / sqrt(12.0 * M_PI * t_p * chi);
+                const double part0 = 1.0 / sqrt(12.0 * M_PI * t_p * chi); // = 
                 const double part1 = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z) * pow(tfactor, 1.25);
                 const double part2 = pow(sqrt(tfactor) * (1.0 + z) + (1.0 - z), -0.5);
                 const double part3 = pow(sqrt(1.0 + Q2 / t_p) * (1.0 - z) + sqrt(tfactor) * (1.0 + z), -3.0);
@@ -266,7 +266,7 @@ namespace eos
                 const auto series   = this->series_p(z);
                 const auto asymptotics = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z);
 
-                return phi * blaschke * series * asymptotics;
+                return 1.0 / (phi * blaschke) * series * asymptotics;
             }
 
             /* f_T */
