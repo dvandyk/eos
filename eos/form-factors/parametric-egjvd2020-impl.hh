@@ -73,12 +73,17 @@ namespace eos
             {   
                 const double t_p = Process_::t_p;
                 const double t_0 = this->_t_0;
-
-                // assumes that Re(q2) > t_p and Im(q2) < 0 such that Im(z) > 0.
-                const double re = (q2 + t_0 - 2.0 * t_p) / (q2 - t_0);
-                const double im = 2.0 * sqrt((q2 - t_p) * (t_p - t_0)) / (q2 - t_0);
-
-                return complex<double>{ re, im };
+                if (q2 > t_p) {
+                    // assumes that Re(q2) > t_p and Im(q2) < 0 such that Im(z) > 0.
+                    const double re = (q2 + t_0 - 2.0 * t_p) / (q2 - t_0);
+                    const double im = 2.0 * sqrt((q2 - t_p) * (t_p - t_0)) / (q2 - t_0);
+                    return complex<double>{ re, im };
+                } else {
+                    const double a = sqrt(t_p - t_0);
+                    const double re = (sqrt(t_p - q2) - a) / (sqrt(t_p - q2) + a);
+                    const double im = 0.0;
+                    return complex<double>{ re, im };
+                }
             }
 
         public:
