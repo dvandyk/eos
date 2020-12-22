@@ -19,7 +19,8 @@ CONSTRAINTS_FILES = \
 	Lb-to-L-ll.yaml \
 	Lb-to-Lq-form-factors.yaml \
 	miscellaneous.yaml \
-	vacuum-to-PP-form-factors.yaml
+	vacuum-to-PP-form-factors.yaml\
+	P-to-P-form-factors.yaml
 
 EXTRA_DIST = $(CONSTRAINTS_FILES)
 
