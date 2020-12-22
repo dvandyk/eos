@@ -1284,7 +1284,7 @@ namespace eos
                 make_form_factor_adapter("0->pipi::Abs{f_+}^2(q2)", R"(|f_+^{0\to \pi\pi}(q^2)|^2)",
                         &FormFactors<VacuumToPP>::abs2_f_p, std::make_tuple("q2")),
                 
-                make_form_factor_adapter("0->pipi::f_+(q2)", R"(f_+^{0\to \pi\pi}(q^2))",
+                make_form_factor_adapter("pi->pi::f_+(q2)", R"(f_+^{\pi \to \pi}(q^2))",
                         &FormFactors<PToP>::f_p, std::make_tuple("q2")),
             }
         };
