@@ -16,7 +16,24 @@
 # Data: 1985
 # Project: parametric-egjvd2020
 #
-# {{{
+# {
+0->pipi::Abs{f_+}^2[q2]@QFT: #pesudo measurement accounting for the QFT demand that the form factor is unity at q2=0;
+    type: MultivariateGaussian
+    dim: 1
+    observables:
+        - 0->pipi::Abs{f_+}^2(q2)
+    kinematics:
+        - {q2: 0.0}
+    options:
+        - {form-factors: EGJvD2020}
+    means:         [1.0]
+    sigma-stat-hi: [0.0]
+    sigma-stat-lo: [0.0]
+    sigma-sys:     [0.001]
+    correlations:
+        - [ 1.0]
+    dof: 1
+
 0->pipi::Abs{f_+}^2[q2]@OLYA:1985: #[Variable]
     type: MultivariateGaussian(Covariance)
     dim: 79 #correspondes to number of meassurement sets?
