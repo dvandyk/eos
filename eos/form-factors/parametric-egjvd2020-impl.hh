@@ -183,6 +183,7 @@ namespace eos
                 const auto phi      = this->phi_p(z);
                 const auto blaschke = this->blaschke_p(z);
                 const auto series   = this->series_p(z);
+                const auto asymptotics = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z);
                 const auto K        = (5 * M_PI) / 64;
 
                 return 1.0 / (phi * blaschke) * asymptotics * K * series;
