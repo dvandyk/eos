@@ -1836,7 +1836,7 @@ namespace eos
         if (e == entries.end())
             throw UnknownConstraintError(name);
 
-        return e->second->make(e->first, options);
+        return e->second->make(e->first, name.options() + options); // options supersede name.options
     }
 
     template <>
