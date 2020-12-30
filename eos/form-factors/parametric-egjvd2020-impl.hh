@@ -50,6 +50,97 @@ namespace eos
         static constexpr const double t_m = (m_1 - m_2) * (m_1 - m_2);
         static constexpr const double Q2  = 2.0;
         static constexpr const bool has_scalar_form_factor = false;
+        static constexpr const auto asymptotic_case_switch = 1; // makeshift implementation of switching the different ayptotic behaviours
+    };
+
+    template <typename Process_, typename Transition_, bool has_scalar_form_factor_> class EGJvD2020UnitarityBoundsBase;
+
+    template <typename Process_> class EGJvD2020UnitarityBoundsBase<Process_, VacuumToPP, false> :
+        public virtual ParameterUser
+    {
+        private:
+            // parameters for form factors f_+ and f_T
+            std::array<UsedParameter, 10u> _a_fp, _a_ft;
+
+            std::string _par_name(const std::string & ff, const std::string & index) const
+            {
+                return stringify(Process_::label) + "::" + "a_" + ff + "^" + index + "@EGJvD2020";
+            }
+        public:
+            EGJvD2020UnitarityBoundsBase(const Parameters & p, const Options & o) :
+                _a_fp{{
+                    UsedParameter(p[_par_name("+", "0")], *this),
+                    UsedParameter(p[_par_name("+", "1")], *this),
+                    UsedParameter(p[_par_name("+", "2")], *this),
+                    UsedParameter(p[_par_name("+", "3")], *this),
+                    UsedParameter(p[_par_name("+", "4")], *this),
+
+                    UsedParameter(p[_par_name("+", "5")], *this),
+                    UsedParameter(p[_par_name("+", "6")], *this),
+                    UsedParameter(p[_par_name("+", "7")], *this),
+                    UsedParameter(p[_par_name("+", "8")], *this),
+                    UsedParameter(p[_par_name("+", "9")], *this)
+                }},
+                _a_ft{{
+                    UsedParameter(p[_par_name("T", "0")], *this),
+                    UsedParameter(p[_par_name("T", "1")], *this),
+                    UsedParameter(p[_par_name("T", "2")], *this),
+                    UsedParameter(p[_par_name("T", "3")], *this),
+                    UsedParameter(p[_par_name("T", "4")], *this),
+
+                    UsedParameter(p[_par_name("T", "5")], *this),
+                    UsedParameter(p[_par_name("T", "6")], *this),
+                    UsedParameter(p[_par_name("T", "7")], *this),
+                    UsedParameter(p[_par_name("T", "8")], *this),
+                    UsedParameter(p[_par_name("T", "9")], *this)
+                }}
+            {
+            }
+
+            ~EGJvD2020UnitarityBoundsBase() = default;
+
+            double bound_1m_prior() const
+            {
+                const double value = bound_1m();
+
+                if (value < 0.0)
+                {
+                    throw InternalError("Contribution to 1^- unitarity bound must be positive; found to be negative!");
+                }
+                else if ((0.0 <= value) && (value < 1.0))
+                {
+                    return 0.0;
+                }
+                else
+                {
+                    // add an r-fit like penalty
+                    static const double sigma = 0.05; // TODO preliminary assuming 5% uncertainty
+                    return -pow((value - 1.0) / sigma, 2) / 2.0;
+                }
+            }
+
+            double bound_1m() const
+            {
+                double sum = 0.0;
+                for (auto & a : _a_fp)
+                {
+                    sum += a * a;
+                }
+
+                return sum;
+            }
+    };
+
+    template <typename Process_> class EGJvD2020UnitarityBounds:
+        public EGJvD2020UnitarityBoundsBase<Process_, typename Process_::Transition, Process_::has_scalar_form_factor>
+    {
+        public:
+            EGJvD2020UnitarityBounds(const Parameters & p, const Options & o) :
+                EGJvD2020UnitarityBoundsBase<Process_, typename Process_::Transition, Process_::has_scalar_form_factor>(p, o)
+            {
+            }
+
+            ~EGJvD2020UnitarityBounds() = default;
     };
 
     template <typename Process_, typename Transition_, bool has_scalar_form_factor_> class EGJvD2020FormFactorBase;
