@@ -25,6 +25,7 @@
 namespace eos
 {
     template <typename Process_> class EGJvD2020FormFactors;
+    template <typename Process_> class EGJvD2020UnitarityBounds;
 
     struct VacuumToPiPi;
 }

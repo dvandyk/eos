@@ -27,4 +27,5 @@ namespace eos
 
     template class EGJvD2020FormFactors<PiToPi>;
     template class EGJvD2020FormFactors<VacuumToPiPi>;
+    template class EGJvD2020UnitarityBounds<VacuumToPiPi>;
 }

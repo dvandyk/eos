@@ -27,6 +27,7 @@
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/observables.hh>
+#include <eos/form-factors/parametric-egjvd2020-impl.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/utils/concrete_observable.hh>
@@ -1286,6 +1287,12 @@ namespace eos
                 
                 make_form_factor_adapter("pi->pi::f_+(q2)", R"(f_+^{\pi \to \pi}(q^2))",
                         &FormFactors<PToP>::f_p, std::make_tuple("q2")),
+
+                make_observable("q->q::Bound[1^-]@EGJvD:2020", R"(B^{q\to q}_{1^-})",
+                        &EGJvD2020UnitarityBounds<VacuumToPiPi>::bound_1m),
+
+                make_observable("q->q::Prior[1^-]@EGJvD:2020", R"(B^{q\to q}_{1^-})",
+                        &EGJvD2020UnitarityBounds<VacuumToPiPi>::bound_1m_prior),
             }
         };
 
