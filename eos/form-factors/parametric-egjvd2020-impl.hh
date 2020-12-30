@@ -39,6 +39,7 @@ namespace eos
         static constexpr const double t_m = (m_1 - m_2) * (m_1 - m_2);
         static constexpr const double Q2  = 2.0;
         static constexpr const bool has_scalar_form_factor = false;
+        static constexpr const auto asymptotic_case_switch = 1; // makeshift implementation of switching the different ayptotic behaviours
     };
 
     struct PiToPi {
@@ -160,10 +161,9 @@ namespace eos
                 return stringify(Process_::label) + "::" + "a_" + ff + "^" + index + "@EGJvD2020";
             }
 
-            complex<double> _z(const double & q2) const
+            complex<double> _z(const double & q2, const double & t_0) const
             {   
                 const double t_p = Process_::t_p;
-                const double t_0 = this->_t_0;
                 if (q2 > t_p) {
                     // assumes that Re(q2) > t_p and Im(q2) < 0 such that Im(z) > 0.
                     const double re = (q2 + t_0 - 2.0 * t_p) / (q2 - t_0);
@@ -175,6 +175,11 @@ namespace eos
                     const double im = 0.0;
                     return complex<double>{ re, im };
                 }
+            }
+
+            complex<double> _z(const double & q2) const
+            {
+                return _z(q2, this->_t_0);
             }
 
         public:
@@ -215,22 +220,21 @@ namespace eos
             {
                 // TODO (->EE): implement phi_+
                 // TODO implement proper pi and chi(Q2)
-                // TODO Is q2 implemented properly here? apperantly not, but how to fix this
                 const double t_p = Process_::t_p;           // = 1.87e-8
                 const double t_0 = this->_t_0;              // = -2.0
                 const double tfactor = 1.0 - t_0 / t_p;     // = 1.0 for t_0 = 0
                 const double chi = 0.00405;                 //GeV^-2 as a makeshift value
                 const double Q2 = Process_::Q2;             // = 2.0
 
-                const double part0 = 1.0 / sqrt(12.0 * M_PI * t_p * chi);                                               // = 18714.84031
-                const complex<double> part1 = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z) * pow(tfactor, 1.25);               // -> 0 (z->1)
+                const double part0 = 1.0 / sqrt(12.0 * M_PI * t_p * chi);
+                const complex<double> part1 = /*(1.0 + z) * (1.0 + z) * sqrt(1.0 - z)*/ pow(tfactor, 1.25);
                 const complex<double> part2 = pow(sqrt(tfactor) * (1.0 + z) + (1.0 - z), -0.5);
                 const complex<double> part3 = pow(sqrt(1.0 + Q2 / t_p) * (1.0 - z) + sqrt(tfactor) * (1.0 + z), -3.0);
 
                 return part0 * part1 * part2 * part3;
             }
 
-            complex<double> blaschke_p(const complex<double> & /*z*/) const
+            complex<double> blaschke_p(const double & q2) const
             {
                 return 1.0;
             }
@@ -239,30 +243,38 @@ namespace eos
             {
                 complex<double> result = 0.0;
 
-                // TODO(->EE): implement truncated series. How are the coefficients supposed to be fitted.
-                // static const std::array<double, 4u> norm
-                // {{
-                //     1.0,
-                //     std::sqrt((1.0 - (3.0 / 7.0) * (3.0 / 7.0))),
-                //     std::sqrt((1.0 - (3.0 / 7.0) * (3.0 / 7.0)) * (1.0 - (5.0 / 9.0) * (5.0 / 9.0))),
-                //     std::sqrt((1.0 - (3.0 / 7.0) * (3.0 / 7.0)) * (1.0 - (5.0 / 9.0) * (5.0 / 9.0)) * (1.0 - (3.0 / 11.0) * (3.0 / 11.0)))
-                // }}; 
+                //TODO: properly implement the options for the different polynomial choices
 
-                // result += _a_fp[0]() * (1.0) / norm[0];
-                // result += _a_fp[1]() * (- 3.0 / 7.0 + 1.0 * z) / norm[1];
-                // result += _a_fp[2]() * (5.0 / 9.0 - 2.0 / 3.0 * z + 1.0 * z * z) / norm[2];
-                // result += _a_fp[3]() * (- 3.0 / 11.0 + 73.0 / 99.0 * z - 9.0 / 11.0 * z * z + 1.0 * z * z * z) / norm[3];
+               switch (Process_::asymptotic_case_switch) //intermediate solution: DONT FORGET TO APPLY THIS OPTION BELOW TOO
+                {
+                    case 0:
+                        result += _a_fp[0]() * (1.0 * pow(z, 0));
+                        result += _a_fp[1]() * (-3.0 / 7.0 * pow(z, 0) + 1.0 * pow(z, 1));
+                        result += _a_fp[2]() * (5.0 / 9.0 * pow(z, 0) + -2.0 / 3.0 * pow(z, 1) + 1.0 * pow(z, 2));
+                        result += _a_fp[3]() * (-3.0 / 11.0 * pow(z, 0) + 73.0 / 99.0 * pow(z, 1) + -9.0 / 11.0 * pow(z, 2) + 1.0 * pow(z, 3));
+                        result += _a_fp[4]() * (5.0 / 13.0 * pow(z, 0) + -84.0 / 143.0 * pow(z, 1) + 146.0 / 143.0 * pow(z, 2) + -12.0 / 13.0 * pow(z, 3) + 1.0 * pow(z, 4));
+                        result += _a_fp[5]() * (-1.0 / 5.0 * pow(z, 0) + 37.0 / 65.0 * pow(z, 1) + -566.0 / 715.0 * pow(z, 2) + 74.0 / 65.0 * pow(z, 3) + -1.0 / 1.0 * pow(z, 4) + 1.0 * pow(z, 5));
+                        result += _a_fp[6]() * (5.0 / 17.0 * pow(z, 0) + -42.0 / 85.0 * pow(z, 1) + 999.0 / 1105.0 * pow(z, 2) + -1132.0 / 1105.0 * pow(z, 3) + 111.0 / 85.0 * pow(z, 4) + -18.0 / 17.0 * pow(z, 5) + 1.0 * pow(z, 6));
+                        result += _a_fp[7]() * (-3.0 / 19.0 * pow(z, 0) + 149.0 / 323.0 * pow(z, 1) + -1131.0 / 1615.0 * pow(z, 2) + 22377.0 / 20995.0 * pow(z, 3) + -377.0 / 323.0 * pow(z, 4) + 447.0 / 323.0 * pow(z, 5) + -21.0 / 19.0 * pow(z, 6) + 1.0 * pow(z, 7));
+                        result += _a_fp[8]() * (5.0 / 21.0 * pow(z, 0) + -8.0 / 19.0 * pow(z, 1) + 1788.0 / 2261.0 * pow(z, 2) + -33176.0 / 33915.0 * pow(z, 3) + 14918.0 / 11305.0 * pow(z, 4) + -3016.0 / 2261.0 * pow(z, 5) + 596.0 / 399.0 * pow(z, 6) + -8.0 / 7.0 * pow(z, 7) + 1.0 * pow(z, 8));
+                        result += _a_fp[9]() * (-3.0 / 23.0 * pow(z, 0) + 187.0 / 483.0 * pow(z, 1) + -1884.0 / 3059.0 * pow(z, 2) + 50172.0 / 52003.0 * pow(z, 3) + -179462.0 / 156009.0 * pow(z, 4) + 75258.0 / 52003.0 * pow(z, 5) + -628.0 / 437.0 * pow(z, 6) + 748.0 / 483.0 * pow(z, 7) + -27.0 / 23.0 * pow(z, 8) + 1.0 * pow(z, 9));
 
-                result += _a_fp[0]() * (1.0);
-                result += _a_fp[1]() * (-0.4743416490252569 + 1.1067971810589328 * z);
-                result += _a_fp[2]() * (0.7395099728874526  + -0.8874119674649428 * z + 1.3311179511974138 * z  * z);
-                result += _a_fp[3]() * (-0.3773364712030903 + 1.0202060147342804 * z + -1.1320094136092695 * z  * z + 1.383567061077995 * z  * z  * z);
-                result += _a_fp[4]() * (0.5764862754491666  + -0.8804517661405453 * z + 1.5303090221014224 * z  * z + -1.3835670610779975 * z  * z  * z + 1.4988643161678288 * z  * z  * z  * z);
-                result += _a_fp[5]() * (-0.30595439735640384+ 0.8707932847836088 * z + -1.2109803419840846 * z  * z + 1.7415865695672144 * z  * z  * z + -1.5297719867820112 * z  * z  * z  * z + 1.5297719867820083 * z  * z  * z  * z  * z);
-                result += _a_fp[6]() * (0.4707547867785388  + -0.7908680417879451 * z + 1.4470277907438744 * z  * z + -1.6396751342563207 * z  * z  * z + 2.0901512532967006 * z  * z  * z  * z + -1.6947172324027273 * z  * z  * z  * z  * z + 1.6005662750470162 * z  * z  * z  * z  * z  * z);
-                result += _a_fp[7]() * (-0.25593140731099673+ 0.7477211703791818 * z + -1.1351310653675895 * z  * z + 1.7275949023825377 * z  * z  * z + -1.8918851089459727 * z  * z  * z  * z + 2.2431635111375248 * z  * z  * z  * z  * z + -1.7915198511769457 * z  * z  * z  * z  * z  * z + 1.6208989129696116 * z  * z  * z  * z  * z  * z  * z);
-                result += _a_fp[8]() * (0.39735553782661237 + -0.7026918984723276 * z + 1.319761674861889 * z  * z + -1.6325284610446684 * z  * z  * z + 2.2022600297080053 * z  * z  * z  * z + -2.2261751741518077 * z  * z  * z  * z  * z + 2.4928831636279853 * z  * z  * z  * z  * z  * z + -1.907306581567715 * z  * z  * z  * z  * z  * z  * z + 1.6688932588717427 * z  * z  * z  * z  * z  * z  * z  * z);
-                result += _a_fp[9]() * (-0.2195574324091433 + 0.6517022200080864 * z + -1.0367072748341433 * z  * z + 1.624006412919271 * z  * z  * z + -1.9363219782303405 * z  * z  * z  * z + 2.436009619378891 * z  * z  * z  * z  * z + -2.418983641279637 * z  * z  * z  * z  * z  * z + 2.606808880032302 * z  * z  * z  * z  * z  * z  * z + -1.9760168916822334 * z  * z  * z  * z  * z  * z  * z  * z + 1.6832736484700404 * z  * z  * z  * z  * z  * z  * z  * z  * z);
+                        break;
+
+                    case 1:
+                        result += _a_fp[0]() * (1.0 * pow(z, 0));
+                        result += _a_fp[1]() * (1.0 / 11.0 * pow(z, 0) + 1.0 * pow(z, 1));
+                        result += _a_fp[2]() * (9.0 / 13.0 * pow(z, 0) + 2.0 / 13.0 * pow(z, 1) + 1.0 * pow(z, 2));
+                        result += _a_fp[3]() * (1.0 / 15.0 * pow(z, 0) + 137.0 / 195.0 * pow(z, 1) + 1.0 / 5.0 * pow(z, 2) + 1.0 * pow(z, 3));
+                        result += _a_fp[4]() * (9.0 / 17.0 * pow(z, 0) + 44.0 / 255.0 * pow(z, 1) + 274.0 / 255.0 * pow(z, 2) + 4.0 / 17.0 * pow(z, 3) + 1.0 * pow(z, 4));
+                        result += _a_fp[5]() * (1.0 / 19.0 * pow(z, 0) + 175.0 / 323.0 * pow(z, 1) + 74.0 / 323.0 * pow(z, 2) + 350.0 / 323.0 * pow(z, 3) + 5.0 / 19.0 * pow(z, 4) + 1.0 * pow(z, 5));
+                        result += _a_fp[6]() * (3.0 / 7.0 * pow(z, 0) + 22.0 / 133.0 * pow(z, 1) + 325.0 / 323.0 * pow(z, 2) + 740.0 / 2261.0 * pow(z, 3) + 25.0 / 19.0 * pow(z, 4) + 2.0 / 7.0 * pow(z, 5) + 1.0 * pow(z, 6));
+                        result += _a_fp[7]() * (1.0 / 23.0 * pow(z, 0) + 71.0 / 161.0 * pow(z, 1) + 681.0 / 3059.0 * pow(z, 2) + 53065.0 / 52003.0 * pow(z, 3) + 1135.0 / 3059.0 * pow(z, 4) + 213.0 / 161.0 * pow(z, 5) + 7.0 / 23.0 * pow(z, 6) + 1.0 * pow(z, 7));
+                        result += _a_fp[8]() * (9.0 / 25.0 * pow(z, 0) + 88.0 / 575.0 * pow(z, 1) + 3692.0 / 4025.0 * pow(z, 2) + 5448.0 / 15295.0 * pow(z, 3) + 21226.0 / 15295.0 * pow(z, 4) + 1816.0 / 4025.0 * pow(z, 5) + 852.0 / 575.0 * pow(z, 6) + 8.0 / 25.0 * pow(z, 7) + 1.0 * pow(z, 8));
+                        result += _a_fp[9]() * (1.0 / 27.0 * pow(z, 0) + 251.0 / 675.0 * pow(z, 1) + 1076.0 / 5175.0 * pow(z, 2) + 580.0 / 621.0 * pow(z, 3) + 24046.0 / 58995.0 * pow(z, 4) + 290.0 / 207.0 * pow(z, 5) + 7532.0 / 15525.0 * pow(z, 6) + 1004.0 / 675.0 * pow(z, 7) + 1.0 / 3.0 * pow(z, 8) + 1.0 * pow(z, 9));
+
+                        break;
+                }
 
                 return result;
             }
@@ -270,14 +282,27 @@ namespace eos
             virtual complex<double> f_p(const double & q2) const
             {
                 const auto z = _z(q2);
-
+                //return this->phi_p(z);
                 const auto phi      = this->phi_p(z);
-                const auto blaschke = this->blaschke_p(z);
+                const auto blaschke = this->blaschke_p(q2);
                 const auto series   = this->series_p(z);
-                const auto asymptotics = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z);
+                complex<double> correction_to_asymptotics;
+                switch (Process_::asymptotic_case_switch)
+                {
+                    case 0: // The asymptotics used by Buck and Lebed
+                        correction_to_asymptotics = 1.0;
+                        break;
+                    case 1: // correct asyptotic behaviour
+                        correction_to_asymptotics = pow(1.0 - z, 5.0 / 2.0 - 1.0 / 2.0);
+                        break;
+                    default:
+                        correction_to_asymptotics = 1.0;
+                        break;
+                }
                 const auto K        = (5 * M_PI) / 64;
 
-                return 1.0 / (phi * blaschke) * asymptotics * K * series;
+                return 1.0 / (phi * blaschke) * correction_to_asymptotics * sqrt(K) * series; //todo combine asymptotics and phi into one
+                // return 1.0 / (phi * blaschke) /* asymptotics*/ * sqrt(K) * series; //todo combine asymptotics and phi into one
             }
 
             /* f_T */
@@ -308,14 +333,18 @@ namespace eos
                 return stringify(Process_::label) + "::" + "a_" + ff + "^" + index + "@EGJvD2020";
             }
 
-            double _z(const double & q2) const
+            double _z(const double & q2, const double & t_0) const
             {
                 const double t_p = Process_::t_p;
-                const double t_0 = this->_t_0;
                 const double a = sqrt(t_p - t_0);
                 const double z = (sqrt(t_p - q2) - a) / (sqrt(t_p - q2) + a);
 
                 return z;
+            }
+
+            double _z(const double & q2) const
+            {
+                return _z(q2, this->_t_0);
             }
 
         public:
@@ -361,14 +390,14 @@ namespace eos
                 const double Q2 = Process_::Q2;
 
                 const double part0 = 1.0 / sqrt(12.0 * M_PI * t_p * chi); // = 
-                const double part1 = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z) * pow(tfactor, 1.25);
+                const double part1 = /*(1.0 + z) * (1.0 + z) * sqrt(1.0 - z) */ pow(tfactor, 1.25);
                 const double part2 = pow(sqrt(tfactor) * (1.0 + z) + (1.0 - z), -0.5);
                 const double part3 = pow(sqrt(1.0 + Q2 / t_p) * (1.0 - z) + sqrt(tfactor) * (1.0 + z), -3.0);
 
                 return part0 * part1 * part2 * part3;
             }
 
-            double blaschke_p(const double & /*z*/) const
+            double blaschke_p(const double & q2) const
             {
                 return 1.0;
             }
@@ -377,30 +406,36 @@ namespace eos
             {
                 double result = 0.0;
 
-                // static const std::array<double, 4u> norm
-                // {{
-                //     1.0,
-                //     std::sqrt((1.0 - (3.0 / 7.0) * (3.0 / 7.0))),
-                //     std::sqrt((1.0 - (3.0 / 7.0) * (3.0 / 7.0)) * (1.0 - (5.0 / 9.0) * (5.0 / 9.0))),
-                //     std::sqrt((1.0 - (3.0 / 7.0) * (3.0 / 7.0)) * (1.0 - (5.0 / 9.0) * (5.0 / 9.0)) * (1.0 - (3.0 / 11.0) * (3.0 / 11.0)))
-                // }}; 
+                switch (Process_::asymptotic_case_switch) //intermediate solution: DONT FORGET TO APPLY THIS OPTION ABOVE TOO
+                {
+                    case 0:
+                        result += _a_fp[0]() * (1.0 * pow(z, 0));
+                        result += _a_fp[1]() * (-3.0 / 7.0 * pow(z, 0) + 1.0 * pow(z, 1));
+                        result += _a_fp[2]() * (5.0 / 9.0 * pow(z, 0) + -2.0 / 3.0 * pow(z, 1) + 1.0 * pow(z, 2));
+                        result += _a_fp[3]() * (-3.0 / 11.0 * pow(z, 0) + 73.0 / 99.0 * pow(z, 1) + -9.0 / 11.0 * pow(z, 2) + 1.0 * pow(z, 3));
+                        result += _a_fp[4]() * (5.0 / 13.0 * pow(z, 0) + -84.0 / 143.0 * pow(z, 1) + 146.0 / 143.0 * pow(z, 2) + -12.0 / 13.0 * pow(z, 3) + 1.0 * pow(z, 4));
+                        result += _a_fp[5]() * (-1.0 / 5.0 * pow(z, 0) + 37.0 / 65.0 * pow(z, 1) + -566.0 / 715.0 * pow(z, 2) + 74.0 / 65.0 * pow(z, 3) + -1.0 / 1.0 * pow(z, 4) + 1.0 * pow(z, 5));
+                        result += _a_fp[6]() * (5.0 / 17.0 * pow(z, 0) + -42.0 / 85.0 * pow(z, 1) + 999.0 / 1105.0 * pow(z, 2) + -1132.0 / 1105.0 * pow(z, 3) + 111.0 / 85.0 * pow(z, 4) + -18.0 / 17.0 * pow(z, 5) + 1.0 * pow(z, 6));
+                        result += _a_fp[7]() * (-3.0 / 19.0 * pow(z, 0) + 149.0 / 323.0 * pow(z, 1) + -1131.0 / 1615.0 * pow(z, 2) + 22377.0 / 20995.0 * pow(z, 3) + -377.0 / 323.0 * pow(z, 4) + 447.0 / 323.0 * pow(z, 5) + -21.0 / 19.0 * pow(z, 6) + 1.0 * pow(z, 7));
+                        result += _a_fp[8]() * (5.0 / 21.0 * pow(z, 0) + -8.0 / 19.0 * pow(z, 1) + 1788.0 / 2261.0 * pow(z, 2) + -33176.0 / 33915.0 * pow(z, 3) + 14918.0 / 11305.0 * pow(z, 4) + -3016.0 / 2261.0 * pow(z, 5) + 596.0 / 399.0 * pow(z, 6) + -8.0 / 7.0 * pow(z, 7) + 1.0 * pow(z, 8));
+                        result += _a_fp[9]() * (-3.0 / 23.0 * pow(z, 0) + 187.0 / 483.0 * pow(z, 1) + -1884.0 / 3059.0 * pow(z, 2) + 50172.0 / 52003.0 * pow(z, 3) + -179462.0 / 156009.0 * pow(z, 4) + 75258.0 / 52003.0 * pow(z, 5) + -628.0 / 437.0 * pow(z, 6) + 748.0 / 483.0 * pow(z, 7) + -27.0 / 23.0 * pow(z, 8) + 1.0 * pow(z, 9));
 
-                // result += _a_fp[0]() * (1.0) / norm[0];
-                // result += _a_fp[1]() * (- 3.0 / 7.0 + 1.0 * z) / norm[1];
-                // result += _a_fp[2]() * (5.0 / 9.0 - 2.0 / 3.0 * z + 1.0 * z * z) / norm[2];
-                // result += _a_fp[3]() * (- 3.0 / 11.0 + 73.0 / 99.0 * z - 9.0 / 11.0 * z * z + 1.0 * z * z * z) / norm[3];
+                        break;
 
-                result += _a_fp[0]() * (1.0);
-                result += _a_fp[1]() * (-0.4743416490252569 + 1.1067971810589328 * z);
-                result += _a_fp[2]() * (0.7395099728874526  + -0.8874119674649428 * z + 1.3311179511974138 * z  * z);
-                result += _a_fp[3]() * (-0.3773364712030903 + 1.0202060147342804 * z + -1.1320094136092695 * z  * z + 1.383567061077995 * z  * z  * z);
-                result += _a_fp[4]() * (0.5764862754491666  + -0.8804517661405453 * z + 1.5303090221014224 * z  * z + -1.3835670610779975 * z  * z  * z + 1.4988643161678288 * z  * z  * z  * z);
-                result += _a_fp[5]() * (-0.30595439735640384+ 0.8707932847836088 * z + -1.2109803419840846 * z  * z + 1.7415865695672144 * z  * z  * z + -1.5297719867820112 * z  * z  * z  * z + 1.5297719867820083 * z  * z  * z  * z  * z);
-                result += _a_fp[6]() * (0.4707547867785388  + -0.7908680417879451 * z + 1.4470277907438744 * z  * z + -1.6396751342563207 * z  * z  * z + 2.0901512532967006 * z  * z  * z  * z + -1.6947172324027273 * z  * z  * z  * z  * z + 1.6005662750470162 * z  * z  * z  * z  * z  * z);
-                result += _a_fp[7]() * (-0.25593140731099673+ 0.7477211703791818 * z + -1.1351310653675895 * z  * z + 1.7275949023825377 * z  * z  * z + -1.8918851089459727 * z  * z  * z  * z + 2.2431635111375248 * z  * z  * z  * z  * z + -1.7915198511769457 * z  * z  * z  * z  * z  * z + 1.6208989129696116 * z  * z  * z  * z  * z  * z  * z);
-                result += _a_fp[8]() * (0.39735553782661237 + -0.7026918984723276 * z + 1.319761674861889 * z  * z + -1.6325284610446684 * z  * z  * z + 2.2022600297080053 * z  * z  * z  * z + -2.2261751741518077 * z  * z  * z  * z  * z + 2.4928831636279853 * z  * z  * z  * z  * z  * z + -1.907306581567715 * z  * z  * z  * z  * z  * z  * z + 1.6688932588717427 * z  * z  * z  * z  * z  * z  * z  * z);
-                result += _a_fp[9]() * (-0.2195574324091433 + 0.6517022200080864 * z + -1.0367072748341433 * z  * z + 1.624006412919271 * z  * z  * z + -1.9363219782303405 * z  * z  * z  * z + 2.436009619378891 * z  * z  * z  * z  * z + -2.418983641279637 * z  * z  * z  * z  * z  * z + 2.606808880032302 * z  * z  * z  * z  * z  * z  * z + -1.9760168916822334 * z  * z  * z  * z  * z  * z  * z  * z + 1.6832736484700404 * z  * z  * z  * z  * z  * z  * z  * z  * z);
+                    case 1:
+                        result += _a_fp[0]() * (1.0 * pow(z, 0));
+                        result += _a_fp[1]() * (1.0 / 11.0 * pow(z, 0) + 1.0 * pow(z, 1));
+                        result += _a_fp[2]() * (9.0 / 13.0 * pow(z, 0) + 2.0 / 13.0 * pow(z, 1) + 1.0 * pow(z, 2));
+                        result += _a_fp[3]() * (1.0 / 15.0 * pow(z, 0) + 137.0 / 195.0 * pow(z, 1) + 1.0 / 5.0 * pow(z, 2) + 1.0 * pow(z, 3));
+                        result += _a_fp[4]() * (9.0 / 17.0 * pow(z, 0) + 44.0 / 255.0 * pow(z, 1) + 274.0 / 255.0 * pow(z, 2) + 4.0 / 17.0 * pow(z, 3) + 1.0 * pow(z, 4));
+                        result += _a_fp[5]() * (1.0 / 19.0 * pow(z, 0) + 175.0 / 323.0 * pow(z, 1) + 74.0 / 323.0 * pow(z, 2) + 350.0 / 323.0 * pow(z, 3) + 5.0 / 19.0 * pow(z, 4) + 1.0 * pow(z, 5));
+                        result += _a_fp[6]() * (3.0 / 7.0 * pow(z, 0) + 22.0 / 133.0 * pow(z, 1) + 325.0 / 323.0 * pow(z, 2) + 740.0 / 2261.0 * pow(z, 3) + 25.0 / 19.0 * pow(z, 4) + 2.0 / 7.0 * pow(z, 5) + 1.0 * pow(z, 6));
+                        result += _a_fp[7]() * (1.0 / 23.0 * pow(z, 0) + 71.0 / 161.0 * pow(z, 1) + 681.0 / 3059.0 * pow(z, 2) + 53065.0 / 52003.0 * pow(z, 3) + 1135.0 / 3059.0 * pow(z, 4) + 213.0 / 161.0 * pow(z, 5) + 7.0 / 23.0 * pow(z, 6) + 1.0 * pow(z, 7));
+                        result += _a_fp[8]() * (9.0 / 25.0 * pow(z, 0) + 88.0 / 575.0 * pow(z, 1) + 3692.0 / 4025.0 * pow(z, 2) + 5448.0 / 15295.0 * pow(z, 3) + 21226.0 / 15295.0 * pow(z, 4) + 1816.0 / 4025.0 * pow(z, 5) + 852.0 / 575.0 * pow(z, 6) + 8.0 / 25.0 * pow(z, 7) + 1.0 * pow(z, 8));
+                        result += _a_fp[9]() * (1.0 / 27.0 * pow(z, 0) + 251.0 / 675.0 * pow(z, 1) + 1076.0 / 5175.0 * pow(z, 2) + 580.0 / 621.0 * pow(z, 3) + 24046.0 / 58995.0 * pow(z, 4) + 290.0 / 207.0 * pow(z, 5) + 7532.0 / 15525.0 * pow(z, 6) + 1004.0 / 675.0 * pow(z, 7) + 1.0 / 3.0 * pow(z, 8) + 1.0 * pow(z, 9));
 
+                        break;
+                }
 
                 return result;
             }
@@ -410,12 +445,25 @@ namespace eos
                 const auto z = _z(q2);
 
                 const auto phi      = this->phi_p(z);
-                const auto blaschke = this->blaschke_p(z);
+                const auto blaschke = this->blaschke_p(q2);
                 const auto series   = this->series_p(z);
-                const auto asymptotics = (1.0 + z) * (1.0 + z) * sqrt(1.0 - z);
+                double correction_to_asymptotics;
+                switch (Process_::asymptotic_case_switch)
+                {
+                    case 0: // The asymptotics used by Buck and Lebed
+                        correction_to_asymptotics = 1.0;
+                        break;
+                    case 1: // correct asyptotic behaviour
+                        correction_to_asymptotics = pow(1.0 - z, 5.0 / 2.0 - 1.0 / 2.0);
+                        break;
+                    default:
+                        correction_to_asymptotics = 1.0;
+                        break;
+                }
                 const auto K        = (5 * M_PI) / 64;
 
-                return 1.0 / (phi * blaschke) * asymptotics * K * series;
+                return 1.0 / (phi * blaschke) * correction_to_asymptotics * sqrt(K) * series;
+                // return 1.0 / (phi * blaschke) /* asymptotics*/ * sqrt(K) * series;
             }
 
             /* f_T */
