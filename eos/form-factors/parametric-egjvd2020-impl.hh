@@ -161,25 +161,34 @@ namespace eos
                 return stringify(Process_::label) + "::" + "a_" + ff + "^" + index + "@EGJvD2020";
             }
 
-            complex<double> _z(const double & q2, const double & t_0) const
-            {   
-                const double t_p = Process_::t_p;
-                if (q2 > t_p) {
-                    // assumes that Re(q2) > t_p and Im(q2) < 0 such that Im(z) > 0.
-                    const double re = (q2 + t_0 - 2.0 * t_p) / (q2 - t_0);
-                    const double im = 2.0 * sqrt((q2 - t_p) * (t_p - t_0)) / (q2 - t_0);
-                    return complex<double>{ re, im };
-                } else {
-                    const double a = sqrt(t_p - t_0);
-                    const double re = (sqrt(t_p - q2) - a) / (sqrt(t_p - q2) + a);
-                    const double im = 0.0;
-                    return complex<double>{ re, im };
-                }
+            complex<double> _z(const double & q2, const complex<double> & t_s) const
+            {
+                const complex<double> t_p = complex<double>{ Process_::t_p, 0.0};
+                const complex<double> t   = complex<double>{ q2, 0.0};
+
+                return (sqrt(t_p - t) - sqrt(t_p - t_s)) / (sqrt(t_p - t) + sqrt(t_p - t_s));
             }
+
+            // complex<double> _z(const double & q2, const double & t_0) const
+            // {
+            //     const double t_p = Process_::t_p;
+            //     if (q2 > t_p) {
+            //         // assumes that Re(q2) > t_p and Im(q2) < 0 such that Im(z) > 0.
+            //         const double re = (q2 + t_0 - 2.0 * t_p) / (q2 - t_0);
+            //         const double im = 2.0 * sqrt((q2 - t_p) * (t_p - t_0)) / (q2 - t_0);
+            //         return complex<double>{ re, im };
+            //     } else {
+            //         const double a = sqrt(t_p - t_0);
+            //         const double re = (sqrt(t_p - q2) - a) / (sqrt(t_p - q2) + a);
+            //         const double im = 0.0;
+            //         return complex<double>{ re, im };
+            //     }
+            // }
 
             complex<double> _z(const double & q2) const
             {
-                return _z(q2, this->_t_0);
+                const complex<double> t_s = complex<double>(this->_t_0, 0.0);
+                return _z(q2, t_s);
             }
 
         public:
@@ -234,7 +243,10 @@ namespace eos
 
             complex<double> blaschke_p(const double & q2) const
             {
-                return 1.0;
+                constexpr const complex<double> t_s_p = complex<double>{0.77 * 0.77, 0.77 * 0.1};
+                constexpr const complex<double> t_s_m = complex<double>{0.77 * 0.77, - 0.77 * 0.1};
+
+                return 1.0 / (_z(q2, t_s_p) * _z(q2, t_s_m));
             }
 
             complex<double> series_p(const complex<double> & z) const
@@ -334,18 +346,28 @@ namespace eos
                 return stringify(Process_::label) + "::" + "a_" + ff + "^" + index + "@EGJvD2020";
             }
 
-            double _z(const double & q2, const double & t_0) const
+            double _z(const double & q2, const complex<double> & t_s) const
             {
-                const double t_p = Process_::t_p;
-                const double a = sqrt(t_p - t_0);
-                const double z = (sqrt(t_p - q2) - a) / (sqrt(t_p - q2) + a);
+                const complex<double> t_p   = complex<double>{ Process_::t_p, 0.0};
+                const complex<double> t     = complex<double>{ q2, 0.0};
+                const complex<double> result= (sqrt(t_p - t) - sqrt(t_p - t_s)) / (sqrt(t_p - t) + sqrt(t_p - t_s));
 
-                return z;
+                return result.real();
             }
+
+            // double _z(const double & q2, const double & t_0) const
+            // {
+            //     const double t_p = Process_::t_p;
+            //     const double a = sqrt(t_p - t_0);
+            //     const double z = (sqrt(t_p - q2) - a) / (sqrt(t_p - q2) + a);
+
+            //     return z;
+            // }
 
             double _z(const double & q2) const
             {
-                return _z(q2, this->_t_0);
+                const complex<double> t_s = complex<double>(this->_t_0, 0.0);
+                return _z(q2, t_s);
             }
 
         public:
@@ -400,7 +422,10 @@ namespace eos
 
             double blaschke_p(const double & q2) const
             {
-                return 1.0;
+                constexpr const complex<double> t_s_p = complex<double>{0.77 * 0.77, 0.77 * 0.1};
+                constexpr const complex<double> t_s_m = complex<double>{0.77 * 0.77, - 0.77 * 0.1};
+
+                return 1.0 / (_z(q2, t_s_p) * _z(q2, t_s_m));
             }
 
             double series_p(const double & z) const
