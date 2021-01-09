@@ -3240,6 +3240,67 @@ groups:
           max:     +1.0
           latex:    '$a_+^9$'
           comments: ''
+      '0->pipi::a_+^10@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^10$'
+          comments: ''
+      '0->pipi::a_+^11@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^11$'
+          comments: ''
+      '0->pipi::a_+^12@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^12$'
+          comments: ''
+      '0->pipi::a_+^13@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^13$'
+          comments: ''
+      '0->pipi::a_+^14@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^14$'
+          comments: ''
+      '0->pipi::a_+^15@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^15$'
+          comments: ''
+      '0->pipi::a_+^16@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^16$'
+          comments: ''
+      '0->pipi::a_+^17@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^17$'
+          comments: ''
+      '0->pipi::a_+^18@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^18$'
+          comments: ''
+      '0->pipi::a_+^19@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_+^19$'
+          comments: ''
+
       '0->pipi::a_T^0@EGJvD2020' :
           central: +0.0
           min:     -1.0
@@ -3288,7 +3349,7 @@ groups:
           max:     +1.0
           latex:    '$a_T^7$'
           comments: ''
-        '0->pipi::a_T^8@EGJvD2020' :
+      '0->pipi::a_T^8@EGJvD2020' :
           central: +0.0
           min:     -1.0
           max:     +1.0
@@ -3300,10 +3361,77 @@ groups:
           max:     +1.0
           latex:    '$a_T^9$'
           comments: ''
-      '0->pipi::t_0@EGJvD2020' :
+      '0->pipi::a_T^10@EGJvD2020' :
           central: +0.0
-          min:     -2.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^10$'
+          comments: ''
+      '0->pipi::a_T^11@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^11$'
+          comments: ''
+      '0->pipi::a_T^12@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^12$'
+          comments: ''
+      '0->pipi::a_T^13@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^13$'
+          comments: ''
+      '0->pipi::a_T^14@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^14$'
+          comments: ''
+      '0->pipi::a_T^15@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^15$'
+          comments: ''
+      '0->pipi::a_T^16@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^16$'
+          comments: ''
+      '0->pipi::a_T^17@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^17$'
+          comments: ''
+      '0->pipi::a_T^18@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^18$'
+          comments: ''
+      '0->pipi::a_T^19@EGJvD2020' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:    '$a_T^19$'
+          comments: ''
+
+      '0->pipi::t_0@EGJvD2020' :
+          central: -2.0
+          min:     -10.0
           max:     +0.07
           latex:    '$t_0$'
+          comments: ''
+      '0->pipi::M_r2@EGJvD2020' :
+          central: +0.07
+          min:     0.0
+          max:     +0.075076 #4 M_pi²
+          latex:    '$M_R^2$'
           comments: ''
   # }}}
