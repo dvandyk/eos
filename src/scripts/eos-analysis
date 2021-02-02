@@ -26,6 +26,8 @@ import scipy
 import sys
 import yaml
 from types import SimpleNamespace
+import multiprocessing
+import time
 
 # return the value of the environment variable, or a default value if the variable is unset.
 def get_from_env(envvar, default):
@@ -313,7 +315,7 @@ class RNG:
 
 
 # Run sequence
-def cmd_run(args, run_posterior = None): #TODO Generalise
+def cmd_run(args, run_posterior = None, run_chain = 0): #TODO Generalise
     if run_posterior != None:
         args.posterior = run_posterior
 
@@ -323,9 +325,9 @@ def cmd_run(args, run_posterior = None): #TODO Generalise
         analysis_file = args.analysis_file,
         verbose = args.verbose,
         posterior = args.posterior,
-        chain = 0, #todo
-        N = 20, #TODO change to higher value
-        pre_N = 10, #TODO change to higher value
+        chain = run_chain, #todo
+        N = 2500, #TODO change to higher value
+        pre_N = 500, #TODO change to higher value
         preruns = 15,
         stride = 5, # default of parser_sample_mcmc
         base_directory = get_from_env('EOS_BASE_DIRECTORY', './')
@@ -339,7 +341,7 @@ def cmd_run(args, run_posterior = None): #TODO Generalise
         analysis_file = args.analysis_file,
         verbose = args.verbose,
         posterior = args.posterior,
-        points = 1, #TODO change to higher value
+        points = 30, #TODO change to higher value
         init_file = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)))
     )
     # run find-mode subroutine using previous markov chains
@@ -352,6 +354,11 @@ def cmd_run(args, run_posterior = None): #TODO Generalise
     data_dict["pre_N"] = mcmc_args.pre_N
     data_dict["preruns"] = mcmc_args.preruns
     data_dict["points"] = find_mode_args.points
+    saturation = 0
+    for a_n in data_dict["bfp"]:
+        saturation += a_n * a_n
+    data_dict["bound-saturation"] = saturation
+
 
     #output log data
     text = ''
@@ -396,14 +403,39 @@ def cmd_run(args, run_posterior = None): #TODO Generalise
 
     return data_dict
 
+def run_process(process_args, process_posterior, chain_index, PROCESS_COUNT, DataSets):
+    PROCESS_COUNT.value += 1
+    DataSets.append(cmd_run(process_args, run_posterior = process_posterior, run_chain = chain_index))
+    PROCESS_COUNT.value += -1
+
 def cmd_batch_analysis(args):
     #Execute run subroutine for given batch of posteriors
     analysis_file = make_analysis_file(args)
-    DataSets = []
+    #Starting Multiprocessing
+    manager = multiprocessing.Manager()
+    DataSets = manager.list()
+    PROCESS_COUNT = manager.Value('i', 0)
+    MAX_PROCESSES_COUNT = multiprocessing.cpu_count() -1
+    ProcessList = []
     for posterior in analysis_file.batch:
-        print(posterior == None)
-        DataSets.append(cmd_run(args, run_posterior = posterior))
-
+        for i in range(0,32):
+            ProcessList.append(multiprocessing.Process(target = run_process, args = (args, posterior,i, PROCESS_COUNT, DataSets)))
+    counter = 0
+    while counter < len(ProcessList):
+        if PROCESS_COUNT.value < MAX_PROCESSES_COUNT:
+            print("#######################################################################################PROCESS_COUNT:", PROCESS_COUNT.value)
+            ProcessList[counter].start()
+            counter += 1
+            time.sleep(0.1)#needed to allow the Process-counter to update in time
+            print("#######################################################################################PROCESS_COUNT:", PROCESS_COUNT.value)
+        time.sleep(0.5)  #needed to keep the resources used by the loop itself at bay
+    for i in range(len(ProcessList)):
+        ProcessList[i].join()
+    #End of Multiprocessing
+    laTex_output = "posterior & chain index & $p$-value & $\chi^2$ & parameters & measurments & bound saturation" +'\n'
+    for Set in DataSets:
+        laTex_output += str(Set["posterior"]) + " & $" + str(Set["chain"]) + "$ & $" + str(round(Set["p-value"], 2)) + "$ & $" + str(round(Set["total chi^2"], 2)) + "$ & $" + str(Set["total #parameters"]) + "$ & $" + str(Set["total #dof"]) + "$ & $" + str(round(Set["bound-saturation"],2)) + '$' + '\n'
+    print(laTex_output)
 
 # Find mode
 def cmd_find_mode(args, RETURN=False):
@@ -440,7 +472,7 @@ def cmd_find_mode(args, RETURN=False):
     for n, e in gof:
         print('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
     if RETURN == True:
-        return_data_dict = {"total #parameters" : len(bfp.point), "bfp" : bfp.point, "total chi^2" : min_chi2, "p-value" : 100 * (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square())), }
+        return_data_dict = {"total #parameters" : len(bfp.point), "bfp" : bfp.point, "total chi^2" : min_chi2, "p-value" : 100 * (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))}
         total_dof = 0
         for n, e in gof:
             return_data_dict[str(n)] = [e.chi2, e.dof]
