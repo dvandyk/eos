@@ -24,11 +24,13 @@
 #include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/b-decays/b-to-vec-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
+#include <eos/b-decays/test.hh>
 #include <eos/b-decays/lambdab-to-lambdac-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2595-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
 #include <eos/b-decays/inclusive-b-to-u.hh>
 #include <eos/b-decays/properties.hh>
+#include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
 namespace eos
@@ -44,6 +46,11 @@ namespace eos
             {
                 make_observable("B_u->lnu::BR", R"(\mathcal{B}(B^- \to \ell^-\bar\nu))",
                         &BToLeptonNeutrino::branching_ratio),
+
+                make_composite_observable("test::evaluate(q2)", R"(\dots)",
+                        &TestCacheableObservableProvider::prepare,
+                        &TestCacheableObservableProvider::evaluate,
+                        std::make_tuple("q2"))
             }
         );
 
