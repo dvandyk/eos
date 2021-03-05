@@ -1,0 +1,70 @@
+/*
+ * Copyright (c) 2021 Méril Reboud
+ *
+ * This file is part of the EOS project. EOS is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License version 2, as published by the Free Software Foundation.
+ *
+ * EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+#ifndef EXPRESSION_PARSER_HH
+#define EXPRESSION_PARSER_HH 1
+
+#include <boost/spirit/include/qi.hpp>
+#include <boost/spirit/include/phoenix.hpp>
+#include <boost/fusion/adapted.hpp>
+
+#include <eos/utils/expression.hh>
+
+namespace qi    = boost::spirit::qi;
+namespace ascii = boost::spirit::ascii;
+namespace phx   = boost::phoenix;
+
+namespace eos
+{
+    template <typename Iterator>
+    struct ExpressionParser :
+        qi::grammar<Iterator, eos::exp::Expression(), ascii::space_type>
+    {
+        struct MakeBinaryExpression
+        {
+            template<typename, typename, typename>
+            struct result
+            {
+                using type = eos::exp::BinaryExpression;
+            };
+
+            template<typename C, typename L, typename R>
+            eos::exp::BinaryExpression operator()(C op, L const& lhs, R const& rhs) const
+            {
+                return eos::exp::BinaryExpression(op, lhs, rhs);
+            }
+        };
+
+        phx::function<MakeBinaryExpression> makebinary;
+
+        // Constructor
+        ExpressionParser();
+
+        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> expression;
+        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> additive_expr;
+        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> non_additive_expr;
+
+        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> primary_expr;
+        qi::rule<Iterator, eos::exp::ConstantExpression()       , ascii::space_type> constant;
+        qi::rule<Iterator, eos::exp::ObservableNameExpression() , ascii::space_type> observable_name;
+
+        // Destuctor
+        ~ExpressionParser();
+    };
+}
+
+#endif
