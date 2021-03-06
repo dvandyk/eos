@@ -62,6 +62,7 @@ namespace eos
             double normalized_four_differential_decay_width(const double & q2, const double & c_theta_l, const double & c_theta_d, const double & phi) const;
 
             // Integrated Observables
+            class IntermediateResult;
             double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
             double integrated_CPave_branching_ratio(const double & q2_min, const double & q2_max) const;
             
