@@ -1293,6 +1293,9 @@ namespace eos
 
                 make_observable("q->q::Prior[1^-]@EGJvD:2020", R"(B^{q\to q}_{1^-})",
                         &EGJvD2020UnitarityBounds<VacuumToPiPi>::bound_1m_prior),
+
+                make_form_factor_adapter("0->pipi::arg{f_+}(q2)", R"(arg(f_+^{\pi \to \pi}(q^2)))",
+                        &FormFactors<VacuumToPP>::arg_f_p, std::make_tuple("q2")),
             }
         };
 
