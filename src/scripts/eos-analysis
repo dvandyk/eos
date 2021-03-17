@@ -386,11 +386,41 @@ def cmd_run(args, run_posterior = None, run_chain = 0): #TODO Generalise
     yaml_plot_file.write(plotting_string)
     yaml_plot_file.close()
 
-
     # define an object to be used as an argument in plotting process
     plot_args = SimpleNamespace(
         input = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "figure.plot"), #Name of the plot input YAML file
         output = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "plot.pdf") #Name of the plot output PDF file
+    )
+    if not os.path.isfile(plot_args.input): # ensure that the input file exists
+        raise RuntimeError('\'%s\' is not a file' % plot_args.input)
+    instructions = None
+    with open(plot_args.input) as input_file:
+        instructions = yaml.load(input_file)
+    # plot data
+    plotter = eos.plot.Plotter(instructions, plot_args.output)
+    plotter.plot()
+
+    # create a .plot yaml file to be used in the plotting process for the phase
+    yaml_template = open("plotting_template_phase.plot", "r")
+    plotting_string = yaml_template.read()
+    yaml_template.close()
+
+    bfp = data_dict["bfp"]
+    for i in range(len(bfp)):
+        if plotting_string.find("###TEMPLATE:INSERT_HERE###") != -1:
+            plotting_string = plotting_string.replace("###TEMPLATE:INSERT_HERE###", str(bfp[i]), 1)
+        else:
+            error("'plotting_template_phase.plot' contains insufficiently many insertion points")
+
+    yaml_plot_file =  open(os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "figure2.plot"),"w")
+    yaml_plot_file.write(plotting_string)
+    yaml_plot_file.close()
+
+
+    # define an object to be used as an argument in plotting process for the phase
+    plot_args = SimpleNamespace(
+        input = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "figure2.plot"), #Name of the plot input YAML file
+        output = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "plot2.pdf") #Name of the plot output PDF file
     )
     if not os.path.isfile(plot_args.input): # ensure that the input file exists
         raise RuntimeError('\'%s\' is not a file' % plot_args.input)
@@ -432,9 +462,12 @@ def cmd_batch_analysis(args):
     for i in range(len(ProcessList)):
         ProcessList[i].join()
     #End of Multiprocessing
-    laTex_output = "posterior & chain index & $p$-value & $\chi^2$ & parameters & measurments & bound saturation" +'\n'
+    laTex_output = "posterior & chain index & $p$-value & $\chi^2$ & parameters & measurements & bound saturation" +'\n'
     for Set in DataSets:
         laTex_output += str(Set["posterior"]) + " & $" + str(Set["chain"]) + "$ & $" + str(round(Set["p-value"], 2)) + "$ & $" + str(round(Set["total chi^2"], 2)) + "$ & $" + str(Set["total #parameters"]) + "$ & $" + str(Set["total #dof"]) + "$ & $" + str(round(Set["bound-saturation"],2)) + '$' + '\n'
+    laTex_file = open("summary.txt", 'a')
+    laTex_file.write(laTex_output)
+    laTex_file.close()
     print(laTex_output)
 
 # Find mode
