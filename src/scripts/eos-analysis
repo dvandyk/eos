@@ -387,18 +387,18 @@ def cmd_run(args, run_posterior = None, run_chain = 0): #TODO Generalise
     yaml_plot_file.close()
 
     # define an object to be used as an argument in plotting process
-    plot_args = SimpleNamespace(
-        input = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "figure.plot"), #Name of the plot input YAML file
-        output = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "plot.pdf") #Name of the plot output PDF file
-    )
-    if not os.path.isfile(plot_args.input): # ensure that the input file exists
-        raise RuntimeError('\'%s\' is not a file' % plot_args.input)
-    instructions = None
-    with open(plot_args.input) as input_file:
-        instructions = yaml.load(input_file)
-    # plot data
-    plotter = eos.plot.Plotter(instructions, plot_args.output)
-    plotter.plot()
+    # plot_args = SimpleNamespace(
+    #     input = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "figure.plot"), #Name of the plot input YAML file
+    #     output = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "plot.pdf") #Name of the plot output PDF file
+    # )
+    # if not os.path.isfile(plot_args.input): # ensure that the input file exists
+    #     raise RuntimeError('\'%s\' is not a file' % plot_args.input)
+    # instructions = None
+    # with open(plot_args.input) as input_file:
+    #     instructions = yaml.load(input_file)
+    # # plot data
+    # plotter = eos.plot.Plotter(instructions, plot_args.output)
+    # plotter.plot()
 
     # create a .plot yaml file to be used in the plotting process for the phase
     yaml_template = open("plotting_template_phase.plot", "r")
@@ -418,18 +418,18 @@ def cmd_run(args, run_posterior = None, run_chain = 0): #TODO Generalise
 
 
     # define an object to be used as an argument in plotting process for the phase
-    plot_args = SimpleNamespace(
-        input = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "figure2.plot"), #Name of the plot input YAML file
-        output = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "plot2.pdf") #Name of the plot output PDF file
-    )
-    if not os.path.isfile(plot_args.input): # ensure that the input file exists
-        raise RuntimeError('\'%s\' is not a file' % plot_args.input)
-    instructions = None
-    with open(plot_args.input) as input_file:
-        instructions = yaml.load(input_file)
-    # plot data
-    plotter = eos.plot.Plotter(instructions, plot_args.output)
-    plotter.plot()
+    # plot_args = SimpleNamespace(
+    #     input = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "figure2.plot"), #Name of the plot input YAML file
+    #     output = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "plot2.pdf") #Name of the plot output PDF file
+    # )
+    # if not os.path.isfile(plot_args.input): # ensure that the input file exists
+    #     raise RuntimeError('\'%s\' is not a file' % plot_args.input)
+    # instructions = None
+    # with open(plot_args.input) as input_file:
+    #     instructions = yaml.load(input_file)
+    # # plot data
+    # plotter = eos.plot.Plotter(instructions, plot_args.output)
+    # plotter.plot()
 
     return data_dict
 
@@ -448,7 +448,7 @@ def cmd_batch_analysis(args):
     MAX_PROCESSES_COUNT = multiprocessing.cpu_count() -1
     ProcessList = []
     for posterior in analysis_file.batch:
-        for i in range(0,32):
+        for i in range(0,64):
             ProcessList.append(multiprocessing.Process(target = run_process, args = (args, posterior,i, PROCESS_COUNT, DataSets)))
     counter = 0
     while counter < len(ProcessList):
