@@ -166,7 +166,7 @@ class Analysis:
         if start_point == None:
             start_point = [float(p) for p in self.varied_parameters]
 
-        default_kwargs = { 'method': 'SLSQP', 'options': { 'ftol': 1.0e-13 } }
+        default_kwargs = { 'method': 'trust-constr', 'options': { 'ftol': 1.0e-13 } }
         if kwargs is None:
             kwargs = default_kwargs
 
