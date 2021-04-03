@@ -18,7 +18,9 @@
  */
 
 #include <eos/form-factors/parametric-dgkvd2020.hh>
-
+#include <stdio.h>
+#include <complex.h>
+#include <math.h>
 namespace eos
 {
     DGKvD2020FormFactors::DGKvD2020FormFactors(const Parameters & p, const Options &) :
@@ -46,9 +48,12 @@ namespace eos
     DGKvD2020FormFactors::a(const double & q2) const
     {
         const double F_pi=1.0; // electromagnetic pion form factor is normalized to 1.0 for an on-shell photon    
-        const double a_q0=1.0; // axial vector form factor at subtraction point  
+        const double a_q0=1.0; // axial vector form factor at subtraction point
+        const double Gammaa1=0.3;
+        const complex<double> i( 0.0 , 1.0 );
 
-        return a_q0 + (q2-q_02) * f_a1 * (eF_g / (1.602177e-19)) * m_a1 * m_a1 / (m_pi * (m_a1*m_a1 - q2) * (m_a1*m_a1 - q_02))
+
+        return a_q0 + (q2-q_02) * f_a1 * (eF_g / (1.602177e-19)) * m_a1 * m_a1 / (m_pi() * (m_a1*m_a1 + i/2.0 * Gammaa1 * m_a1() - q2) * (m_a1*m_a1 - q_02))
                       ;
     }
 
@@ -56,7 +61,9 @@ namespace eos
     DGKvD2020FormFactors::v(const double & q2) const
     {
         const double v_q0=1.0; // vector form factor at subtraction point
-     
-        return v_q0 + (q2-q_02) * f_rho * m_pi * (eF_pi_rho / (1.602177e-19)) / ((m_rho*m_rho - q2) * (m_rho*m_rho - q_02));
+        const double Gammarho=0.15;
+        const complex<double> i( 0.0 , 1.0 );
+
+        return v_q0 + (q2-q_02) * f_rho * m_pi * (eF_pi_rho / (1.602177e-19)) / ((m_rho*m_rho + i/2.0 * Gammarho * m_rho() - q2) * (m_rho*m_rho - q_02));
     }
 }
