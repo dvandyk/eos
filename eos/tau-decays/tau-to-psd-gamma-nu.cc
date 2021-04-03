@@ -138,7 +138,8 @@ namespace eos
     double
     TauToPseudoscalarGammaNeutrino::differential_ratio(const double & E_gamma, const double & E_pi) const
     {
-        return _imp->differential_ratio(E_gamma, E_pi);
+        // return _imp->differential_ratio(E_gamma, E_pi);
+        return std::exp(abs(E_gamma-E_pi));
     }
 
     double

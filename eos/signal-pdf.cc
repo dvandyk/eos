@@ -440,11 +440,11 @@ namespace eos
                   Options{ },
                     &TauToPseudoscalarGammaNeutrino::differential_ratio,
                     std::make_tuple(
-                        KinematicRange{ "E_gamma",                  0.0,  1.0,      TauToPseudoscalarGammaNeutrino::kinematics_description_E_gamma },
-                        KinematicRange{ "E_pi",                  0.139,  1.0,       TauToPseudoscalarGammaNeutrino::kinematics_description_E_pi }     
+                        KinematicRange{ "E_gamma",                  0.0,  0.8829283266,      TauToPseudoscalarGammaNeutrino::kinematics_description_E_gamma },
+                        KinematicRange{ "E_pi",                  0.13957039,  0.8938916734,       TauToPseudoscalarGammaNeutrino::kinematics_description_E_pi }     
                     ),
                     &TauToPseudoscalarGammaNeutrino::dummy,
-                    std::make_tuple("dummy")
+                    std::make_tuple("E_gamma_min")
             ),
         };
 
