@@ -219,6 +219,13 @@ namespace eos
         static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
         static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
     };
+
+    /* Vacuum -> P Gamma Processes */
+
+    struct VacuumToPiGamma {
+        typedef VacuumToPGamma Transition;
+        static constexpr const char * label = "0->pigamma";
+    };
 }
 
 #endif

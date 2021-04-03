@@ -51,6 +51,8 @@ namespace eos
 
     struct VToV { };
 
+    struct VacuumToPGamma { };
+
     template <>
     class FormFactors<PToV> :
         public virtual ParameterUser
@@ -183,6 +185,25 @@ namespace eos
             static std::shared_ptr<FormFactors<VToV>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
     };
 
+    /* Vacuum -> P Gamma */
+
+    template <>
+    class FormFactors<VacuumToPGamma> :
+        public virtual ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            virtual complex<double> a(const double & s) const = 0;
+            virtual complex<double> v(const double & s) const = 0;
+    };
+
+    template <>
+    class FormFactorFactory<VacuumToPGamma>
+    {
+        public:
+            static std::shared_ptr<FormFactors<VacuumToPGamma>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
+    };
 }
 
 

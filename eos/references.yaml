@@ -465,6 +465,13 @@ Belle:2017B:
   inspire-id: Abdesselam:2018nnh
   title: Measurement of the CKM matrix element $|V_{cb}|$ from $B^0\to D^{*-}\ell^
     {+} \nu_\ell$ at Belle
+C:2003A:
+  authors: Cheng Hai-Yang
+  eprint:
+    archive: arXiv
+    id: arXiv:hep-ph/0301198v1
+  inspire-id: 
+  title: Hadronic Charmed Meson Decays Involving Axial Vector Mesons
 C:2006A:
   authors: Crandall, R.E.
   title: Note on fast polylogarithm computation
