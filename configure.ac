@@ -472,6 +472,7 @@ AC_OUTPUT(
 	eos/form-factors/Makefile
 	eos/rare-b-decays/Makefile
 	eos/b-decays/Makefile
+	eos/tau-decays/Makefile
 	eos/parameters/Makefile
 	eos/utils/Makefile
 	eos/optimize/Makefile

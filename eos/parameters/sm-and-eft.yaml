@@ -135,6 +135,11 @@ groups:
           max:     +1.77698
           comments: 'cf. [PDG2012], p. 14'
           latex:     '$m_\tau$'
+      'life_time::tau' :
+          central: +0.2903e-12
+          min:     +0.2898e-12
+          max:     +0.2908e-12
+          comments: 'cf. [PDG2018], p. 17'
       # Quark masses
       'mass::u(2GeV)' :
           central: +0.0032

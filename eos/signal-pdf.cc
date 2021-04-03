@@ -29,6 +29,7 @@
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
+#include <eos/tau-decays/tau-to-psd-gamma-nu.hh>
 #include <eos/utils/density.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
@@ -435,6 +436,16 @@ namespace eos
                     )
                 ),
 
+           make_signal_pdf("tau->pigammanu::d^2Gamma",
+                  Options{ },
+                    &TauToPseudoscalarGammaNeutrino::differential_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "E_gamma",                  0.0,  1.0,      TauToPseudoscalarGammaNeutrino::kinematics_description_E_gamma },
+                        KinematicRange{ "E_pi",                  0.139,  1.0,       TauToPseudoscalarGammaNeutrino::kinematics_description_E_pi }     
+                    ),
+                    &TauToPseudoscalarGammaNeutrino::dummy,
+                    std::make_tuple("dummy")
+            ),
         };
 
         return signal_pdf_entries;
