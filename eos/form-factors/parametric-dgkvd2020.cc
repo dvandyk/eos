@@ -48,8 +48,8 @@ namespace eos
         const double F_pi=1.0; // electromagnetic pion form factor is normalized to 1.0 for an on-shell photon    
         const double a_q0=1.0; // axial vector form factor at subtraction point  
 
-        return a_q0 + (q2-q_02)*f_a1/(m_pi*(m_a1*m_a1-q2)*(m_a1*m_a1-q_02))*
-                      (eF_g/(1.602177e-19)*m_a1*m_a1);
+        return a_q0 + (q2-q_02) * f_a1 * (eF_g / (1.602177e-19)) * m_a1 * m_a1 / (m_pi * (m_a1*m_a1 - q2) * (m_a1*m_a1 - q_02))
+                      ;
     }
 
     complex<double>
@@ -57,6 +57,6 @@ namespace eos
     {
         const double v_q0=1.0; // vector form factor at subtraction point
      
-        return v_q0 + (q2-q_02)*f_rho*m_pi*eF_pi_rho/((m_rho*m_rho-q2)*(m_rho*m_rho-q_02)*(1.602177e-19));
+        return v_q0 + (q2-q_02) * f_rho * m_pi * (eF_pi_rho / (1.602177e-19)) / ((m_rho*m_rho - q2) * (m_rho*m_rho - q_02));
     }
 }

@@ -476,6 +476,7 @@ AC_OUTPUT(
 	eos/parameters/Makefile
 	eos/rare-b-decays/Makefile
 	eos/statistics/Makefile
+	eos/tau-decays/Makefile
 	eos/utils/Makefile
 	manual/Makefile
 	manual/appendices/Makefile
