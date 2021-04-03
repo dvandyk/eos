@@ -28,6 +28,7 @@
 #include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/parametric-bgl1997.hh>
+#include <eos/form-factors/parametric-dgkvd2020.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -465,6 +466,34 @@ namespace eos
             // b -> c
             // not yet supported
             { KeyType("B^*->D^*::HQET"),      &HQETFormFactors<BstarToDstar, VToV>::make      },
+        };
+
+        auto i = form_factors.find(name);
+        if (form_factors.end() != i)
+        {
+            result.reset(i->second(parameters, name.options() + options));
+        }
+
+        return result;
+    }
+
+    /* Vacuum -> P Gamma Proceses */
+
+    FormFactors<VacuumToPGamma>::~FormFactors()
+    {
+    }
+
+    std::shared_ptr<FormFactors<VacuumToPGamma>>
+    FormFactorFactory<VacuumToPGamma>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
+    {
+        std::shared_ptr<FormFactors<VacuumToPGamma>> result;
+
+        typedef QualifiedName KeyType;
+        typedef std::function<FormFactors<VacuumToPGamma> * (const Parameters &, const Options &)> ValueType;
+        static const std::map<KeyType, ValueType> form_factors
+        {
+            // parametrizations
+            { KeyType("0->pigamma::DGKvD2020"), &DGKvD2020FormFactors::make      },
         };
 
         auto i = form_factors.find(name);

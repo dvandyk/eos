@@ -359,6 +359,12 @@ groups:
           max:     +0.312
           latex:    '$f_{D_s^{*0}}$'
           comments: 'GeV, cf. [GKPR2013], symmetrized errors'
+      'decay-constant::a_1' :
+          central: +0.203
+          min:     +0.185
+          max:     +0.221
+          latex:    '$f_{a1}$'
+          comments: 'GeV, cf. [C2003]'
       # 3-particle couplings
       'decay-constant::g_{B^*Bpi}' :
           central: +30.0
@@ -624,6 +630,26 @@ groups:
           latex:    '$\lambda_H^2(B_s)$'
           comments: 'GeV^2, cf. [NT2011]'
   # }}}
+
+  # Parameters in hadronic dispersion relations
+  # {{{
+  - title: 'Parameters in hadronic dispersion relations'
+    description: ''
+    parameters:
+      # Formfactors for meson to pi gamma decay at k^2=0
+       'rho->pi::eV(0)' : 
+          central: +0.171
+          min:     +0.162
+          max:     +0.180
+       'a_1->pi::eF_g(0)' :
+          central: +0.199
+          min:     +0.161
+          max:     +0.237
+       '0->pigamma::q_0^2' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0 
+  #}}}
 
   # Parameters in the Heavy Quark Exapnsion
   # {{{
