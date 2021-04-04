@@ -169,6 +169,20 @@ def main():
     )
     parser_find_mode.set_defaults(cmd = cmd_find_mode)
 
+    # find-mode-from-point
+    parser_find_mode_from_point = subparsers.add_parser('find-mode-from-point',
+        description = 'Finds the mode of a posterior starting the optimization from a given parameter point',
+        help = 'find mode of posterior from point'
+    )
+    parser_find_mode_from_point.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'posterior PDF from which to draw samples'
+    )
+    parser_find_mode_from_point.add_argument('-p', '--starting-point',
+        help = 'Point from which minization is started',
+        dest = 'Point', action = 'store', type = str
+    )
+    parser_find_mode_from_point.set_defaults(cmd = cmd_find_mode_from_point)
+
     # find-clusters
     parser_find_clusters = subparsers.add_parser('find-clusters',
         description = 'Find clusters among the posterior samples by Gelman-Rubin R value.',
@@ -243,13 +257,14 @@ def main():
     # add verbosity arg to all commands
     parsers = [
         parser,
-        parser_find_clusters, parser_find_mode,
+        parser_find_clusters, parser_find_mode, parser_find_mode_from_point,
         parser_list_priors, parser_list_likelihoods, parser_list_posteriors, parser_list_predictions,
         parser_plot_samples,
         parser_sample_mcmc, parser_sample_pmc,
         parser_predict_observables,
         parser_run,
         parser_batch_analysis
+
     ]
     for p in parsers:
         p.add_argument('-v', '--verbose',
@@ -469,6 +484,43 @@ def cmd_batch_analysis(args):
     laTex_file.write(laTex_output)
     laTex_file.close()
     print(laTex_output)
+# Find mode from point
+def cmd_find_mode_from_point(args, RETURN=False): #enter point in this fashion: -p '0.8 849.32 7.4 .... '
+    analysis_file = make_analysis_file(args)
+    analysis = analysis_file.analysis(args.posterior)
+    min_chi2 = sys.float_info.max
+    gof = None
+    bfp = None
+
+    starting_point = args.Point
+    starting_point.strip()
+    starting_point = starting_point.split()
+    starting_point = [float(x) for x in starting_point]
+
+    info('Starting minimization from point: {}'.format(starting_point))
+
+    _bfp = analysis.optimize(starting_point)
+    _gof = eos.GoodnessOfFit(analysis.log_posterior)
+    _chi2 = _gof.total_chi_square()
+    if _chi2 < min_chi2:
+        gof = _gof
+        bfp = _bfp
+        min_chi2 = _chi2
+
+    print('best-fit point = {}'.format(bfp.point))
+    print('total chi^2 = {}'.format(min_chi2))
+    print('p value = {:.1f}%'.format(100 * (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))))
+    print('individual test statistics:')
+    for n, e in gof:
+        print('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
+    if RETURN == True:
+        return_data_dict = {"total #parameters" : len(bfp.point), "bfp" : bfp.point, "total chi^2" : min_chi2, "p-value" : 100 * (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))}
+        total_dof = 0
+        for n, e in gof:
+            return_data_dict[str(n)] = [e.chi2, e.dof]
+            total_dof +=e.dof
+        return_data_dict["total #dof"] = total_dof
+        return return_data_dict
 
 # Find mode
 def cmd_find_mode(args, RETURN=False):
