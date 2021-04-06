@@ -463,7 +463,7 @@ def cmd_batch_analysis(args):
     MAX_PROCESSES_COUNT = multiprocessing.cpu_count() -1
     ProcessList = []
     for posterior in analysis_file.batch:
-        for i in range(0,64):
+        for i in range(0,256):
             ProcessList.append(multiprocessing.Process(target = run_process, args = (args, posterior,i, PROCESS_COUNT, DataSets)))
     counter = 0
     while counter < len(ProcessList):
