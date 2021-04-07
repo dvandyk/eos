@@ -44,8 +44,7 @@ namespace eos
 
                 auto & kinematic_range = std::get<i_ - 1>(kinematic_ranges);
                 std::string kname = std::string(kinematic_range.name);
-                double kvalue = (kinematic_range.max - kinematic_range.min) / 2.0;
-                MutablePtr kvar(new KinematicVariable(k.declare(kname, kvalue)));
+                MutablePtr kvar(new KinematicVariable(k[kname]));
                 result.push_back(ParameterDescription{ kvar, kinematic_range.min, kinematic_range.max, false });
 
                 return result;
@@ -60,8 +59,7 @@ namespace eos
 
                 auto & kinematic_range = std::get<0u>(kinematic_ranges);
                 std::string kname = std::string(kinematic_range.name);
-                double kvalue = (kinematic_range.max - kinematic_range.min) / 2.0;
-                MutablePtr kvar(new KinematicVariable(k.declare(kname, kvalue)));
+                MutablePtr kvar(new KinematicVariable(k[kname]));
                 result.push_back(ParameterDescription{ kvar, kinematic_range.min, kinematic_range.max, false });
 
                 return std::move(result);
@@ -144,9 +142,8 @@ namespace eos
             for (auto krange : kinematic_ranges)
             {
                 auto kname = std::string(krange.name);
-                auto kvalue = (krange.max - krange.min) / 2.0;
 
-                MutablePtr kvar(new KinematicVariable(kinematics.declare(kname, kvalue)));
+                MutablePtr kvar(new KinematicVariable(kinematics[kname]));
 
                 result.push_back(ParameterDescription{ kvar, krange.min, krange.max, false });
             }
