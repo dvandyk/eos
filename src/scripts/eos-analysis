@@ -169,7 +169,7 @@ def main():
     )
     parser_find_mode.add_argument('--from-point',
         help = 'Point from which minization is started',
-        dest = 'Point', action = 'store', type = str, default = ''
+        dest = 'point', action = 'store', type = str, default = ''
     )
     parser_find_mode.set_defaults(cmd = cmd_find_mode)
 
@@ -347,7 +347,8 @@ def cmd_run(args, run_posterior = None, run_chain = 0): #TODO Generalise
         verbose = args.verbose,
         posterior = args.posterior,
         points = 30, #TODO change to higher value
-        init_file = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)))
+        init_file = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain))),
+        point = ''
     )
     # run find-mode subroutine using previous markov chains
     data_dict = cmd_find_mode(find_mode_args, RETURN = True)
@@ -483,8 +484,8 @@ def cmd_find_mode(args, RETURN=False):
     gof = None
     bfp = None
 
-    if args.Point != '':
-        starting_point = args.Point
+    if args.point != '':
+        starting_point = args.point
         starting_point.strip()
         starting_point = starting_point.split()
         starting_point = [float(x) for x in starting_point]
