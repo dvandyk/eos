@@ -984,7 +984,6 @@ class Plotter:
             if not np.array(self.plotter.yrange).any():
                 self.plotter.yrange = [np.amin(ydata), np.amax(ydata)]
                 self.plotter.ax.set_ylim(tuple(self.plotter.yrange))
-            plt.show()
 
             xbins = 100
             ybins = 100
@@ -1481,7 +1480,6 @@ class Plotter:
         if self.output:
             plt.savefig(self.output, bbox_inches='tight', dpi=300)
 
-        plt.show()
 
 
 def variable_to_latex(variable):
