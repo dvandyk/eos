@@ -31,8 +31,9 @@
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
-#include <map>
 #include <cmath>
+#include <limits>
+#include <map>
 
 namespace eos
 {
@@ -141,6 +142,55 @@ namespace eos
 
     FormFactors<PToV>::~FormFactors()
     {
+    }
+
+    complex<double>
+    FormFactors<PToV>::v(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor V for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::a_0(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor A_0 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::a_1(const complex<double> &) const
+    {
+        throw InternalError("P->V form factors A_1 complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::a_12(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor A_12 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::t_1(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor T_1 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::t_2(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor T_2 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::t_23(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor T_23 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
     }
 
     std::shared_ptr<FormFactors<PToV>>
