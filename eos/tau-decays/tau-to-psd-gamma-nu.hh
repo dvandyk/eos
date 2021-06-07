@@ -22,7 +22,9 @@ namespace eos
             ~TauToPseudoscalarGammaNeutrino();
 
             // Observables
-            double differential_ratio(const double & E_gamma, const double & E_pi) const;
+           // double differential_ratio(const double & E_gamma, const double & E_pi) const;
+            double differential_ratio(const double & q2, const double & cosTheta) const;
+
           /*  double branching_ratio(const double & q2) const;*/
             double dummy(const double & ) const;
               
@@ -31,8 +33,10 @@ namespace eos
              */
             static const std::set<ReferenceName> references;
             static const std::string description;
-            static const std::string kinematics_description_E_gamma;
-            static const std::string kinematics_description_E_pi;
+           // static const std::string kinematics_description_E_gamma;
+           // static const std::string kinematics_description_E_pi;
+          static const std::string kinematics_description_q2;
+          static const std::string kinematics_description_cosTheta;
     };
 }
 

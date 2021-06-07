@@ -86,12 +86,18 @@ namespace eos
        -alpha_e at tau scale!
        -check jacobi determinant xy -> E_gamma E_pi
 */
-        double differential_ratio(const double & E_gamma, const double & E_pi) const
+       // double differential_ratio(const double & E_gamma, const double & E_pi) const
+        double differential_ratio(const double & q2, const double & cosTheta) const
         {
-            const double q2 = 2.0 * E_gamma * m_tau + 2.0 * E_pi * m_tau - m_tau * m_tau;
+          // const double q2 = 2.0 * E_gamma * m_tau + 2.0 * E_pi * m_tau - m_tau * m_tau;
             const double delta = pow( m_pi / m_tau, 2);
-            const double x = 2.0 * E_gamma / m_tau;
-            const double y = 2.0 * E_pi / m_tau;
+            const double alpha_e = 1.0 / 137.0;
+            const double x = q2 / (2.0 * m_tau * m_tau) + 0.5 + 0.5 * cosTheta * (m_tau * m_tau / q2 - 1) * (q2 / (m_tau * m_tau) - delta) - delta * 0.5 * (1 + m_tau * m_tau / q2);
+            const double y = q2 / (2.0 * m_tau * m_tau) + 0.5 - 0.5 * cosTheta * (m_tau * m_tau / q2 - 1) * (q2 / (m_tau * m_tau) - delta) + delta * 0.5 * (1 + m_tau * m_tau / q2);
+            const double detJacobi = 2.0 * m_tau * m_tau * (1.0 + delta - x -y) * (2.0 + x*x - 3.0*y + y*y + x * (2.0*y - 3.0))/((y + x - 2.0)*(y + x - 2.0)*(x + y -delta -1.0)*(x + y -delta -1.0));
+            const double detJacobi2 = (1.0 + delta)/(2.0 * m_tau * m_tau) - delta / (2.0 *q2) - q2 / (2.0 * pow(m_tau,4));
+            //const double x = 2.0 * E_gamma / m_tau; 
+            //const double y = 2.0 * E_pi / m_tau;
             const double F_BB = -2.0 * delta * (2.0 - x - y) / (pow(x + y - 1.0 - delta, 2)) - 2.0 * (1.0 - x - delta) / (pow(x, 2)) + 2.0 * y * (2.0 - x -y) / (x * (x + y - 1.0 - delta)) 
                                 - (1.0 - delta - x) / x - y * (1.0 + delta -y) / (x * (x + y - 1.0 - delta)) + (1.0 - delta - x) / (x + y - 1.0 - delta);
             const double F_VV = (x + y - 1.0 - delta) * (x * (1.0 - delta - x) + y * (1.0 + delta - y)) - 2.0 * delta * x * (1.0 + delta - y);
@@ -101,17 +107,32 @@ namespace eos
             const double F_AV = (x + y - 1.0 - delta) * (x * (1.0 - delta - x) - y * (1.0 + delta - y));
             const complex<double> v_q2 = ff->v(q2) / m_pi();
             const complex<double> a_q2 = ff->a(q2) * 2.0 * m_pi() / (q2 - (m_pi * m_pi));
-            const double alpha_e = 1.0 / 137.0; 
-            /*const double decay_width_pi0 = 7.73e-9;*/
             const double C = pow(m_tau, 4) * alpha_e / (8.0 * M_PI * pow(f_pi * (1.0 - delta), 2));
             const double D = pow(m_tau, 2) * alpha_e / (4.0 * M_PI * f_pi * pow(1.0 - delta, 2));
+            //const double photon_lower_limit = (m_tau - E_pi - sqrt(E_pi * E_pi - m_pi * m_pi)) / 2.0;
+            //const double photon_upper_limit = (m_tau - E_pi + sqrt(E_pi * E_pi - m_pi * m_pi)) / 2.0;
+            const double x_lower_limit = 1 - 0.5 * y - pow( y*y / 4.0 - delta, 0.5);
+            const double x_upper_limit = 1 - 0.5 * y + pow( y*y / 4.0 - delta, 0.5);
+
             
-            return alpha_e / ( 2.0 * M_PI * (1.0-delta)*(1.0-delta)) * F_BB 
-                   + C * std::norm(v_q2) * F_VV 
-                   + C * std::norm(a_q2) * F_AA 
-                   - D * 2.0 * std::real(v_q2) * F_VB 
-                   + D * 2.0 * std::real(a_q2) * F_AB 
-                   + C * 2.0 * std::real(a_q2 * v_q2) * F_AV;
+            //if ((E_gamma < photon_lower_limit) || (E_gamma > photon_upper_limit))
+            //    return 0.0;
+            if ((x < x_lower_limit) || (x > x_upper_limit))
+                return 0.0;
+
+           // return alpha_e / ( 2.0 * M_PI * (1.0-delta)*(1.0-delta)) * F_BB 
+           //             + C * std::norm(v_q2) * F_VV 
+           //             + C * std::norm(a_q2) * F_AA 
+           //             - D * 2.0 * std::real(v_q2) * F_VB 
+           //             + D * 2.0 * std::real(a_q2) * F_AB 
+           //             + C * 2.0 * std::real(a_q2 * v_q2) * F_AV;
+            return (alpha_e / ( 2.0 * M_PI * (1.0-delta)*(1.0-delta)) * F_BB 
+                        + C * std::norm(v_q2) * F_VV 
+                        + C * std::norm(a_q2) * F_AA 
+                        + D * 2.0 * std::real(v_q2) * F_VB 
+                        + D * 2.0 * std::real(a_q2) * F_AB 
+                        - C * 2.0 * std::real(a_q2 * std::conj(v_q2)) * F_AV) / std::abs(detJacobi);
+       
         }
 
   /*      double branching_ratio(const double & q2) const
@@ -135,12 +156,26 @@ namespace eos
         return _imp->branching_ratio(q2);
     }
 */
+
+
+    //double
+    //TauToPseudoscalarGammaNeutrino::differential_ratio(const double & E_gamma, const double & E_pi) const
+    //{
+    //   return _imp->differential_ratio(E_gamma, E_pi);
+       //return std::abs(E_gamma-E_pi);
+    //}
+
+ 
+
     double
-    TauToPseudoscalarGammaNeutrino::differential_ratio(const double & E_gamma, const double & E_pi) const
+    TauToPseudoscalarGammaNeutrino::differential_ratio(const double & q2, const double & cosTheta) const
     {
-        // return _imp->differential_ratio(E_gamma, E_pi);
-        return std::exp(abs(E_gamma-E_pi));
+       return _imp->differential_ratio(q2, cosTheta); 
     }
+
+
+
+
 
     double
     TauToPseudoscalarGammaNeutrino::dummy(const double & ) const
@@ -157,10 +192,16 @@ namespace eos
     const std::string
     TauToPseudoscalarGammaNeutrino::description = "Decay tau -> P gamma neutrino with P = {pi, K}";
 
-    const std::string
-    TauToPseudoscalarGammaNeutrino::kinematics_description_E_gamma = "Energy of the photon in the tau rest frame";
+  //  const std::string
+  //  TauToPseudoscalarGammaNeutrino::kinematics_description_E_gamma = "Energy of the photon in the tau rest frame";
+
+  //  const std::string
+  //  TauToPseudoscalarGammaNeutrino::kinematics_description_E_pi = "Energy of the pion in the tau rest frame";
 
     const std::string
-    TauToPseudoscalarGammaNeutrino::kinematics_description_E_pi = "Energy of the pion in the tau rest frame";
+    TauToPseudoscalarGammaNeutrino::kinematics_description_q2 = "Momentum of the pion and photon squared";
+
+    const std::string
+    TauToPseudoscalarGammaNeutrino::kinematics_description_cosTheta = "Helicity angle of the photon";
     
 }
