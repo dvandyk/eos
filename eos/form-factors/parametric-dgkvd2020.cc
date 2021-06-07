@@ -51,10 +51,10 @@ namespace eos
         const double a_q0=1.0; // axial vector form factor at subtraction point
         const double Gammaa1=0.3;
         const complex<double> i( 0.0 , 1.0 );
+        const double alpha_e = 1.0 / 137.0;
 
 
-        return a_q0 + (q2-q_02) * f_a1 * (eF_g / (1.602177e-19)) * m_a1 * m_a1 / (m_pi() * (m_a1*m_a1 + i/2.0 * Gammaa1 * m_a1() - q2) * (m_a1*m_a1 - q_02))
-                      ;
+        return a_q0 + (q2-q_02) * f_a1 * (eF_g / sqrt(alpha_e * 4.0 * M_PI)) * m_a1 * m_a1 / (m_pi() * (m_a1*m_a1 + i/2.0 * Gammaa1 * m_a1() - q2) * (m_a1*m_a1 - q_02));
     }
 
     complex<double>
@@ -63,7 +63,8 @@ namespace eos
         const double v_q0=1.0; // vector form factor at subtraction point
         const double Gammarho=0.15;
         const complex<double> i( 0.0 , 1.0 );
+        const double alpha_e = 1.0 / 137.0;
 
-        return v_q0 + (q2-q_02) * f_rho * m_pi * (eF_pi_rho / (1.602177e-19)) / ((m_rho*m_rho + i/2.0 * Gammarho * m_rho() - q2) * (m_rho*m_rho - q_02));
+        return v_q0 + (q2-q_02) * f_rho * m_pi * (eF_pi_rho / sqrt(alpha_e * 4.0 * M_PI)) / ((m_rho*m_rho + i/2.0 * Gammarho * m_rho() - q2) * (m_rho*m_rho - q_02));
     }
 }
