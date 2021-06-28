@@ -23,6 +23,7 @@
 #include <eos/rare-b-decays/b-to-k-charmonium.hh>
 #include <eos/rare-b-decays/b-to-k-ll.hh>
 #include <eos/rare-b-decays/b-to-kstar-charmonium.hh>
+#include <eos/rare-b-decays/lambdab-to-lambda-charmonium.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
 #include <eos/rare-b-decays/bs-to-phi-charmonium.hh>
