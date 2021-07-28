@@ -48,6 +48,27 @@ class KinematicsTest :
                 TEST_CHECK_EQUAL(6.0, kinematics["s_max"]);
             }
 
+            // Creation from initializer list and aliasing
+            {
+                Kinematics kinematics
+                {
+                    { "s_min", 1.0 },
+                    { "s_max", 6.0 },
+                };
+                kinematics.alias("q2_min", "s_min");
+                kinematics.alias("q2_max", "s_max");
+
+                TEST_CHECK_EQUAL(1.0, kinematics["s_min"]);
+                TEST_CHECK_EQUAL(6.0, kinematics["s_max"]);
+                TEST_CHECK_EQUAL(1.0, kinematics["q2_min"]);
+                TEST_CHECK_EQUAL(6.0, kinematics["q2_max"]);
+
+                TEST_CHECK_EQUAL("s_min", kinematics["s_min"].name());
+                TEST_CHECK_EQUAL("s_min", kinematics["s_min"].name());
+                TEST_CHECK_EQUAL("q2_min", kinematics["q2_min"].name());
+                TEST_CHECK_EQUAL("q2_max", kinematics["q2_max"].name());
+            }
+
             // Access
             {
                 Kinematics kinematics;
@@ -83,6 +104,14 @@ class KinematicsTest :
                 b.set("foo", 19.0);
                 TEST_CHECK(a == b);
 
+                // add alias to a, but not b
+                a.alias("baz", "foo");
+                TEST_CHECK(! (a == b));
+
+                // add alias to b, too
+                b.alias("baz", "foo");
+                TEST_CHECK(a == b);
+
                 // copy
                 Kinematics c = a;
                 TEST_CHECK(a == c);
@@ -112,6 +141,34 @@ class KinematicsTest :
 
                 ++i;
                 TEST_CHECK(k.end() == i);
+            }
+
+            // Iteration (check for names, values, and order, in presence of an alias)
+            {
+                Kinematics k
+                {
+                    { "s_min",       1.0 },
+                    { "s_max",       6.0 },
+                    { "cos(theta)", -0.5 },
+                };
+                k.alias("z", "cos(theta)");
+
+                auto i = k.begin();
+                TEST_CHECK("s_min" == i->name());
+                TEST_CHECK(1.0 == i->evaluate());
+
+                ++i;
+                TEST_CHECK("s_max" == i->name());
+                TEST_CHECK(6.0 == i->evaluate());
+
+                ++i;
+                TEST_CHECK("cos(theta)" == i->name());
+                TEST_CHECK(-0.5 == i->evaluate());
+
+                ++i;
+                TEST_CHECK(k.end() == i);
+
+                TEST_CHECK_NO_THROW(-0.5 == k["z"].evaluate());
             }
         }
 } kinematics_test;
