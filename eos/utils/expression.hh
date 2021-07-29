@@ -20,6 +20,7 @@
 
 #include <eos/observable-fwd.hh>
 #include <eos/utils/expression-fwd.hh>
+#include <eos/utils/qualified-name.hh>
 
 #include <cassert>
 #include <memory>
@@ -65,10 +66,22 @@ namespace eos::exp
     class ObservableNameExpression
     {
         public:
-            std::string observable_name;
+            class KinematicsSpecification
+            {
+                public:
+                    std::map<std::string, double> values;
+                    std::map<std::string, std::string> aliases;
 
-            ObservableNameExpression(const std::string & input = "") :
-                 observable_name(input)
+                    void operator() (const std::pair<std::string, double> & value) { values.insert(value); }
+                    void operator() (const std::pair<std::string, std::string> & alias) { aliases.insert(alias); }
+            };
+
+            QualifiedName observable_name;
+            KinematicsSpecification kinematics_specification;
+
+            ObservableNameExpression(const QualifiedName & observable_name, const KinematicsSpecification & kinematics_specification) :
+                 observable_name(observable_name),
+                 kinematics_specification(kinematics_specification)
             {
             }
 

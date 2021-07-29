@@ -18,6 +18,7 @@
 #include <eos/utils/exception.hh>
 #include <eos/utils/expression.hh>
 #include <eos/utils/expression-fwd.hh>
+#include <eos/utils/join.hh>
 
 #include <iostream>
 
@@ -49,7 +50,30 @@ namespace eos::exp
 
             void visit(ObservableNameExpression & e)
             {
-                _os << "ObservableNameExpression(" << e.observable_name << ")";
+                _os << "ObservableNameExpression(" << e.observable_name.full();
+                if (! e.kinematics_specification.aliases.empty())
+                {
+                    auto a = e.kinematics_specification.aliases.cbegin();
+                    _os << ", aliases=[" << a->first << "=>" << a->second;
+                    ++a;
+                    for (auto a_end = e.kinematics_specification.aliases.cend() ; a != a_end ; ++a)
+                    {
+                        _os << "," << a->first << "=>" << a->second;
+                    }
+                    _os << "]";
+                }
+                if (! e.kinematics_specification.values.empty())
+                {
+                    auto v = e.kinematics_specification.values.cbegin();
+                    _os << ", values=[" << v->first << "=" << v->second;
+                    ++v;
+                    for (auto v_end = e.kinematics_specification.values.cend() ; v != v_end ; ++v)
+                    {
+                        _os << "," << v->first << "=" << v->second;
+                    }
+                    _os << "]";
+                }
+                _os << ")";
             }
 
             void visit(ObservableExpression &)

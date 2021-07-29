@@ -77,12 +77,12 @@ public:
 
             TEST_CHECK(test.completed);
             TEST_CHECK_EQUAL(test.e.accept_returning<double>(evaluator), 7.0);
-            TEST_CHECK_EQUAL(out.str(), "BinaryExpression(ConstantExpression(1) + BinaryExpression(ConstantExpression(2) * ConstantExpression(3)))");
+            TEST_CHECK_EQUAL("BinaryExpression(ConstantExpression(1) + BinaryExpression(ConstantExpression(2) * ConstantExpression(3)))", out.str());
         }
 
         // testing parsing and evaluation of observables
         {
-            ExpressionTest test2("{B->Dlnu::BR;l=tau} / {B->Dlnu::BR;l=mu}");
+            ExpressionTest test2("{B->Dlnu::BR;l=tau}[q2_min=>q2_min_tau] / {B->Dlnu::BR;l=mu}[q2_min=0.0]");
 
             std::stringstream out;
             ExpressionPrinter printer(out);
@@ -91,9 +91,10 @@ public:
             ExpressionEvaluator evaluator;
 
             TEST_CHECK(test2.completed);
-            TEST_CHECK_EQUAL(out.str(),
-                "BinaryExpression(ObservableNameExpression(B->Dlnu::BR;l=tau) / ObservableNameExpression(B->Dlnu::BR;l=mu))"
-                );
+            TEST_CHECK_EQUAL_STR(
+                "BinaryExpression(ObservableNameExpression(B->Dlnu::BR;l=tau, aliases=[q2_min=>q2_min_tau]) / ObservableNameExpression(B->Dlnu::BR;l=mu, values=[q2_min=0]))",
+                out.str()
+            );
 
             // Cannot evaluate expression with ObservableNameExpression objects
             TEST_CHECK_THROWS(InternalError, test2.e.accept_returning<double>(evaluator));

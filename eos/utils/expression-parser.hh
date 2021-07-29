@@ -34,23 +34,6 @@ namespace eos
     struct ExpressionParser :
         qi::grammar<Iterator, eos::exp::Expression(), ascii::space_type>
     {
-        struct MakeBinaryExpression
-        {
-            template<typename, typename, typename>
-            struct result
-            {
-                using type = eos::exp::BinaryExpression;
-            };
-
-            template<typename C, typename L, typename R>
-            eos::exp::BinaryExpression operator()(C op, L const& lhs, R const& rhs) const
-            {
-                return eos::exp::BinaryExpression(op, lhs, rhs);
-            }
-        };
-
-        phx::function<MakeBinaryExpression> makebinary;
-
         // Constructor
         ExpressionParser();
 
@@ -60,7 +43,13 @@ namespace eos
 
         qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> primary_expr;
         qi::rule<Iterator, eos::exp::ConstantExpression()       , ascii::space_type> constant;
-        qi::rule<Iterator, eos::exp::ObservableNameExpression() , ascii::space_type> observable_name;
+        qi::rule<Iterator, std::string()                        , ascii::space_type> observable_name;
+
+        using KinematicsSpecification = eos::exp::ObservableNameExpression::KinematicsSpecification;
+
+        qi::rule<Iterator, KinematicsSpecification()            , ascii::space_type> kinematics;
+        qi::rule<Iterator, std::pair<std::string, std::string>(), ascii::space_type> kinematics_alias;
+        qi::rule<Iterator, std::pair<std::string, double>       , ascii::space_type> kinematics_value;
 
         // Destuctor
         ~ExpressionParser();

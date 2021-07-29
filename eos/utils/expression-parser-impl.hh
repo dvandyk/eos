@@ -24,7 +24,7 @@
 #include <eos/utils/expression.hh>
 #include <eos/utils/expression-parser.hh>
 
-BOOST_FUSION_ADAPT_STRUCT(eos::exp::ObservableNameExpression,  observable_name)
+#include <utility>
 
 namespace eos
 {
@@ -38,28 +38,68 @@ namespace eos
             additive_expr                                [ _val = _1]
             ;
 
+        auto make_binary = [] (char op, const auto & lhs, const auto & rhs)
+        {
+            return eos::exp::BinaryExpression(op, lhs, rhs);
+        };
+
         additive_expr =
             non_additive_expr                            [ _val = _1]
-            >> *(  (char_("+") >> non_additive_expr)     [ _val = makebinary(_1, _val, _2)]
-                  |(char_("-") >> non_additive_expr)     [ _val = makebinary(_1, _val, _2)]
+            >> *(   (char_("+") >> non_additive_expr)    [ _val = phx::bind(make_binary, _1, _val, _2)]
+                  | (char_("-") >> non_additive_expr)    [ _val = phx::bind(make_binary, _1, _val, _2)]
                 )
             ;
 
         non_additive_expr =
             primary_expr                                 [ _val = _1]
-            >> *(  (char_('*') >> primary_expr)          [ _val = makebinary(_1, _val, _2)]
-                  |(char_('/') >> primary_expr)          [ _val = makebinary(_1, _val, _2)]
+            >> *(   (char_('*') >> primary_expr)         [ _val = phx::bind(make_binary, _1, _val, _2)]
+                  | (char_('/') >> primary_expr)         [ _val = phx::bind(make_binary, _1, _val, _2)]
                 )
             ;
+
+        auto make_observable = [] (const std::string & name, const KinematicsSpecification & spec)
+        {
+            return eos::exp::Expression(eos::exp::ObservableNameExpression(name, spec));
+        };
 
         primary_expr =
               ( '(' >> expression >> ')' )               [ _val = _1 ]
             | constant                                   [ _val = _1 ]
-            | observable_name                            [ _val = _1 ]
+            | (observable_name >> kinematics)            [ _val = phx::bind(make_observable, _1, _2) ]
+            | observable_name                            [ _val = phx::bind(make_observable, _1, KinematicsSpecification()) ]
             ;
 
         constant = double_ | int_;
-        observable_name   = '{' >> lexeme [ *~char_("}") ] > '}';
+        observable_name =
+              '{'
+            >> as_string [ lexeme [ *~char_("}") ] ]     [ _val = _1 ]
+            >> '}'
+            ;
+
+        kinematics =
+            '['
+            >> (
+                kinematics_alias    [ phx::bind(_val, _1) ]
+              | kinematics_value    [ phx::bind(_val, _1) ]
+            ) % ','
+            >> ']'
+            ;
+
+        kinematics_alias =
+            (
+            as_string [ lexeme [ *~char_(",=>]") ] ]
+            >> "=>"
+            >> as_string [ lexeme [ *~char_(",=]") ] ]
+            )
+            ;
+
+        kinematics_value =
+            (
+            as_string [ lexeme [ *~char_(",=>]") ] ]
+            >> '='
+            >> double_
+            )
+            ;
     }
 
     template <typename Iterator>
