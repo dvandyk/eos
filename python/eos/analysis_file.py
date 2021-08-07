@@ -62,6 +62,22 @@ class AnalysisFile:
         else:
             self._predictions = { pred['name'] : dict(pred) for pred in input_data['predictions'] }
 
+        if 'batch' not in input_data:
+            self.batch = []
+        else:
+            self.batch = input_data['batch']
+
+
+    #     if 'run-templates' not in input_data:
+    #         self._run_templates = []
+    #     else:
+    #         self._run_templates = { run_templates['name'] : dict(temp) for temp in input_data['run-templates'] }
+
+    # def run(self, _run_template):
+    #     if _run_template not in self._run_template:
+    #         raise RuntimeError('Cannot execute the sequence for unknown template: \'{}\''.format(_run_template))
+
+    #     _run_template = self._run_template
 
     def analysis(self, _posterior):
         """Create an eos.Analysis object for the named posterior."""

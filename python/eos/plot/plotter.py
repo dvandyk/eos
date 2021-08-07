@@ -121,6 +121,9 @@ class Plotter:
                 self.xrange = myx['range']
                 self.ax.set_xlim(tuple(self.xrange))
 
+            if 'log-scale' in myx:
+                self.ax.set_xscale('log' if myx['log-scale'] else 'linear')
+
             self.ax.xaxis.set_major_locator(matplotlib.ticker.AutoLocator())
             self.ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
             self.ax.xaxis.set_ticks_position('both')
@@ -153,6 +156,9 @@ class Plotter:
             if 'range' in myy:
                 self.yrange = myy['range']
                 self.ax.set_ylim(tuple(self.yrange))
+
+            if 'log-scale' in myy:
+                self.ax.set_yscale('log' if myy['log-scale'] else 'linear')
 
             self.ax.yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
             self.ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
@@ -984,7 +990,6 @@ class Plotter:
             if not np.array(self.plotter.yrange).any():
                 self.plotter.yrange = [np.amin(ydata), np.amax(ydata)]
                 self.plotter.ax.set_ylim(tuple(self.plotter.yrange))
-            plt.show()
 
             xbins = 100
             ybins = 100
@@ -1484,7 +1489,6 @@ class Plotter:
         if self.output:
             plt.savefig(self.output, bbox_inches='tight', dpi=300)
 
-        plt.show()
 
 
 def variable_to_latex(variable):
