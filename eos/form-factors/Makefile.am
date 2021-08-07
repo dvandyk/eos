@@ -25,6 +25,7 @@ libeosformfactors_la_SOURCES = \
 	mesonic-processes.hh \
 	observables.cc observables.hh \
 	parametric-bgl1997.hh parametric-bgl1997-impl.hh parametric-bgl1997.cc \
+	parametric-egjvd2020.hh parametric-egjvd2020-impl.hh parametric-egjvd2020.cc \
 	pi-lcdas.cc pi-lcdas.hh \
 	unitarity-bounds.cc unitarity-bounds.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
@@ -44,6 +45,7 @@ include_eos_rarebdecays_HEADERS = \
 	form-factors.hh \
 	observables.hh \
 	parametric-bgl1997.hh \
+	parametric-egjvd2020.hh parametric-egjvd2020-impl.hh \
 	pi-lcdas.hh
 
 AM_TESTS_ENVIRONMENT = \
@@ -61,6 +63,7 @@ TESTS = \
 	mesonic_TEST \
 	mesonic-hqet_TEST \
 	parametric-bgl1997_TEST \
+	parametric-egjvd2020_TEST \
 	pi-lcdas_TEST \
 	unitarity-bounds_TEST
 LDADD = \
@@ -93,6 +96,8 @@ mesonic_TEST_SOURCES = mesonic_TEST.cc
 mesonic_hqet_TEST_SOURCES = mesonic-hqet_TEST.cc
 
 parametric_bgl1997_TEST_SOURCES = parametric-bgl1997_TEST.cc
+
+parametric_egjvd2020_TEST_SOURCES = parametric-egjvd2020_TEST.cc
 
 pi_lcdas_TEST_SOURCES = pi-lcdas_TEST.cc
 

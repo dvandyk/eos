@@ -28,6 +28,7 @@
 #include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/parametric-bgl1997.hh>
+#include <eos/form-factors/parametric-egjvd2020-impl.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -340,6 +341,8 @@ namespace eos
         static const std::map<KeyType, ValueType> form_factors
         {
             // parametrizations
+            // u,d -> u,d
+            { KeyType("pi->pi::EGJvD2020"),   &EGJvD2020FormFactors<PiToPi>::make              },
             // b -> s
             { KeyType("B->K::BCL2008"),       &BCL2008FormFactors<BToK, 3u>::make              },
             { KeyType("B->K::BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make             },
@@ -471,6 +474,45 @@ namespace eos
             // b -> c
             // not yet supported
             { KeyType("B^*->D^*::HQET"),      &HQETFormFactors<BstarToDstar, VToV>::make      },
+        };
+
+        auto i = form_factors.find(name);
+        if (form_factors.end() != i)
+        {
+            result.reset(i->second(parameters, name.options() + options));
+        }
+
+        return result;
+    }
+
+    /* Vacuum -> P P Processes */
+
+    FormFactors<VacuumToPP>::~FormFactors()
+    {
+    }
+
+    double
+    FormFactors<VacuumToPP>::abs2_f_p(const double & q2) const
+    {
+        return std::norm(this->f_p(q2));
+    }
+
+    double
+    FormFactors<VacuumToPP>::arg_f_p(const double & q2) const
+    {
+        return std::arg(this->f_p(q2));
+    }
+
+    std::shared_ptr<FormFactors<VacuumToPP>>
+    FormFactorFactory<VacuumToPP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
+    {
+        std::shared_ptr<FormFactors<VacuumToPP>> result;
+
+        typedef QualifiedName KeyType;
+        typedef std::function<FormFactors<VacuumToPP> * (const Parameters &, const Options &)> ValueType;
+        static const std::map<KeyType, ValueType> form_factors
+        {
+            { KeyType("0->pipi::EGJvD2020"),     &EGJvD2020FormFactors<VacuumToPiPi>::make      },
         };
 
         auto i = form_factors.find(name);

@@ -27,6 +27,7 @@
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/observables.hh>
+#include <eos/form-factors/parametric-egjvd2020-impl.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/utils/concrete_observable.hh>
@@ -1519,6 +1520,44 @@ namespace eos
     }
     // }}}
 
+    // 0 -> PP
+    // {{{
+
+    // 0 -> pi pi
+    // {{{
+    ObservableGroup
+    make_vacuum_to_pipi_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>{
+            R"(Form factors for $0 \to \pi \pi$ transitions)",
+            R"(Pseudo observables representing the full basis of $0 \to \pi \pi$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("0->pipi::Abs{f_+}^2(q2)", R"(|f_+^{0\to \pi\pi}(q^2)|^2)",
+                        &FormFactors<VacuumToPP>::abs2_f_p, std::make_tuple("q2")),
+                
+                make_form_factor_adapter("pi->pi::f_+(q2)", R"(f_+^{\pi \to \pi}(q^2))",
+                        &FormFactors<PToP>::f_p, std::make_tuple("q2")),
+
+                make_observable("q->q::Bound[1^-]@EGJvD:2020", R"(B^{q\to q}_{1^-})",
+                        Unit::None(),
+                        &EGJvD2020UnitarityBounds<VacuumToPiPi>::bound_1m),
+
+                make_observable("q->q::Prior[1^-]@EGJvD:2020", R"(B^{q\to q}_{1^-})",
+                        Unit::None(),
+                        &EGJvD2020UnitarityBounds<VacuumToPiPi>::bound_1m_prior),
+
+                make_form_factor_adapter("0->pipi::arg{f_+}(q2)", R"(arg(f_+^{\pi \to \pi}(q^2)))",
+                        &FormFactors<VacuumToPP>::arg_f_p, std::make_tuple("q2")),
+            }
+        };
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // }}}
+
     ObservableSection
     make_form_factors_section()
     {
@@ -1557,6 +1596,9 @@ namespace eos
 
                 // heavy-quark expansion
                 make_hqe_group(),
+
+                // 0 -> PP
+                make_vacuum_to_pipi_form_factors_group(),
             }
         );
 
