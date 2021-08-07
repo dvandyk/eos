@@ -25,6 +25,9 @@ import pypmc
 import scipy
 import sys
 import yaml
+from types import SimpleNamespace
+import multiprocessing
+import time
 
 # return the value of the environment variable, or a default value if the variable is unset.
 def get_from_env(envvar, default):
@@ -220,6 +223,25 @@ def main():
     )
     parser_predict_observables.set_defaults(cmd = cmd_predict_observables)
 
+    # egjvd2020 automisation
+    parser_run = subparsers.add_parser('run',
+        description = 'Runs a sequence of eos-analysis commands, which are issued in a given order.',
+        help = 'run'
+    )
+    # parser_run.add_argument('template', metavar = 'TEMPLATE', #TODO: implement template run from yaml files 
+    #     help = 'name set of observables to predict',
+    #     action = 'store', type = str
+    # )
+    parser_run.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'posterior PDF from which to draw samples'
+    )
+    parser_run.set_defaults(cmd = cmd_run)
+
+    parser_batch_analysis = subparsers.add_parser('batch-analysis',
+        description = 'Runs the anaylsis for a given batch of posteriors that is specified in the analysis file',
+        help = 'batch-analyis'
+    )
+    parser_batch_analysis.set_defaults(cmd = cmd_batch_analysis)
     ## end of commands
 
     # add verbosity arg to all commands
@@ -229,7 +251,10 @@ def main():
         parser_list_priors, parser_list_likelihoods, parser_list_posteriors, parser_list_predictions,
         parser_plot_samples,
         parser_sample_mcmc, parser_sample_pmc,
-        parser_predict_observables
+        parser_predict_observables,
+        parser_run,
+        parser_batch_analysis
+
     ]
     for p in parsers:
         p.add_argument('-v', '--verbose',
@@ -294,8 +319,165 @@ class RNG:
         return result
 
 
+# Run sequence
+def cmd_run(args, run_posterior = None, run_chain = 0): #TODO Generalise
+    if run_posterior != None:
+        args.posterior = run_posterior
+
+    # define an object to be used as an argument for cmd_sample-mcmc
+    mcmc_args = SimpleNamespace(
+        #TODO make these parameters accesible for parsing arguments in terminal
+        analysis_file = args.analysis_file,
+        verbose = args.verbose,
+        posterior = args.posterior,
+        chain = run_chain, #todo
+        N = 2500, #TODO change to higher value
+        pre_N = 500, #TODO change to higher value
+        preruns = 15,
+        stride = 5, # default of parser_sample_mcmc
+        base_directory = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    # run markov chains
+    cmd_sample_mcmc(mcmc_args)
+
+
+    # define an object to be used as an argument for cmd_sample-mcmc
+    find_mode_args = SimpleNamespace(
+        analysis_file = args.analysis_file,
+        verbose = args.verbose,
+        posterior = args.posterior,
+        points = 30, #TODO change to higher value
+        init_file = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain))),
+        point = ''
+    )
+    # run find-mode subroutine using previous markov chains
+    data_dict = cmd_find_mode(find_mode_args, RETURN = True)
+
+    #add additional data to data_dict
+    data_dict["posterior"] = mcmc_args.posterior
+    data_dict["chain"] = mcmc_args.chain
+    data_dict["N"] = mcmc_args.N
+    data_dict["pre_N"] = mcmc_args.pre_N
+    data_dict["preruns"] = mcmc_args.preruns
+    data_dict["points"] = find_mode_args.points
+    saturation = 0
+    for a_n in data_dict["bfp"]:
+        saturation += a_n * a_n
+    data_dict["bound-saturation"] = saturation
+
+
+    #output log data
+    text = ''
+    for item in data_dict.items():
+        text += str(item[0])+ ": " + str(item[1]) + '\n'
+    txt_path = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "fit_data.txt")
+    txt_file = open(txt_path,"w")
+    txt_file.write(text)
+    txt_file.close()
+
+
+    # create a .plot yaml file to be used in the plotting process
+    yaml_template = open("plotting_template.plot", "r")
+    plotting_string = yaml_template.read()
+    yaml_template.close()
+
+    bfp = data_dict["bfp"]
+    for i in range(len(bfp)):
+        if plotting_string.find("###TEMPLATE:INSERT_HERE###") != -1:
+            plotting_string = plotting_string.replace("###TEMPLATE:INSERT_HERE###", str(bfp[i]), 1)
+        else:
+            error("'plotting_template.plot' contains insufficiently many insertion points")
+
+    yaml_plot_file =  open(os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "figure.plot"),"w")
+    yaml_plot_file.write(plotting_string)
+    yaml_plot_file.close()
+
+    # define an object to be used as an argument in plotting process
+    # plot_args = SimpleNamespace(
+    #     input = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "figure.plot"), #Name of the plot input YAML file
+    #     output = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "plot.pdf") #Name of the plot output PDF file
+    # )
+    # if not os.path.isfile(plot_args.input): # ensure that the input file exists
+    #     raise RuntimeError('\'%s\' is not a file' % plot_args.input)
+    # instructions = None
+    # with open(plot_args.input) as input_file:
+    #     instructions = yaml.load(input_file)
+    # # plot data
+    # plotter = eos.plot.Plotter(instructions, plot_args.output)
+    # plotter.plot()
+
+    # create a .plot yaml file to be used in the plotting process for the phase
+    yaml_template = open("plotting_template_phase.plot", "r")
+    plotting_string = yaml_template.read()
+    yaml_template.close()
+
+    bfp = data_dict["bfp"]
+    for i in range(len(bfp)):
+        if plotting_string.find("###TEMPLATE:INSERT_HERE###") != -1:
+            plotting_string = plotting_string.replace("###TEMPLATE:INSERT_HERE###", str(bfp[i]), 1)
+        else:
+            error("'plotting_template_phase.plot' contains insufficiently many insertion points")
+
+    yaml_plot_file =  open(os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "figure2.plot"),"w")
+    yaml_plot_file.write(plotting_string)
+    yaml_plot_file.close()
+
+
+    # define an object to be used as an argument in plotting process for the phase
+    # plot_args = SimpleNamespace(
+    #     input = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "figure2.plot"), #Name of the plot input YAML file
+    #     output = os.path.join(args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain)), "plot2.pdf") #Name of the plot output PDF file
+    # )
+    # if not os.path.isfile(plot_args.input): # ensure that the input file exists
+    #     raise RuntimeError('\'%s\' is not a file' % plot_args.input)
+    # instructions = None
+    # with open(plot_args.input) as input_file:
+    #     instructions = yaml.load(input_file)
+    # # plot data
+    # plotter = eos.plot.Plotter(instructions, plot_args.output)
+    # plotter.plot()
+
+    return data_dict
+
+def run_process(process_args, process_posterior, chain_index, PROCESS_COUNT, DataSets):
+    PROCESS_COUNT.value += 1
+    DataSets.append(cmd_run(process_args, run_posterior = process_posterior, run_chain = chain_index))
+    PROCESS_COUNT.value += -1
+
+def cmd_batch_analysis(args):
+    #Execute run subroutine for given batch of posteriors
+    analysis_file = make_analysis_file(args)
+    #Starting Multiprocessing
+    manager = multiprocessing.Manager()
+    DataSets = manager.list()
+    PROCESS_COUNT = manager.Value('i', 0)
+    MAX_PROCESSES_COUNT = multiprocessing.cpu_count() -1
+    ProcessList = []
+    for posterior in analysis_file.batch:
+        for i in range(0,32):
+            ProcessList.append(multiprocessing.Process(target = run_process, args = (args, posterior,i, PROCESS_COUNT, DataSets)))
+    counter = 0
+    while counter < len(ProcessList):
+        if PROCESS_COUNT.value < MAX_PROCESSES_COUNT:
+            print("#######################################################################################PROCESS_COUNT:", PROCESS_COUNT.value)
+            ProcessList[counter].start()
+            counter += 1
+            time.sleep(0.1)#needed to allow the Process-counter to update in time
+            print("#######################################################################################PROCESS_COUNT:", PROCESS_COUNT.value)
+        time.sleep(0.5)  #needed to keep the resources used by the loop itself at bay
+    for i in range(len(ProcessList)):
+        ProcessList[i].join()
+    #End of Multiprocessing
+    laTex_output = "posterior & chain index & $p$-value & $\chi^2$ & parameters & measurements & bound saturation" +'\n'
+    for Set in DataSets:
+        laTex_output += str(Set["posterior"]) + " & $" + str(Set["chain"]) + "$ & $" + str(round(Set["p-value"], 2)) + "$ & $" + str(round(Set["total chi^2"], 2)) + "$ & $" + str(Set["total #parameters"]) + "$ & $" + str(Set["total #dof"]) + "$ & $" + str(round(Set["bound-saturation"],2)) + '$' + '\n'
+    laTex_file = open("summary.txt", 'a')
+    laTex_file.write(laTex_output)
+    laTex_file.close()
+    print(laTex_output)
+
 # Find mode
-def cmd_find_mode(args):
+def cmd_find_mode(args, RETURN=False):
     analysis_file = make_analysis_file(args)
     analysis = analysis_file.analysis(args.posterior)
     min_chi2 = sys.float_info.max
@@ -339,18 +521,20 @@ def cmd_find_mode(args):
                 bfp = _bfp
                 min_chi2 = _chi2
 
-    print('best-fit point:')
-    for p, v in zip(analysis.varied_parameters, _bfp.point):
-        print('  - {} -> {}'.format(p.name(), v))
+    print('best-fit point = {}'.format(bfp.point))
     print('total chi^2 = {}'.format(min_chi2))
     print('p value = {:.1f}%'.format(100 * (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))))
     print('individual test statistics:')
     for n, e in gof:
         print('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
-    print('individual observable values:')
-    for o in _bfp.analysis.log_likelihood.observable_cache():
-        print('  - {n}[{k}];{o} -> {v:f}'.format(n=o.name(), k=o.kinematics(), o=o.options(), v=o.evaluate()))
-
+    if RETURN == True:
+        return_data_dict = {"total #parameters" : len(bfp.point), "bfp" : bfp.point, "total chi^2" : min_chi2, "p-value" : 100 * (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))}
+        total_dof = 0
+        for n, e in gof:
+            return_data_dict[str(n)] = [e.chi2, e.dof]
+            total_dof +=e.dof
+        return_data_dict["total #dof"] = total_dof
+        return return_data_dict
 
 # Plot samples
 def cmd_plot_samples(args):

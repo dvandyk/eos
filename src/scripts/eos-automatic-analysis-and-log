@@ -1,0 +1,164 @@
+#!/usr/bin/env python3
+
+# Copyright (c) 2020 Danny van Dyk
+#
+# This file is part of the EOS project. EOS is free software;
+# you can redistribute it and/or modify it under the terms of the GNU General
+# Public License version 2, as published by the Free Software Foundation.
+#
+# EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
+import eos
+from eos import debug, info, warn, error
+import logging
+import numpy as _np
+import os
+import pypmc
+import scipy
+import sys
+import yaml
+
+#in case of "sample-mcmc", args is an object with the attributes ["posterior", "chain", "-N", "-S", "-p", "-n", "-b"]
+#with the method "cmd = cmd_sample_mcmc"
+#args.cmd(args)
+def get_from_env(envvar, default):
+    if not envvar in os.environ:
+        return default
+
+    return os.environ[envvar]
+
+class McmcArgs():
+    def __init__(self, posterior, chain, preruns = 3, pre_N = 150, N = 1000, stride = 5, base_directory = get_from_env('EOS_BASE_DIRECTORY', './')):
+        self.base_directory = base_directory
+        self.posterior = posterior
+        self.chain = chain
+        self.stride = stride
+        self.pre_N = pre_N
+        self.preruns = preruns
+        self.N = N
+
+class FindModeArgs():
+    def __init__(self, posterior, points = 10, init_file = '', analysis_file = '.analysis.yaml'):
+        self.posterior = posterior
+        self.points = points
+        self.init_file = init_file
+        self.analysis_file = analysis_file
+
+# Sample MCMC
+def cmd_sample_mcmc_adapted(args, set_dir = ""):
+    #same as cmd_sample_mcmc except for changing output directory
+    output_path = os.path.join(args.base_directory, set_dir, args.posterior, 'mcmc-{:04}'.format(int(args.chain)))
+    set_log_file(output_path, 'log')
+    analysis_file = make_analysis_file(args)
+    analysis = analysis_file.analysis(args.posterior)
+    rng = _np.random.mtrand.RandomState(int(args.chain) + 1701)
+    try:
+        samples, weights = analysis.sample(N=args.N, stride=args.stride, pre_N=args.pre_N, preruns=args.preruns, rng=rng)
+        eos.data.MarkovChain.create(output_path, analysis.varied_parameters, samples, weights)
+    except RuntimeError as e:
+        error('encountered run time error ({e}) in parameter point:'.format(e=e))
+        for p in analysis.varied_parameters:
+            error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
+
+# Find mode
+def cmd_find_mode_adapted(args, base_directory, set_dir):
+    #redirecting terminal output into strings
+    output_string = ''
+
+    analysis_file = make_analysis_file(args)
+    analysis = analysis_file.analysis(args.posterior)
+    min_chi2 = sys.float_info.max
+    gof = None
+    bfp = None
+    output_string += 'Starting minimization in {} points'.format(args.points) + '\n'
+    starting_points = []
+    if args.init_file != '':
+        output_string += 'Initializing starting point from MCMC data file \n'
+        chain = eos.data.MarkovChain(args.init_file)
+        idx_mode = _np.argmax(chain.weights)
+        for p, v in zip(analysis.varied_parameters, chain.samples[idx_mode]):
+            p.set(v)
+    else:
+        output_string += 'Using random starting point \n'
+
+    for i in range(args.points):
+        starting_point = [float(p) for p in analysis.varied_parameters]
+        _bfp = analysis.optimize(starting_point)
+        _gof = eos.GoodnessOfFit(analysis.log_posterior)
+        _chi2 = _gof.total_chi_square()
+        if _chi2 < min_chi2:
+            gof = _gof
+            bfp = _bfp
+            min_chi2 = _chi2
+
+    p_value = 100 * (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))
+    
+    output_data = [bfp.point, min_chi2, p_value]
+
+    output_string += 'best-fit point = {}'.format(bfp.point) + '\n'
+    output_string += 'total chi^2 = {}'.format(min_chi2)  + '\n'
+    output_string += 'p value = {:.1f}%'.format(p_value)  + '\n'
+    output_string += 'individual test statistics: \n'
+
+    test_statistics = []
+
+    for n, e in gof:
+        output_string += '  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof) + '\n'
+        test_statistics.append('chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
+
+    output_data.append(test_statistics)
+
+    #write output to text file
+    output_path = os.path.join(base_directory, set_dir, 'FitData.txt')
+    text_file = open(output_path, "w")
+    text_file.write(output_string)
+    text_file.close()
+
+    return output_data
+
+
+class DataSet():
+    def __init__(self, mcmc_args, find_mode_args, set_dir):
+        #perform sanity check
+        print(mcmc_args.posterior)
+        print(find_mode_args.posterior)
+        if mcmc_args.posterior == find_mode_args.posterior:
+            self.mcmc_args = mcmc_args
+            self.find_mode_args = find_mode_args
+            self.set_dir = set_dir
+            self.base_directory = self.mcmc_args.base_directory
+
+            # Set up directory where the data of one fit is saved
+            self.path = os.path.join(self.base_directory, self.set_dir)
+            os.mkdir(self.path)
+        else:
+            error(' posterior used in the markov chain should match with the one used in find-mode')
+
+    def __sampleMcmc(self):
+        cmd_sample_mcmc_adapted(self.mcmc_args, self.set_dir)
+
+    def __findMode(self):
+        #self.fit_data = [best_fit_point, chi², p-value, chi²/d.o.f.]
+        self.fit_data = cmd_find_mode_adapted(self.find_mode_args, self.base_directory, self.set_dir)
+    
+    def analyse(self):
+        if find_mode_args.init_file == os.path.join(self.set_dir, mcmc_args.posterior, 'mcmc-{:04}'.format(int(mcmc_args.chain))):
+            self.__sampleMcmc()
+            self.__findMode()
+        else:
+            error(' minimization should be started from MCMC file, but the directory does not match.')
+
+def automise(set_dir, posterior, chain_index):
+    #TODO: migrate default options
+    A = McmcArgs(posterior, chain_index)
+    B = FindModeArgs(posterior, init_file = os.path.join(set_dir, posterior, 'mcmc-{:04}'.format(int(chain_index))))
+    C = DataSet(A, B, set_dir)
+
+automise('testXXXXXXXXXXXXXXXXXXXXXX', 'FF-QFT+CMD+OLYA', 0)
