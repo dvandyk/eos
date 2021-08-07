@@ -305,6 +305,12 @@ namespace eos
         return std::numeric_limits<double>::quiet_NaN();
     }
 
+    double FormFactors<PToP>::f_plus_T(const double & /*s*/) const
+    {
+        throw InternalError("Not yet implemented");
+        return std::numeric_limits<double>::quiet_NaN();
+    }
+
     double FormFactors<PToP>::f_p_d1(const double & s) const
     {
         using namespace std::placeholders;
