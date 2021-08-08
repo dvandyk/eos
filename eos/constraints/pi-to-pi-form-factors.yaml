@@ -5,7 +5,6 @@
 # 2012
 #
 # {{{
-# Branching ratios are normalized to BR(Bs->phi Jpsi)
 0->pipi::Abs{f_+}^2[q2]@BarBar:2012E:
   type: MultivariateGaussian(Covariance)
   dim: 337
