@@ -48,6 +48,7 @@ namespace eos
             struct SBSB;
             struct CBLNu;
             struct UBLNu;
+            struct SBNuNu;
         }
         struct DeltaBS1;
         ///@}
@@ -137,6 +138,16 @@ namespace eos
         public:
             /* b->c Wilson coefficients */
             virtual WilsonCoefficients<ChargedCurrent> wet_cblnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
+    };
+
+    /*!
+     * Base class for the sbnunu component of models.
+     */
+    template <> class ModelComponent<components::WET::SBNuNu>
+    {
+        public:
+            /* sbnunu Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjguate = false) const = 0;
     };
 
     /*!
