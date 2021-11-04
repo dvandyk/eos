@@ -19,8 +19,10 @@
  */
 
 #include <eos/utils/instantiation_policy-impl.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/units.hh>
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -42,6 +44,28 @@ namespace eos
         };
 
         return representations[static_cast<int>(_id)];
+    }
+
+    Unit::Unit(const std::string & s) :
+        Unit(Id::undefined)
+    {
+        static const std::map<std::string, Id> map
+        {
+            { "1",       Id::none       },
+            { "GeV",     Id::gev        },
+            { "ps^-1",   Id::inverse_ps }
+        };
+
+        const auto i = map.find(s);
+        if (map.cend() == i)
+        {
+            Log::instance()->message("Unit", ll_error)
+                << "Unrecognized unit '" << s << "' encountered";
+        }
+        else
+        {
+            _id = i->second;
+        }
     }
 
     Unit

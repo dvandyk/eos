@@ -49,6 +49,7 @@ namespace eos
                 inverse_ps
             };
 
+            Unit(const std::string &);
             Unit(const Unit &) = default;
             Unit(Unit &&) = default;
             ~Unit() = default;
@@ -64,6 +65,7 @@ namespace eos
             static Unit InversePicoSecond();
 
             bool operator== (const Unit &) const;
+            Unit & operator= (const Unit &) = default;
     };
 }
 
