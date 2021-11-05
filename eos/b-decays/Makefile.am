@@ -6,6 +6,7 @@ AM_LDLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeosbdecays.la
 libeosbdecays_la_SOURCES = \
+	b-to-d-psd.cc b-to-d-psd.hh \
 	b-to-d-pi-l-nu.cc b-to-d-pi-l-nu.hh \
 	b-to-d-l-x-nu.cc b-to-d-l-x-nu.hh \
 	b-to-l-nu.cc b-to-l-nu.hh \
@@ -31,6 +32,7 @@ libeosbdecays_la_LIBADD = \
 
 include_eos_bdecaysdir = $(includedir)/eos/b-decays
 include_eos_bdecays_HEADERS = \
+	b-to-d-psd.hh \
 	b-to-d-pi-l-nu.hh \
 	b-to-d-l-x-nu.hh \
 	b-to-l-nu.hh \
@@ -51,6 +53,7 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
+	b-to-d-psd_TEST \
 	b-to-l-nu_TEST \
 	b-to-d-l-nu_TEST \
 	b-to-dstar-l-nu_TEST \
@@ -71,6 +74,9 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
+
+b_to_d_psd_TEST_SOURCES = b-to-d-psd_TEST.cc
+
 b_to_l_nu_TEST_SOURCES = b-to-l-nu_TEST.cc
 
 b_to_d_l_nu_TEST_SOURCES = b-to-d-l-nu_TEST.cc
