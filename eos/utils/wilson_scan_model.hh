@@ -316,7 +316,7 @@ namespace eos
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
             /*! cbar b sbar u Wilson coefficients */
-            virtual WilsonCoefficients<wc::CBSU> wilson_coefficients_cbsu(const double & mu) const;
+            virtual WilsonCoefficients<wc::CBSU> wet_cbsu(const bool & cp_conjguate = false) const;
     };
 
     /*!

@@ -571,7 +571,7 @@ namespace eos
     }
 
     WilsonCoefficients<wc::CBSU>
-    WilsonScanComponent<components::WET::CBSU>::wilson_coefficients_cbsu(const double & mu) const
+    WilsonScanComponent<components::WET::CBSU>::wet_cbsu(const bool & cp_conjugate) const
     {
         WilsonCoefficients<wc::CBSU> result;
 
@@ -597,6 +597,14 @@ namespace eos
             complex<double>(_re_cbsu_c9p__CBSU(), _im_cbsu_c9p__CBSU()),
             complex<double>(_re_cbsu_c10p__CBSU(), _im_cbsu_c10p__CBSU())
         }};
+
+        if (cp_conjugate)
+        {
+            for (auto & wc : result._coefficients)
+            {
+                wc = std::conj(wc);
+            }
+        }
 
         return result;
     }

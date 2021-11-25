@@ -243,7 +243,7 @@ namespace eos
         inline complex<double> c9p()  const { return _coefficients[18]; }
         inline complex<double> c10p() const { return _coefficients[19]; }
 
-        std::array<complex<double>, 20> convertToMvD();
+        std::array<complex<double>, 20> convertToMvD() const;
     };
 }
 

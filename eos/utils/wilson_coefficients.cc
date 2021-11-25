@@ -264,7 +264,7 @@ namespace eos
     }
 
     std::array<complex<double>, 20>
-    WilsonCoefficients<wc::CBSU>::convertToMvD()
+    WilsonCoefficients<wc::CBSU>::convertToMvD() const
     {
         using std::array;
 
