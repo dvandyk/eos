@@ -326,8 +326,10 @@ Runs a list of subcommands.
     return parser
 
 def main():
+    print(f'argv = {sys.argv}', file=sys.stderr)
     parser = _parser()
     args = parser.parse_args()
+    print(f'args = {args}', file=sys.stderr)
 
     if args.verbose > 3:
         args.verbose = 3
@@ -381,6 +383,7 @@ class RNG:
 
 # Find mode
 def cmd_find_mode(args):
+    print(args, file=sys.stderr)
     analysis_file = make_analysis_file(args)
     analysis = analysis_file.analysis(args.posterior)
     min_chi2 = sys.float_info.max

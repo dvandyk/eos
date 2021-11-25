@@ -8,6 +8,13 @@ export EOS_BASE_DIRECTORY=$(mktemp -d)
 
 echo using PYTHON=${PYTHON} >&2
 echo using PYTHONPATH=${PYTHONPATH} >&2
+echo using SOURCE_DIR=${SOURCE_DIR} >&2
+echo contents of SOURCE_DIR: >&2
+ls -l ${SOURCE_DIR} >&2
+
+echo analysis file is in ${SOURCE_DIR}/eos-analysis_TEST.d >&2
+echo contents: >&2
+ls -l ${SOURCE_DIR}/eos-analysis_TEST.d >&2
 
 ###########################
 ## Analysis optimization ##
@@ -16,7 +23,7 @@ echo running analysis optimization test ... >&2
 $PYTHON ${SOURCE_DIR}/eos-analysis \
     find-mode CKM+FF \
     --use-random-seed 123 \
-    -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+    --analysis-file ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 
 
