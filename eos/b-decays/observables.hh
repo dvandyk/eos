@@ -24,7 +24,9 @@
 
 namespace eos
 {
-    ObservableSection make_b_decays_section();
+    ObservableSection make_semileptonic_b_decays_section();
+
+    ObservableSection make_nonleptonic_b_decays_section();
 }
 
 #endif

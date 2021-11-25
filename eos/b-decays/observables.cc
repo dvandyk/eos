@@ -18,6 +18,7 @@
  */
 
 #include <eos/observable-impl.hh>
+#include <eos/b-decays/b-to-d-psd.hh>
 #include <eos/b-decays/b-to-d-pi-l-nu.hh>
 #include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
@@ -1885,7 +1886,7 @@ namespace eos
     // }}}
 
     ObservableSection
-    make_b_decays_section()
+    make_semileptonic_b_decays_section()
     {
         auto imp = new Implementation<ObservableSection>(
             "Observables in (semi)leptonic $b$-hadron decays",
@@ -1921,6 +1922,40 @@ namespace eos
 
                 // B -> X_u l^- nubar
                 make_b_to_xu_semileptonic_group(),
+            }
+        );
+
+        return ObservableSection(imp);
+    }
+
+    // Bbar_q^0 -> D_q^+ L^-
+    // {{{
+    ObservableGroup
+    make_bz_to_dp_km_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $\bar{B}^0\to D^{(*)+} K^-)",
+            R"()",
+            {
+                make_observable("B^0->D^+K^-::BR",
+                        Unit::None(),
+                        &BToDPseudoscalar::branching_ratio),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    ObservableSection
+    make_nonleptonic_b_decays_section()
+    {
+        auto imp = new Implementation<ObservableSection>(
+            "Observables in nonleptonic $b$-hadron decays",
+            "",
+            {
+                // Bbar^0_q -> D^+_q L^-
+                make_bz_to_dp_km_group()
             }
         );
 

@@ -43,7 +43,8 @@ namespace eos
     make_observable_sections()
     {
         return std::vector<ObservableSection>({
-            make_b_decays_section(),
+            make_semileptonic_b_decays_section(),
+            make_nonleptonic_b_decays_section(),
             make_rare_b_decays_section(),
             make_form_factors_section(),
             make_meson_mixing_section(),
