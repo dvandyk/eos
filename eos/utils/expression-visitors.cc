@@ -16,6 +16,7 @@
  */
 
 #include <eos/observable.hh>
+#include <eos/observable-impl.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/expression.hh>
 #include <eos/utils/expression-cacher.hh>
@@ -383,7 +384,18 @@ namespace eos::exp
     std::set<std::string>
     ExpressionKinematicReader::visit(const ObservableNameExpression & e)
     {
+        std::cerr << "e: " << e.observable_name.full() << std::endl;
         std::set<std::string> kinematic_set;
+
+        const auto & entries = impl::observable_entries;
+        const auto & it = entries.find(e.observable_name);
+        if (it == entries.end())
+        {
+            throw InternalError("Observable '" + e.observable_name.full() + "' not found");
+        }
+        const auto entry = it->second;
+
+        kinematic_set.insert(entry->begin_kinematic_variables(), entry->end_kinematic_variables());
 
         const auto & kinematics_values = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
