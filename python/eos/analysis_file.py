@@ -155,44 +155,131 @@ class AnalysisFile:
             for k, v in params.items()
         }
 
-    def run(self):
+    def run(self, dry_run=False, executor=None):
         """Runs predefined analysis steps recorded in the analysis file."""
-        import inspect
-        command_map = {
-            'find-clusters':       eos.find_clusters,
-            'predict-observables': eos.predict_observables,
-            'sample-mcmc':         eos.sample_mcmc,
-            'sample-pmc':          eos.sample_pmc,
-        }
+        from .tasks import _tasks
+        from collections import ChainMap
+        from inspect import signature
+        from itertools import chain, product
+        import networkx as nx
 
-        for idx, step in enumerate(self._steps):
-            if type(step) is not dict:
-                raise ValueError("Step #{} is not a key/value map.")
+        def _expand_arguments(step_name, task, arguments):
+            task_sig = signature(_tasks[task])
 
-            if 'command' not in step:
-                raise ValueError("Step #{} contains no command.")
-
-            command  = step['command']
-            func     = command_map[command]
-            params   = step['parameters'] if 'parameters' in step else {}
-            params   = { params_map[(command, k)]: v for k, v in params.items() }
-            paramstr = ','.join(['{k}={v}'.format(k=k,v=v) for k, v in params])
-
-            func_sig = inspect.signature(func)
-            func_required_args = {}
-            for n, p in func_sig.parameters.items():
-                if p.default() != p.empty():
+            task_required_args = {}
+            for n, p in task_sig.parameters.items():
+                if type(p.default) != p.empty:
                     continue
-                func_required_args += { n }
-            for n in func_required_args:
-                if n in params.keys():
+                task_required_args += { n }
+            for n in task_required_args:
+                if n in arguments.keys():
                     continue
-                eos.error('Mandatory argument \'{}\' not provided'.format(n))
-                return
+                raise ValueError(f'Task "{task}" in step "{step_name}" requires mandatory argument \'{n}\', which is not provided')
 
-            eos.info('Beginning step #{i}: {cmd}({params})'.format(i=i,cmd=cmd, params=paramstr))
-            func(**params)
-            eos.info('Step #{i} complete'.format(i=i))
+            outer_list = []
+            for key, value in arguments.items():
+                if key not in task_sig.parameters:
+                    eos.warn(f'Task "{task}" in step "{step_name}" does not expect argument "{key}", possibly misspelled?')
+                    continue
+
+                param_type = task_sig.parameters[key].annotation
+                print(f'param_type = {param_type}, type(param_type) = {type(param_type)}, str = {str}')
+
+                # straight match?
+                if type(value) is param_type:
+                    # append
+                    outer_list.append([{key: value}])
+                # handle integer parameters
+                elif param_type is int:
+                    # integer range?
+                    if type(value) is str:
+                        values = list(chain.from_iterable(range(int(v.split("-")[0]),int(v.split("-")[-1])+1) for v in value.split(",")))
+                    else:
+                        raise ValueError(f'Task "{task}" in step "{step_name}" expects argument "{key}" to be an integer, but got {type(value)}')
+                else:
+                    print(f'task = {task}, key = {key}, param_type = {param_type}, value = {value}, str(value) = {str(value)}')
+                    outer_list.append([{key: param_type(value)}])
+
+            result = []
+            for r in list(product(*outer_list)):
+                arguments = {}
+                for d in r:
+                    arguments.update(d)
+                result.append(arguments)
+
+            return result
+
+        def _handle_single_step(step_desc, step_arguments):
+            step_name = step_desc['name']
+            tasks     = step_desc['tasks']
+
+            for task_desc in tasks:
+                task = task_desc['task']
+                if task not in _tasks.keys():
+                    raise ValueError(f'Unknown task \"{task}\" encountered in step {step_name}')
+
+                arguments = { 'analysis_file': self }
+                for key, value in step_arguments.items():
+                    if key in _tasks.keys():
+                        continue
+
+                    arguments[key] = value
+
+                if 'arguments' in task_desc:
+                    arguments.update(task_desc['arguments'])
+
+                if task in step_arguments:
+                    arguments.update(step_arguments[task])
+
+                return [(task, a) for a in _expand_arguments(step_name, task, arguments)]
+
+        # main part starts here
+
+        # check inputs
+        for step_idx, step_desc in enumerate(self._steps):
+            if type(step_desc) is not dict:
+                raise ValueError(f'Description of step #{step_idx} is not a key/value map')
+
+            if 'name' not in step_desc:
+                raise ValueError(f'Description of step #{step_idx} requires a name')
+
+            if 'tasks' not in step_desc:
+                raise ValueError('Description of step #{step_idx} ({step["name"]}) requires a list of tasks')
+
+            if 'iterations' in step_desc:
+                if type(step_desc['iterations']) is not list:
+                    raise ValueError(f'Description of step #{step_idx} ({step["name"]} expects a list of iterations')
+
+        # resolve dependencies
+        graph = nx.MultiDiGraph()
+        graph.add_nodes_from([step['name'] for step in self._steps])
+        for step in self._steps:
+            if not 'depends-on' in step:
+                continue
+
+            for dep in step['depends-on']:
+                graph.add_edge(dep, step['name'])
+        steps = list(nx.topological_sort(graph))
+        eos.info(f'Dependencies between steps enforce the following order:')
+        for step_idx, step_name in enumerate(steps):
+            eos.info(f'  {chr(65 + step_idx)}) {step_name}')
+
+        # handle steps in order imposed by the dependency graph
+        task_list = []
+        for step in steps:
+            step_desc = { sd['name']: sd for sd in self._steps }[step]
+            iterations = [{}]
+            if 'iterations' in step_desc:
+                iterations = step_desc['iterations']
+
+            for iteration_arguments in iterations:
+                task_list.extend(_handle_single_step(step_desc, iteration_arguments))
+
+        if dry_run:
+            print(task_list)
+        else:
+            for task, arguments in task_list:
+                _tasks[task](**arguments)
 
 
     @property
