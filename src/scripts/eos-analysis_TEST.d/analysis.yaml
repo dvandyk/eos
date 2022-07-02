@@ -83,28 +83,23 @@ predictions:
 steps:
   - name: optimize
     iterations:
-      - posterior: FF
-        chain: '0-7'   # run 8 chains in parallel, and optimize starting from their modes
       - posterior: CKM+FF
-        chain: '0-7'   # run 8 chains in parallel, and optimize starting from their modes
     tasks:
-      - task: sample-mcmc
-        arguments:
-          preruns: 10
-          pre_N: 1000
-
       - task: find-mode
         arguments:
-          label: '-chain-{chain}'
+          label: '-seed-{seed}'
 
   - name: sample
     iterations:
-      - { posterior: FF      'sample-mcmc': { pre_N: 1000, preruns: 4  } }
-      - { posterior: CKM+FF, 'sample-mcmc': { pre_N: 1500, preruns: 10 } }
+      - { posterior: CKM+FF }
     tasks:
       - task: sample-mcmc
         arguments:
-          chain: '10-12, 20, 30-33'
-          pre_N: 1000 # overriden for 'CKM-FF' to use 'pre_N': 1500
+          chain: '0,1-2,3'
+          pre_N: 500
 
       - task: find-clusters
+
+      - task: sample-pmc
+        arguments:
+          step_N: 1000
