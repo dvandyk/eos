@@ -15,8 +15,6 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import annotations
-
 import eos
 import contextlib
 import functools
@@ -87,7 +85,7 @@ def task(name, output, mode=lambda **kwargs: 'w'):
 
 
 @task('find-mode', '{posterior}/mode-{label}')
-def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimizations:int=3, start_point:list[float]=None, chain:int=None, seed:int=None, label:str='default'):
+def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimizations:int=3, start_point:list=None, chain:int=None, seed:int=None, label:str='default'):
     '''
     Finds the mode of the named posterior.
 
@@ -186,7 +184,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
 
 
 @task('sample-mcmc', '{posterior}/mcmc-{chain:04}')
-def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str='./', pre_N:int=150, preruns:int=3, N:int=1000, stride:int=5, cov_scale:float=0.1, start_point:list[float]=None):
+def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str='./', pre_N:int=150, preruns:int=3, N:int=1000, stride:int=5, cov_scale:float=0.1, start_point:list=None):
     """
     Samples from a named posterior PDF using Markov Chain Monte Carlo (MCMC) methods.
 
@@ -265,7 +263,7 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
 
 
 @task('mixture-product', '{posterior}/product')
-def mixture_product(posterior:str, posteriors:list[str], base_directory:str='./', analysis_file:str=None):
+def mixture_product(posterior:str, posteriors:list, base_directory:str='./', analysis_file:str=None):
     """
     Compute the cartesian product of the densities listed in posteriors. Note that this product is not commutative.
 
@@ -288,7 +286,7 @@ def mixture_product(posterior:str, posteriors:list[str], base_directory:str='./'
 # Sample PMC
 @task('sample-pmc', '{posterior}/pmc', mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a')
 def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N:int=500, steps:int=10, final_N:int=5000,
-               perplexity_threshold:float=1.0, weight_threshold:float=1e-10, sigma_test_stat:list[float]=None, initial_proposal:str='clusters',
+               perplexity_threshold:float=1.0, weight_threshold:float=1e-10, sigma_test_stat:list=None, initial_proposal:str='clusters',
                pmc_iterations:int=1, pmc_rel_tol:float=1e-10, pmc_abs_tol:float=1e-05, pmc_lookback:int=1):
     """
     Samples from a named posterior using the Population Monte Carlo (PMC) methods.
