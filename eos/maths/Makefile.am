@@ -15,6 +15,8 @@ libeosmaths_la_SOURCES = \
 	interpolation.cc interpolation.hh \
 	lagrange-polynomial.hh \
 	matrix.hh \
+	multiplepolylog_li22.cc multiplepolylog_li22.hh \
+	multiplepolylog_li22-const.cc \
 	polylog.cc polylog.hh \
 	power-of.hh \
 	szego-polynomial.hh
