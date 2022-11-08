@@ -31,12 +31,12 @@
 using namespace test;
 using namespace eos;
 
-class AnalyticFormFactorBToPiDKMMO2008Test :
+class AnalyticFormFactorBsToKDKMMO2008Test :
     public TestCase
 {
     public:
-        AnalyticFormFactorBToPiDKMMO2008Test() :
-            TestCase("analytic_form_factor_b_to_pi_DKMMO2008_test")
+        AnalyticFormFactorBsToKDKMMO2008Test() :
+            TestCase("analytic_form_factor_bs_to_k_DKMMO2008_test")
         {
         }
 
@@ -47,7 +47,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
             /* Factory */
             {
                 Parameters p = Parameters::Defaults();
-                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi::DKMMO2008", p, Options{ });
+                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B_s->K::DKMMO2008", p, Options{ });
 
                 TEST_CHECK(0 != ff.get());
             }
@@ -56,17 +56,17 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
             {
                 Parameters p = Parameters::Defaults();
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, Options{ });
-                p["mass::B_d"] = 5.2795;
+                p["mass::B_s"] = 5.3667;
                 p["mass::b(MSbar)"] = 4.2;
-                p["B->pi::mu@DKMMO2008"] = 4.2;
-                p["B->pi::Mp^2@DKMMO2008"] = 5.0;       // decay constant
-                p["B->pi::sp_0^B@DKMMO2008"] = 35.75;   // decay constant
-                p["B->pi::s_0^+(0)@DKMMO2008"] = 37.5;  // f_+
-                p["B->pi::s_0^+'(0)@DKMMO2008"] = 0.0;  // f_+
-                p["B->pi::s_0^0(0)@DKMMO2008"] = 37.5;  // f_0
-                p["B->pi::s_0^0'(0)@DKMMO2008"] = 0.0;  // f_0
-                p["B->pi::s_0^T(0)@DKMMO2008"] = 37.5;  // f_T
-                p["B->pi::s_0^T'(0)@DKMMO2008"] = 0.0;  // f_T
+                p["B_s->K::mu@DKMMO2008"] = 4.2;
+                p["B_s->K::Mp^2@DKMMO2008"] = 5.0;       // decay constant
+                p["B_s->K::sp_0^B@DKMMO2008"] = 35.75;   // decay constant
+                p["B_s->K::s_0^+(0)@DKMMO2008"] = 37.5;  // f_+
+                p["B_s->K::s_0^+'(0)@DKMMO2008"] = 0.0;  // f_+
+                p["B_s->K::s_0^0(0)@DKMMO2008"] = 37.5;  // f_0
+                p["B_s->K::s_0^0'(0)@DKMMO2008"] = 0.0;  // f_0
+                p["B_s->K::s_0^T(0)@DKMMO2008"] = 37.5;  // f_T
+                p["B_s->K::s_0^T'(0)@DKMMO2008"] = 0.0;  // f_T
                 p["QCD::m_0^2"] = 0.8;
                 p["QCD::cond_GG"] = 0.012;
                 p["QCD::r_vac"] = 1.0;
@@ -96,25 +96,27 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
             }
 
             /*
-             * B -> pi f_+ Form Factor at test scale mu = 3.0 GeV.
+             * B_s -> K f_+ Form Factor at test scale mu = 3.0 GeV.
              * These test values are in reasonably agreement with values
              * derived from the Mathematica notebook graciously
-             * provided by I. Sentitemsu Imsong.
+             * provided by Domagoj Leljak.
              */
             {
                 static const double eps = 1e-4;
 
                 Parameters p = Parameters::Defaults();
-                p["mass::pi^+"] = 0.13957;
+                p["mass::K_u"] = 0.49368;
                 p["mass::b(MSbar)"] = 4.18;
                 p["mass::d(2GeV)"] = 0.0048;
                 p["mass::u(2GeV)"] = 0.0032;
-                p["pi::a2@1GeV"] = 0.17;
-                p["pi::a4@1GeV"] = 0.06;
-                p["pi::f3@1GeV"] = 0.0045;
-                p["pi::omega3@1GeV"] = -1.5;
-                p["pi::omega4@1GeV"] = 0.2;
-                p["pi::delta^2@1GeV"] = 0.18;
+                p["K::a1@1GeV"] =  0.06;
+                p["K::a2@1GeV"] =  0.25;
+                p["K::a3@1GeV"] =  0.00;
+                p["K::a4@1GeV"] = -0.15;
+                p["K::f3@1GeV"] = 0.0045;
+                p["K::omega3@1GeV"] = -1.5;
+                p["K::omega4@1GeV"] = 0.2;
+                p["K::delta^2@1GeV"] = 0.18;
                 p["B->pi::M^2@DKMMO2008"] = 12.0;
                 p["B->pi::Mp^2@DKMMO2008"] = 4.5;
                 p["B->pi::mu@DKMMO2008"] = 3.0;
