@@ -39,8 +39,9 @@ jobs:
                 rm -Rf '/usr/local/lib/python2.7/site-packages/numpy/'
                 brew outdated boost || brew upgrade boost || true
                 brew outdated boost-python3 || brew upgrade boost-python3 || true
-                brew install autoconf automake boost-python3 gsl libtool pkg-config yaml-cpp
+                brew install autoconf automake boost-python3 gsl libtool pkg-config yaml-cpp hdf5@1.8
                 brew link --overwrite --force python@3.10
+                export HDF5_DIR='/usr/local/opt/hdf5@1.8'
                 $PYTHON -m pip install -U cython h5py matplotlib networkx numpy PyYAML scipy wilson "rundec>=0.5"
                 $PYTHON -m pip install -U "pypmc>=1.2"
 
