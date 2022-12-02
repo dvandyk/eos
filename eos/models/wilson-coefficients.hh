@@ -127,6 +127,7 @@ namespace eos
     {
         struct SBSB {};
         struct SBNuNu {};
+        struct LLLL {};
     }
 
     /* Wilson coefficients for |Delta B| = |Delta S| = 2 operators */
@@ -215,6 +216,27 @@ namespace eos
         inline complex<double> cSL()   const { return _coefficients[2]; }
         inline complex<double> cSR()   const { return _coefficients[3]; }
         inline complex<double> cTL()   const { return _coefficients[4]; }
-    };}
+    };
+
+    template <> struct WilsonCoefficients<wc::LLLL>
+    {
+        /*
+         * C++ idx -> operator
+         * 0       -> O_V,LL = [l1bar gamma^mu P_L l2][l3bar gamma_mu P_L l4]
+         * 1       -> O_V,LR = [l1bar gamma^mu P_L l2][l3bar gamma_mu P_R l4]
+         * 2       -> O_V,RR = [l1bar gamma^mu P_R l2][l3bar gamma_mu P_R l4]
+         * 3       -> O_S,RR = [l1bar P_R l2][l3bar P_R l4]
+         */
+        std::array<complex<double>, 4u> _coefficients;
+
+        /*! Default ctor */
+        WilsonCoefficients();
+
+        inline complex<double> cVLL() const { return _coefficients[0]; }
+        inline complex<double> cVLR() const { return _coefficients[1]; }
+        inline complex<double> cVRR() const { return _coefficients[2]; }
+        inline complex<double> cSRR() const { return _coefficients[3]; }
+    };
+}
 
 #endif

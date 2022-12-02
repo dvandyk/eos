@@ -257,4 +257,9 @@ namespace eos
     {
         _coefficients.fill(0.0);
     }
+
+    WilsonCoefficients<wc::LLLL>::WilsonCoefficients()
+    {
+        _coefficients.fill(0.0);
+    }
 }
