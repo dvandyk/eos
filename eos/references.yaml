@@ -739,6 +739,13 @@ CMS+LHCb:2014A:
     id: oai:arXiv.org:1411.4413
   inspire-id: CMS:2014xfa
   title: Observation of the rare $B^0_s\to\mu^+\mu^-$ decay from the combined analysis of CMS and LHCb data
+CNR:2013A:
+  authors: Crivellin, A. and Najjari, S. and Rosiek, J.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1312.0634
+  inspire-id: Crivellin:2013hpa
+  title: Lepton Flavor Violation in the Standard Model with general Dimenson-Six Operators
 D0:2011A:
   authors: Abazov, Victor Mukhamedovich et al.
   collaboration: D0
