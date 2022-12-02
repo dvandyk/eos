@@ -271,6 +271,19 @@ namespace eos
             virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjugate) const;
     };
 
+    template <>
+    class WilsonScanComponent<components::WET::LTauLL> :
+    public virtual ModelComponent<components::WET::LTauLL>
+    {
+        private:
+            std::array<std::array<std::array<std::array<UsedParameter, 4u>, 2u>, 2u>, 2u> _re_c__ltaull;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            virtual WilsonCoefficients<wc::LLLL> wet_ltaull(const std::array<LeptonFlavor, 3u> &) const;
+    };
+
     /*!
      * A model with all possible operators; their Wilson coefficients
      * are allowed to have arbitrary values.
@@ -283,7 +296,8 @@ namespace eos
         public WilsonScanComponent<components::DeltaBS1>,
         public WilsonScanComponent<components::WET::UBLNu>,
         public WilsonScanComponent<components::WET::CBLNu>,
-        public WilsonScanComponent<components::WET::SBNuNu>
+        public WilsonScanComponent<components::WET::SBNuNu>,
+        public WilsonScanComponent<components::WET::LTauLL>
     {
         public:
             WilsonScanModel(const Parameters &, const Options &);
@@ -314,7 +328,8 @@ namespace eos
         public ConstrainedWilsonScanComponent,
         public WilsonScanComponent<components::WET::UBLNu>,
         public WilsonScanComponent<components::WET::CBLNu>,
-        public WilsonScanComponent<components::WET::SBNuNu>
+        public WilsonScanComponent<components::WET::SBNuNu>,
+        public WilsonScanComponent<components::WET::LTauLL>
     {
         public:
             ConstrainedWilsonScanModel(const Parameters &, const Options &);

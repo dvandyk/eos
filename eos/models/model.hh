@@ -49,6 +49,7 @@ namespace eos
             struct CBLNu;
             struct UBLNu;
             struct SBNuNu;
+            struct LTauLL;
         }
         struct DeltaBS1;
         ///@}
@@ -151,6 +152,16 @@ namespace eos
     };
 
     /*!
+     * Base class for the LLLL component of models.
+     */
+    template <> class ModelComponent<components::WET::LTauLL>
+    {
+        public:
+            /* sbnunu Wilson coefficients */
+            virtual WilsonCoefficients<wc::LLLL> wet_ltaull(const std::array<LeptonFlavor, 3u> & sector) const = 0;
+    };
+
+    /*!
      * Base class for all models.
      */
     class Model :
@@ -161,7 +172,8 @@ namespace eos
         public virtual ModelComponent<components::DeltaBS1>,
         public virtual ModelComponent<components::WET::UBLNu>,
         public virtual ModelComponent<components::WET::CBLNu>,
-        public virtual ModelComponent<components::WET::SBNuNu>
+        public virtual ModelComponent<components::WET::SBNuNu>,
+        public virtual ModelComponent<components::WET::LTauLL>
     {
         public:
             virtual ~Model() = 0;

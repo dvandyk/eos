@@ -928,6 +928,16 @@ namespace implementation
         return wc;
     }
 
+    SMComponent<components::WET::LTauLL>::SMComponent(const Parameters & , ParameterUser &)
+    {
+    }
+
+    WilsonCoefficients<wc::LLLL>
+    SMComponent<components::WET::LTauLL>::wet_ltaull(const std::array<LeptonFlavor, 3u> &) const
+    {
+        return WilsonCoefficients<wc::LLLL>();
+    }
+
     StandardModel::StandardModel(const Parameters & p) :
         SMComponent<components::CKM>(p, *this),
         SMComponent<components::QCD>(p, *this),
@@ -935,7 +945,8 @@ namespace implementation
         SMComponent<components::DeltaBS1>(p, *this),
         SMComponent<components::WET::CBLNu>(p, *this),
         SMComponent<components::WET::UBLNu>(p, *this),
-        SMComponent<components::WET::SBNuNu>(p, *this)
+        SMComponent<components::WET::SBNuNu>(p, *this),
+        SMComponent<components::WET::LTauLL>(p, *this)
     {
     }
 

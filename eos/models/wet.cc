@@ -508,6 +508,71 @@ namespace eos
         return result;
     }
 
+    namespace impl
+    {
+        std::array<UsedParameter, 4u> ltaull_param(const std::array<LeptonFlavor, 3u> & _sector, const Parameters & p, ParameterUser & u)
+        {
+            const std::string sector = stringify(_sector[0]) + "tau" + stringify(_sector[1]) + stringify(_sector[2]);
+
+            return {{
+                UsedParameter(p[sector + "::CVLL"], u),
+                UsedParameter(p[sector + "::CVLR"], u),
+                UsedParameter(p[sector + "::CVRR"], u),
+                UsedParameter(p[sector + "::CSRR"], u)
+            }};
+        }
+    }
+
+    /* ltaull Wilson coefficients */
+    WilsonScanComponent<components::WET::LTauLL>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+        _re_c__ltaull{{
+            {{ // e tau l l
+                {{ // e tau e l
+                    impl::ltaull_param({{ LeptonFlavor::electron, LeptonFlavor::electron, LeptonFlavor::electron }}, p, u),
+                    impl::ltaull_param({{ LeptonFlavor::electron, LeptonFlavor::electron, LeptonFlavor::muon }},     p, u),
+                }},
+                {{ // e tau mu l
+                    impl::ltaull_param({{ LeptonFlavor::electron, LeptonFlavor::muon,     LeptonFlavor::electron }}, p, u),
+                    impl::ltaull_param({{ LeptonFlavor::electron, LeptonFlavor::muon,     LeptonFlavor::muon }},     p, u),
+                }}
+            }},
+            {{ // mu tau ll
+                {{ // mu tau e l
+                    impl::ltaull_param({{ LeptonFlavor::muon,     LeptonFlavor::electron, LeptonFlavor::electron }}, p, u),
+                    impl::ltaull_param({{ LeptonFlavor::muon,     LeptonFlavor::electron, LeptonFlavor::muon }},     p, u),
+                }},
+                {{ // mu tau mu l
+                    impl::ltaull_param({{ LeptonFlavor::muon,     LeptonFlavor::muon,     LeptonFlavor::electron }}, p, u),
+                    impl::ltaull_param({{ LeptonFlavor::muon,     LeptonFlavor::muon,     LeptonFlavor::muon }},     p, u),
+                }}
+            }}
+        }}
+    {
+    }
+
+    WilsonCoefficients<wc::LLLL>
+    WilsonScanComponent<components::WET::LTauLL>::wet_ltaull(const std::array<LeptonFlavor, 3u> & sector) const
+    {
+        WilsonCoefficients<wc::LLLL> result;
+
+        if ((sector[0] == LeptonFlavor::tauon) || (sector[1] == LeptonFlavor::tauon) || (sector[2] == LeptonFlavor::tauon))
+        {
+            throw InternalError("WilsonScanComponent<components::WET::LTauLL implements only operators of the form ltaull with l='e' or l='mu'");
+        }
+
+        const auto & re_c = _re_c__ltaull[static_cast<unsigned>(sector[0])][static_cast<unsigned>(sector[1])][static_cast<unsigned>(sector[2])];
+
+        result._coefficients = std::array<complex<double>, 4u>{{
+            complex<double>(re_c[0], 0.0),
+            complex<double>(re_c[1], 0.0),
+            complex<double>(re_c[2], 0.0),
+            complex<double>(re_c[3], 0.0)
+        }};
+
+        return result;
+    }
+
+
     ConstrainedWilsonScanComponent::ConstrainedWilsonScanComponent(const Parameters & p, const Options & o, ParameterUser & u) :
         WilsonScanComponent<components::DeltaBS1>(p, o, u)
     {
@@ -541,7 +606,8 @@ namespace eos
         WilsonScanComponent<components::DeltaBS1>(parameters, options, *this),
         WilsonScanComponent<components::WET::UBLNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this)
+        WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this),
+        WilsonScanComponent<components::WET::LTauLL>(parameters, options, *this)
     {
     }
 
@@ -562,7 +628,8 @@ namespace eos
         ConstrainedWilsonScanComponent(parameters, options, *this),
         WilsonScanComponent<components::WET::UBLNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this)
+        WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this),
+        WilsonScanComponent<components::WET::LTauLL>(parameters, options, *this)
     {
     }
 

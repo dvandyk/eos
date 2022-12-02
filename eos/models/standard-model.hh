@@ -202,6 +202,15 @@ namespace eos
             virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjugate) const;
     };
 
+    template <> class SMComponent<components::WET::LTauLL> :
+    public virtual ModelComponent<components::WET::LTauLL>
+    {
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            virtual WilsonCoefficients<wc::LLLL> wet_ltaull(const std::array<LeptonFlavor, 3u> &) const;
+    };
+
     class StandardModel :
         public Model,
         public SMComponent<components::CKM>,
@@ -210,7 +219,8 @@ namespace eos
         public SMComponent<components::DeltaBS1>,
         public SMComponent<components::WET::UBLNu>,
         public SMComponent<components::WET::CBLNu>,
-        public SMComponent<components::WET::SBNuNu>
+        public SMComponent<components::WET::SBNuNu>,
+        public SMComponent<components::WET::LTauLL>
     {
         public:
             StandardModel(const Parameters &);
