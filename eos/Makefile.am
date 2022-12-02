@@ -14,6 +14,7 @@ SUBDIRS = \
 	rare-b-decays \
 	b-decays \
 	meson-mixing \
+	tau-decays \
 	.
 
 AM_CXXFLAGS = @AM_CXXFLAGS@

@@ -1396,3 +1396,50 @@ groups:
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{T_L}$'
+
+  # ltaull WET Parameters
+  # {{{
+  - title: '$\bar{\ell}_1 \tau \bar{\ell}_2 \ell_3$ WET Parameters'
+    description: >
+        The list of parameters describing the $\bar{\ell}_1\tau\bar{\ell}_2\ell_3$ Wilson coefficients in the effective Hamiltonian
+        \begin{equation}
+          \mathcal{H}^{\bar{s}b\bar{\nu}\nu}_\mathrm{eff}
+          = \frac{4 G_F}{\sqrt{2}} \sum_i \mathcal{C}^{\bar{\ell}_1\tau\bar{\ell}_2\ell_3}_i \mathcal{O}^{\bar{\ell}_1\tau\bar{\ell}_2\ell_3}_i\,.
+        \end{equation}
+        The operators read:
+        \begin{align}
+          \mathcal{O}_{V,LL} & = [\bar{\ell}_1 \gamma^\mu P_{L} \tau]\, [\bar{\ell}_2 \gamma_\mu P_L \ell_3]
+          \mathcal{O}_{V,LR} & = [\bar{\ell}_1 \gamma^\mu P_{L} \tau]\, [\bar{\ell}_2 \gamma_\mu P_R \ell_3]
+          \mathcal{O}_{V,RR} & = [\bar{\ell}_1 \gamma^\mu P_{R} \tau]\, [\bar{\ell}_2 \gamma_\mu P_R \ell_3]
+          \mathcal{O}_{S,RR} & = [\bar{\ell}_1            P_{R} \tau]\, [\bar{\ell}_2            P_R \ell_3]
+        \end{align}
+
+    wcxf-relevant: true
+    parameters:
+      # e tau e e
+      'etauee::mu' :
+          central: 1.776
+          min:     1.776
+          max:     1.776
+          latex:   '$\mu^{\bar{e}\tau\bar{e}e}$'
+          unit:    'GeV'
+      'etauee::Re{cVLL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{e}\tau\bar{e}e}_{V,LL}}$'
+      'etauee::Re{cVLR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{e}\tau\bar{e}e}_{V,LR}}$'
+      'etauee::Re{cVRR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{e}\tau\bar{e}e}_{V,RR}}$'
+      'etauee::Re{cSRR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{e}\tau\bar{e}e}_{S,RR}}$'
