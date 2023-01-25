@@ -69,7 +69,7 @@ namespace eos
                 virtual std::tuple<BMesonLCDAs::CoefficientIterator, BMesonLCDAs::CoefficientIterator> coefficient_range(const double & mu) const final override;
 
                 /*!
-                 * Leading twist two-particle LCDAs
+                 * Leading twist two-particle LCDAs in momentum space
                  *
                  * omega: plus-component of the spectator momentum
                  */
@@ -77,6 +77,13 @@ namespace eos
                 virtual double phi_minus(const double & omega) const final override;
                 virtual double phi_bar(const double & omega) const final override;
                 virtual double phi_bar_d1(const double & omega) const final override;
+
+                /*!
+                 * Leading twist two-particle LCDAs in position space
+                 *
+                 * tau: minus-component of the spectator position
+                 */
+                double phitilde_plus(const double & tau) const;
 
                 /*!
                  * Next-to-leading twist two-particle LCDAs

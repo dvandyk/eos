@@ -117,6 +117,11 @@ namespace eos
             throw InternalError("Function not yet implemented");
         }
 
+        double
+        FLvD2022::phitilde_plus(const double & tau) const
+        {
+            return 0.0;
+        }
 
         /* Next-to-leading twist two-particle LCDAs */
 
