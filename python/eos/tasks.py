@@ -464,7 +464,7 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
 
 # Corner plot
 @task('corner-plot', '{posterior}/plots')
-def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf'):
+def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf', begin:int=0, end:int=None):
     """
     Generates a corner plot of the 1-D and 2-D marginalized posteriors.
 
@@ -484,23 +484,24 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     analysis = analysis_file.analysis(posterior)
     p = analysis.varied_parameters
     f = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
-    size = f.samples.shape[-1]
+    indices = _np.array(range(len(f.samples)))[begin:end]
+    size = len(indices)
     fig, axes = _plt.subplots(size, size, figsize=(3.0 * size, 3.0 * size), dpi=100)
 
-    for i in range(size):
+    for i, idxi in zip(range(size), indices):
         # diagonal
         ax = axes[i, i]
-        samples = f.samples[:, i]
+        samples = f.samples[:, idxi]
 
         ax.hist(samples, weights=f.weights, alpha=0.5, bins=100, density=True, stacked=True, color='C1')
         xmin = _np.min(samples)
         xmax = _np.max(samples)
         ax.set_xlim((xmin, xmax))
-        ax.set_xlabel(p[i].latex())
-        ax.set_ylabel(p[i].latex())
+        ax.set_xlabel(p[idxi].latex())
+        ax.set_ylabel(p[idxi].latex())
         ax.set_aspect(_np.diff((xmin, xmax))[0] / _np.diff(ax.get_ylim())[0])
 
-        for j in range(0, size):
+        for j, idxj in zip(range(size), indices):
             if j < i:
                 axes[i, j].set_axis_off()
 
@@ -508,8 +509,8 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
                 continue
 
             ax = axes[i, j]
-            xsamples = f.samples[:, j]
-            ysamples = f.samples[:, i]
+            xsamples = f.samples[:, idxj]
+            ysamples = f.samples[:, idxi]
             xmin = _np.min(xsamples)
             xmax = _np.max(xsamples)
             ymin = _np.min(ysamples)
