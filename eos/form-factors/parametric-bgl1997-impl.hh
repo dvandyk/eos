@@ -121,7 +121,7 @@ namespace eos
         _mB2(power_of<2>(_mB)),
         _mV(BToDstar::m_V),
         _mV2(power_of<2>(_mV)),
-        // here optimal t_0 = sqrt(t_p) (sqrt(m_B) - sqrt(m_M))^2
+        // default t_0 = sqrt(t_p) (sqrt(m_B) - sqrt(m_M))^2 (optimal value)
         _t_0(p["B->D^*::t_0@BGL1997"], *this)
     {
     }
