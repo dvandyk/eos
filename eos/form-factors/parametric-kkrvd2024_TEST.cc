@@ -43,7 +43,6 @@ class ParametricKKRvD2024Test :
             Parameters p = Parameters::Defaults();
             p["mass::pi^+"]                  = 0.13957;
             p["pi->pi::t_0@KKRvD2024"]       = 0.0;
-            p["pi->pi::b_(+,1)^0@KKRvD2024"] = -0.4523;
             p["pi->pi::b_(+,1)^1@KKRvD2024"] = -0.03156;
             p["pi->pi::b_(+,1)^2@KKRvD2024"] = 0.007017;
             p["pi->pi::b_(+,1)^3@KKRvD2024"] = 0.06082;
@@ -72,13 +71,13 @@ class ParametricKKRvD2024Test :
                 const double chi = 3.52e-3;
 
                 TEST_CHECK_NEARLY_EQUAL(ff.z(-1.0), 0.5762159, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.z( 0.0), 0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.z( 0.0), 0.0,       eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z(-1.0), chi), 1.303305e-1, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z( 0.0), chi), 2.969088e-2, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_p(-1.0), 0.13369753,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_p( 0.0), 0.024614699, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_p(-1.0), 0.34358101,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_p( 0.0), 1.0,         eps);
             }
 
             /* 0->PP factory */

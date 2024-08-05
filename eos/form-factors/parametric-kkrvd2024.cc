@@ -28,11 +28,12 @@
 
 #include <numeric>
 
+#include <iostream>
+
 namespace eos
 {
     KKRvD2024FormFactors<PiToPi>::KKRvD2024FormFactors(const Parameters & p, const Options & /*o*/) :
         _b_fp_I1{{
-            UsedParameter(p[_par_name("+", "1", "0")], *this),
             UsedParameter(p[_par_name("+", "1", "1")], *this),
             UsedParameter(p[_par_name("+", "1", "2")], *this),
             UsedParameter(p[_par_name("+", "1", "3")], *this),
@@ -98,18 +99,19 @@ namespace eos
     }
 
     double
-    KKRvD2024FormFactors<PiToPi>::f_p(const double & q2) const
+    KKRvD2024FormFactors<PiToPi>::_b_fp_I1_0() const
     {
-        // prepare expansion coefficients
+        // prepare expansion coefficients, enforce f_+(q2=0) = 1.0
         std::array<double, 10> b;
-        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin());
+        b[0] = 0.0;
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin() + 1);
 
-        const auto z           = this->z(q2);
+        const auto z0          = this->z(0.0);
         const auto chi         = 3.52e-3; // GeV^-2, cf. [BL:1998A], p. 13
-        const auto phi         = this->phi_p(z, chi);
+        const auto phi         = this->phi_p(z0, chi);
         // the weight function has been absorbed into the outer function to cancel a superficial divergence
         // as z -> +/- 1.0
-        const auto series      = this->series_m(z, b);
+        const auto series      = this->series_m(z0, b);
 
         // Super-threshold pole location
         const auto zr =  this->_zr(this->_M_fp_I1(), this->_G_fp_I1());
@@ -117,9 +119,51 @@ namespace eos
         const auto cr = complex<double>(this->_re_c_fp_I1(), this->_im_c_fp_I1());
 
         // Inverse Blaschke factors
-        const auto B1 = this->_inverseblaschke(z, zr);
+        const auto B1 = this->_inverseblaschke(z0, zr);
 
-        return (series * power_of<2>(std::abs(B1)) + 2 * real(cr * B1)) /  phi; // the weight factor has been absorbed into 1 / phi
+        // the weight factor has been absorbed into 1 / phi, invert for f_+(q2=0) = 1.0
+        return (phi - 2.0 * real(cr * B1)) / power_of<2>(std::abs(B1)) - series;
+    }
+
+    double
+    KKRvD2024FormFactors<PiToPi>::f_p(const double & q2) const
+    {
+        // prepare expansion coefficients
+        std::array<double, 10> b;
+        b[0] = this->_b_fp_I1_0();
+        std::cerr << "b[0] = " << b[0] << std::endl;
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin() + 1);
+        std::cerr << "b[1] = " << b[1] << std::endl;
+        std::cerr << "b[2] = " << b[2] << std::endl;
+        std::cerr << "b[3] = " << b[3] << std::endl;
+        std::cerr << "b[4] = " << b[4] << std::endl;
+        std::cerr << "b[5] = " << b[5] << std::endl;
+        std::cerr << "b[6] = " << b[6] << std::endl;
+        std::cerr << "b[7] = " << b[7] << std::endl;
+        std::cerr << "b[8] = " << b[8] << std::endl;
+        std::cerr << "b[9] = " << b[9] << std::endl;
+
+        const auto z           = this->z(q2);
+        std::cerr << "z = " << z << std::endl;
+        const auto chi         = 3.52e-3; // GeV^-2, cf. [BL:1998A], p. 13
+        const auto phi         = this->phi_p(z, chi);
+        std::cerr << "phi = " << phi << std::endl;
+        // the weight function has been absorbed into the outer function to cancel a superficial divergence
+        // as z -> +/- 1.0
+        const auto series      = this->series_m(z, b);
+        std::cerr << "series = " << series << std::endl;
+
+        // Super-threshold pole location
+        const auto zr =  this->_zr(this->_M_fp_I1(), this->_G_fp_I1());
+        // Artificial FF zero interpolation value
+        const auto cr = complex<double>(this->_re_c_fp_I1(), this->_im_c_fp_I1());
+        std::cerr << "cr = " << cr << std::endl;
+
+        // Inverse Blaschke factors
+        const auto B1 = this->_inverseblaschke(z, zr);
+        std::cerr << "B1 = " << B1 << std::endl;
+
+        return (series * power_of<2>(std::abs(B1)) + 2.0 * real(cr * B1)) /  phi; // the weight factor has been absorbed into 1 / phi
     }
 
     double
