@@ -2,9 +2,7 @@
     "name": "report-activity",
     "version": "1.0.0",
     "description": "Create a status report for the EOS developer meetings",
-    "exports": {
-      "default": "./index.js"
-    },
+    "type": "module",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1"
     },
